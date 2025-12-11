@@ -16,6 +16,12 @@ public class Projet implements Sujet {
     private List<Observateur> observateurs;
 
     /**
+     * Liste de ListeDeTache
+     */
+    private List<ListeDeTache> listeDeTaches;
+
+
+    /**
      * Constructeur du projet
      *
      * @param nom le nom du projet
@@ -23,6 +29,7 @@ public class Projet implements Sujet {
     public Projet(String nom) {
         this.nom = nom;
         this.observateurs = new ArrayList<>();
+        this.listeDeTaches = new ArrayList<>();
     }
 
 
