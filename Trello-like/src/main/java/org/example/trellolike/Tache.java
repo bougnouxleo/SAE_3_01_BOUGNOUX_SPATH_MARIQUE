@@ -93,4 +93,12 @@ public abstract class Tache {
     public String getDateFin() {
         return dateFin;
     }
+
+    /**
+     * Méthode qui retourne la liste des Etiquettes
+     * @return la liste des Etiquettes
+     */
+    public String toString(){
+        return "Nom : " + nom + "\nDescription : " + description + "\nDate de début : " + dateDebut + "\nDate de fin : " + dateFin + "\n";
+    }
 }
