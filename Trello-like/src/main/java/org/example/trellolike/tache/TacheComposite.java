@@ -1,9 +1,9 @@
-package org.example.trellolike;
+package org.example.trellolike.tache;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TacheComposite extends Tache{
+public class TacheComposite extends Tache {
     /**
      * Liste des sous taches nécessaires à la réalisation de la tâche
      */

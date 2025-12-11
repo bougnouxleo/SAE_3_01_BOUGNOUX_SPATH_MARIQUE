@@ -1,6 +1,6 @@
-package org.example.trellolike;
+package org.example.trellolike.tache;
 
-public class TacheSimple extends Tache{
+public class TacheSimple extends Tache {
     /**
      * Duree de la tache
      */

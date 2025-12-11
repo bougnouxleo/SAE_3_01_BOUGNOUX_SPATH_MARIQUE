@@ -1,5 +1,7 @@
 package org.example.trellolike;
 
+import org.example.trellolike.vue.Observateur;
+
 public interface Sujet {
     /**
      * Méthode qui enregistre un nouvel Observateur

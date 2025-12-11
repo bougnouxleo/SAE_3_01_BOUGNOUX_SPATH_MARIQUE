@@ -1,4 +1,6 @@
-package org.example.trellolike;
+package org.example.trellolike.tache;
+
+import org.example.trellolike.Etiquette;
 
 import java.util.ArrayList;
 import java.util.List;

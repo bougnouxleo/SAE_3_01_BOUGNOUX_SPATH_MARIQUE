@@ -1,4 +1,6 @@
-package org.example.trellolike;
+package org.example.trellolike.vue;
+
+import org.example.trellolike.Sujet;
 
 public interface Observateur {
 

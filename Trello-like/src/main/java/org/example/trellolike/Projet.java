@@ -1,6 +1,8 @@
 package org.example.trellolike;
 
-import java.lang.reflect.Member;
+import org.example.trellolike.tache.ListeDeTache;
+import org.example.trellolike.vue.Observateur;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
