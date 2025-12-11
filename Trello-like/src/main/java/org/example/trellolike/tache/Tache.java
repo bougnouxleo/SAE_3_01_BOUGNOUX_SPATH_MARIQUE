@@ -1,6 +1,7 @@
 package org.example.trellolike.tache;
 
 import org.example.trellolike.Etiquette;
+import org.example.trellolike.Utilisateur;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public abstract class Tache {
      */
     protected List<Etiquette> etiquettes;
 
+    protected Utilisateur utilisateur;
+
 
     /**
      * Constructeur de la tâche
@@ -43,6 +46,11 @@ public abstract class Tache {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.etiquettes = new ArrayList<>();
+    }
+
+    public static Tache findById(int idTache) {
+        //TODO
+        return null;
     }
 
     /**
@@ -102,5 +110,18 @@ public abstract class Tache {
      */
     public String toString(){
         return "Nom : " + nom + "\nDescription : " + description + "\nDate de début : " + dateDebut + "\nDate de fin : " + dateFin + "\n";
+    }
+
+    public List<Etiquette> getEtiquettes() {
+        return etiquettes;
+    }
+
+    public Utilisateur getUtilisateurAssigne() {
+        return utilisateur;
+    }
+
+    public static int getId() {
+        //TODO
+        return 0;
     }
 }

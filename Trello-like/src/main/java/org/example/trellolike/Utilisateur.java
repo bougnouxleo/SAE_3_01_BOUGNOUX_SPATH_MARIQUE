@@ -16,4 +16,8 @@ public class Utilisateur {
      * Pseudo de l'utilisateur
      */
     private String pseudo;
+
+    public String getPseudo() {
+        return pseudo;
+    }
 }

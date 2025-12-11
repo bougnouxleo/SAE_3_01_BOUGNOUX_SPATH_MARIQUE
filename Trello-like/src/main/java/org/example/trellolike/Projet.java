@@ -1,6 +1,7 @@
 package org.example.trellolike;
 
 import org.example.trellolike.tache.ListeDeTache;
+import org.example.trellolike.tache.Tache;
 import org.example.trellolike.vue.Observateur;
 
 import java.util.ArrayList;
@@ -57,6 +58,19 @@ public class Projet implements Sujet {
     }
 
     /**
+     * deplacement d'une tache d'une liste à une autre
+     *
+     * @param t
+     * @param l1
+     * @param l2
+     */
+    public void deplacerTache(Tache t, ListeDeTache l1, ListeDeTache l2) {
+        l1.retirerTache(t);
+        l2.ajouterTache(t);
+        notifierObservateurs();
+    }
+
+    /**
      * Méthode qui retourne le nom du Projet
      *
      * @return le nom du Projet
@@ -73,19 +87,35 @@ public class Projet implements Sujet {
 
     /**
      * Méthode qui ajoute un membre au projet
+     *
      * @param membre le membre à ajouter
      */
-    public void addMembers(Utilisateur membre){
+    public void addMembers(Utilisateur membre) {
         this.members.add(membre);
 
     }
 
     /**
      * Méthode qui supprime un membre du projet
+     *
      * @param membre le membre à supprimer
      */
-    public void removeMembers(Utilisateur membre){
+    public void removeMembers(Utilisateur membre) {
         this.members.remove(membre);
+    }
+
+    public List<ListeDeTache> getListeDeTaches() {
+        return listeDeTaches;
+    }
+
+    public ListeDeTache trouverListeDeLaTache(Tache tache) {
+        ListeDeTache lres = null;
+        for (ListeDeTache liste : listeDeTaches) {
+            if (liste.getTaches().contains(tache)) {
+                lres = liste;
+            }
+        }
+        return lres;
     }
 }
 
