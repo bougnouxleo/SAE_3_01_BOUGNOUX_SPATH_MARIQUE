@@ -1,5 +1,6 @@
 package org.example.trellolike;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +21,11 @@ public class Projet implements Sujet {
      */
     private List<ListeDeTache> listeDeTaches;
 
+    /**
+     * Liste des membres du projet
+     */
+    private ArrayList<Utilisateur> members;
+
 
     /**
      * Constructeur du projet
@@ -30,6 +36,7 @@ public class Projet implements Sujet {
         this.nom = nom;
         this.observateurs = new ArrayList<>();
         this.listeDeTaches = new ArrayList<>();
+        this.members = new ArrayList<>();
     }
 
 
@@ -60,6 +67,23 @@ public class Projet implements Sujet {
     public boolean equals(Object o) {
         if (!(o instanceof Projet projet)) return false;
         return Objects.equals(getNom(), projet.getNom());
+    }
+
+    /**
+     * Méthode qui ajoute un membre au projet
+     * @param membre le membre à ajouter
+     */
+    public void addMembers(Utilisateur membre){
+        this.members.add(membre);
+
+    }
+
+    /**
+     * Méthode qui supprime un membre du projet
+     * @param membre le membre à supprimer
+     */
+    public void removeMembers(Utilisateur membre){
+        this.members.remove(membre);
     }
 }
 
