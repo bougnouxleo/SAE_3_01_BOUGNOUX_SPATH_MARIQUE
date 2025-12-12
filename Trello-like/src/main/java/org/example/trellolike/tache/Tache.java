@@ -124,4 +124,9 @@ public abstract class Tache {
         //TODO
         return 0;
     }
+
+    public boolean estBloquee() {
+        //TODO
+        return false;
+    }
 }
