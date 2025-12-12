@@ -1,4 +1,4 @@
-package org.example.trellolike;
+package org.example.trellolike.controlleur;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -17,4 +17,6 @@ module org.example.trellolike {
     opens org.example.trellolike.tache to javafx.fxml;
     exports org.example.trellolike.vue;
     opens org.example.trellolike.vue to javafx.fxml;
+    exports org.example.trellolike.controlleur;
+    opens org.example.trellolike.controlleur to javafx.fxml;
 }
