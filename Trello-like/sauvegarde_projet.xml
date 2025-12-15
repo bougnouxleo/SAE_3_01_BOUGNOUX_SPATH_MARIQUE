@@ -25,6 +25,19 @@
         </void>
        </object>
       </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="description">
+         <string></string>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>z</string>
+        </void>
+       </object>
+      </void>
      </void>
     </object>
    </void>
