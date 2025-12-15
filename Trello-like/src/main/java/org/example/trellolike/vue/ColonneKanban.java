@@ -6,7 +6,7 @@ import javafx.scene.layout.VBox;
 public class ColonneKanban extends VBox {
     public ColonneKanban(String titre) {
         this.setMinWidth(250);
-        this.setStyle("-fx-background-color: white; -fx-padding: 10;");
+        this.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: black; -fx-border-width: 1px;");
         Label lbl = new Label(titre);
         lbl.setStyle("-fx-font-weight: bold;");
         this.getChildren().add(lbl);
