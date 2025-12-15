@@ -1,5 +1,6 @@
 package org.example.trellolike;
 
+import org.example.trellolike.tache.GestionPersistance;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 import org.example.trellolike.vue.Observateur;
@@ -8,11 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Projet implements Sujet {
+public class Projet implements Sujet, java.io.Serializable {
     /**
      * Nom du projet
      */
-    private final String nom;
+    private String nom;
+
+    // Instance unique (Singleton) pour remplacer la BDD accessible partout
+    private static Projet instance;
 
     /**
      * Liste des observateurs
@@ -30,18 +34,62 @@ public class Projet implements Sujet {
     private ArrayList<Utilisateur> members;
 
 
+    // Constructeur public (requis pour la sérialisation XML)
+    public Projet() {
+        this.observateurs = new ArrayList<>();
+        this.listeDeTaches = new ArrayList<>();
+        this.members = new ArrayList<>();
+    }
+
     /**
      * Constructeur du projet
      *
      * @param nom le nom du projet
      */
     public Projet(String nom) {
+        this();
         this.nom = nom;
-        this.observateurs = new ArrayList<>();
-        this.listeDeTaches = new ArrayList<>();
-        this.members = new ArrayList<>();
     }
 
+
+    // --- Gestion du Singleton & Chargement ---
+    public static Projet getInstance() {
+        if (instance == null) {
+            instance = GestionPersistance.charger();
+        }
+        return instance;
+    }
+
+    public void sauvegarderGlobalement() {
+        GestionPersistance.sauvegarder(this);
+        this.notifierObservateurs(); // Sauvegarder déclenche souvent une mise à jour
+    }
+
+    // --- Méthodes de recherche (remplace le SQL SELECT) ---
+
+    public Tache trouverTacheParId(int id) {
+        // On parcourt tout en mémoire (in-memory database)
+        for (ListeDeTache liste : this.listeDeTaches) {
+            for (Tache t : liste.getTaches()) {
+                if (t.getId() == id) return t;
+            }
+        }
+        return null;
+    }
+
+    public ListeDeTache trouverListeDeLaTache(Tache t) {
+        for (ListeDeTache liste : this.listeDeTaches) {
+            if (liste.getTaches().contains(t)) return liste;
+        }
+        return null; // Devrait lancer une exception
+    }
+
+    // Getters & Setters (Requis pour sérialisation XML)
+    public List<ListeDeTache> getListes() { return listeDeTaches; }
+
+    public void setListes(List<ListeDeTache> listes) { this.listeDeTaches = listes; }
+
+    public void setNom(String nom) { this.nom = nom; }
 
     public void enregistrerObservateur(Observateur o) {
         observateurs.add(o);
@@ -108,14 +156,10 @@ public class Projet implements Sujet {
         return listeDeTaches;
     }
 
-    public ListeDeTache trouverListeDeLaTache(Tache tache) {
-        ListeDeTache lres = null;
-        for (ListeDeTache liste : listeDeTaches) {
-            if (liste.getTaches().contains(tache)) {
-                lres = liste;
-            }
-        }
-        return lres;
+    public void ajouterListe(ListeDeTache liste) {
+        listeDeTaches.add(liste);
     }
+
+
 }
 

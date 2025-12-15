@@ -1,12 +1,16 @@
 package org.example.trellolike.tache;
 
 import org.example.trellolike.Etiquette;
+import org.example.trellolike.Projet;
 import org.example.trellolike.Utilisateur;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Tache {
+public abstract class Tache implements java.io.Serializable {
+    private int id;
+    private static int compteurId = 0; // Pour générer des ID uniques
     /**
      * Nom de la tâche
      */
@@ -34,13 +38,14 @@ public abstract class Tache {
 
     protected Utilisateur utilisateur;
 
-
+    public Tache() { } // Requis pour XML
     /**
      * Constructeur de la tâche
      * @param nom le nom de la tâche
      * @param description la description de la tâche
      */
     public Tache(String nom, String description, String dateDebut, String dateFin) {
+        this.id = ++compteurId;
         this.nom = nom;
         this.description = description;
         this.dateDebut = dateDebut;
@@ -48,11 +53,19 @@ public abstract class Tache {
         this.etiquettes = new ArrayList<>();
     }
 
-    public static Tache findById(int idTache) {
-        //TODO
-        return null;
+    public static Tache findById(int id) {
+        // On demande au Singleton Projet de chercher dans ses listes en mémoire
+        return Projet.getInstance().trouverTacheParId(id);
     }
 
+    public void save() {
+        // En sérialisation, "sauvegarder une tâche" veut dire "réécrire tout le fichier XML"
+        Projet.getInstance().sauvegarderGlobalement();
+    }
+
+    // Getters Setters classiques...
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; } // Requis XML
     /**
      * Méthode qui retourne le nom de la tâche
      * @return le nom de la tâche
@@ -120,13 +133,18 @@ public abstract class Tache {
         return utilisateur;
     }
 
-    public static int getId() {
-        //TODO
-        return 0;
-    }
 
     public boolean estBloquee() {
         //TODO
         return false;
+    }
+
+    public void setArchivee(boolean b) {
+        //TODO
+    }
+
+    public String getDuree() {
+        //TODO
+        return null;
     }
 }

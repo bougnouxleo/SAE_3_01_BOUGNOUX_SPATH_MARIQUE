@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="22.0.2" class="java.beans.XMLDecoder">
+ <object class="org.example.trellolike.Projet">
+  <void property="nom">
+   <string>Nouveau Projet</string>
+  </void>
+ </object>
+</java>
