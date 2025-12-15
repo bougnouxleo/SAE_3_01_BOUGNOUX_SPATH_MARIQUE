@@ -66,6 +66,15 @@ public abstract class Tache implements java.io.Serializable {
     // Getters Setters classiques...
     public int getId() { return id; }
     public void setId(int id) { this.id = id; } // Requis XML
+
+    /**
+     * Setter nom XML
+     * @param nom
+     */
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
     /**
      * Méthode qui retourne le nom de la tâche
      * @return le nom de la tâche
@@ -80,6 +89,14 @@ public abstract class Tache implements java.io.Serializable {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * setter XML
+     * @param description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -143,8 +160,8 @@ public abstract class Tache implements java.io.Serializable {
         //TODO
     }
 
-    public String getDuree() {
+    public int getDuree() {
         //TODO
-        return null;
+        return 0;
     }
 }

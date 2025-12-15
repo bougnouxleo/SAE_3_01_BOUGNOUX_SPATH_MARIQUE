@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="22.0.2" class="java.beans.XMLDecoder">
- <object class="org.example.trellolike.Projet">
+ <object class="org.example.trellolike.Projet" id="Projet0">
+  <void property="listes">
+   <void method="add">
+    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache0">
+     <void property="nom">
+      <string>À Faire</string>
+     </void>
+     <void property="taches">
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="id">
+         <int>1</int>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>gdtsfgfh</string>
+        </void>
+       </object>
+      </void>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.example.trellolike.tache.ListeDeTache">
+     <void property="nom">
+      <string>En Cours</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache1">
+     <void property="nom">
+      <string>Terminé</string>
+     </void>
+     <void property="taches">
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="id">
+         <int>2</int>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="id">
+         <int>2</int>
+        </void>
+        <void property="nom">
+         <string>qesrdf</string>
+        </void>
+       </object>
+      </void>
+     </void>
+    </object>
+   </void>
+  </void>
   <void property="nom">
    <string>Nouveau Projet</string>
   </void>
