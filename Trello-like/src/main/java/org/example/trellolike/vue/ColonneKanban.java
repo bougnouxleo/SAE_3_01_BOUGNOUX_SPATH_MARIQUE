@@ -1,5 +1,6 @@
 package org.example.trellolike.vue;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
@@ -7,6 +8,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import java.time.LocalDate;
 
 import java.util.Optional;
 
@@ -65,14 +70,69 @@ public class ColonneKanban extends VBox {
      * Demande à l'utilisateur le nom d'une nouvelle tâche et informe le contrôleur
      */
     private void demanderNouvelleTache() {
-        TextInputDialog dialog = new TextInputDialog();
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Nouvelle Tâche");
-        dialog.setHeaderText("Ajouter dans : " + listeModele.getNom());
-        dialog.setContentText("Nom de la tâche :");
+        dialog.setHeaderText("Créer une tâche dans : " + listeModele.getNom());
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(nom -> {
-            controller.traiterAjoutTache(nom, listeModele);
+        ButtonType btnTypeValider = new ButtonType("Créer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnTypeValider, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        // --- Les Champs ---
+        TextField txtNom = new TextField();
+        txtNom.setPromptText("Nom de la tâche");
+
+        TextArea txtDesc = new TextArea();
+        txtDesc.setPromptText("Description détaillée...");
+        txtDesc.setPrefRowCount(3);
+
+        DatePicker dateDebut = new DatePicker(LocalDate.now());
+        DatePicker dateFin = new DatePicker();
+
+        grid.add(new Label("Nom :"), 0, 0);
+        grid.add(txtNom, 1, 0);
+
+        grid.add(new Label("Description :"), 0, 1);
+        grid.add(txtDesc, 1, 1);
+
+        grid.add(new Label("Date début :"), 0, 2);
+        grid.add(dateDebut, 1, 2);
+
+        grid.add(new Label("Date fin :"), 0, 3);
+        grid.add(dateFin, 1, 3);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnTypeValider);
+
+        btnOk.addEventFilter(ActionEvent.ACTION, event -> {
+            LocalDate d = dateDebut.getValue();
+
+            if (d != null && d.isBefore(LocalDate.now())) {
+                event.consume();
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Date invalide");
+                alert.setContentText("Vous ne pouvez pas choisir une date dans le passé !");
+                alert.show();
+            }
         });
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == btnTypeValider) {
+                String nom = txtNom.getText();
+                String desc = txtDesc.getText();
+                LocalDate dDebut = dateDebut.getValue();
+                LocalDate dFin = dateFin.getValue();
+
+                controller.traiterAjoutTache(nom, desc, dDebut, dFin, listeModele);
+                return true;
+            }
+            return null;
+        });
+        dialog.showAndWait();
     }
 }

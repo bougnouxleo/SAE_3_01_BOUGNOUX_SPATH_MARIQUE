@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
-import org.example.trellolike.tache.TacheSimple; // Assurez-vous d'avoir cet import
+import org.example.trellolike.tache.TacheSimple;
+import java.time.LocalDate;
 
 public class KanbanController {
     /**
@@ -27,12 +28,14 @@ public class KanbanController {
 
     /**
      * Gère l'ajout d'une nouvelle tâche dans une liste donnée.
-     * @param nomTache le nom de la tâche à ajouter
+     * @param nom le nom de la tâche à ajouter
      * @param listeDest la liste de tâches destination
      */
-    public void traiterAjoutTache(String nomTache, ListeDeTache listeDest) {
-        if (nomTache == null || nomTache.trim().isEmpty()) return;
-        Tache nouvelleTache = new TacheSimple(nomTache, "Pas de description", null, null, 0);
+    public void traiterAjoutTache(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ListeDeTache listeDest) {
+        if (nom == null || nom.trim().isEmpty()) return;
+        String strDebut = (dateDebut != null) ? dateDebut.toString() : "";
+        String strFin = (dateFin != null) ? dateFin.toString() : "";
+        Tache nouvelleTache = new TacheSimple(nom, description, strDebut, strFin, 0);
         listeDest.ajouterTache(nouvelleTache);
         projet.sauvegarderGlobalement();
     }
