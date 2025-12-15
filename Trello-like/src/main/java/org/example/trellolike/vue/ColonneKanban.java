@@ -6,13 +6,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.example.trellolike.Projet;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import org.example.trellolike.tache.Tache;
+
 import java.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ColonneKanban extends VBox {
@@ -93,17 +98,39 @@ public class ColonneKanban extends VBox {
         DatePicker dateDebut = new DatePicker(LocalDate.now());
         DatePicker dateFin = new DatePicker();
 
-        grid.add(new Label("Nom :"), 0, 0);
-        grid.add(txtNom, 1, 0);
+        CheckBox chkComposite = new CheckBox("Est un projet (Tâche Composite)");
 
-        grid.add(new Label("Description :"), 0, 1);
-        grid.add(txtDesc, 1, 1);
+        TextField txtDuree = new TextField("0");
+        txtDuree.setPromptText("Heures");
 
-        grid.add(new Label("Date début :"), 0, 2);
-        grid.add(dateDebut, 1, 2);
+        //Peut pas être une tâche composite et avoir une durée fixe
+        chkComposite.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            txtDuree.setDisable(isSelected);
+            if (isSelected) txtDuree.setText("Calculé auto.");
+            else txtDuree.setText("0");
+        });
 
-        grid.add(new Label("Date fin :"), 0, 3);
-        grid.add(dateFin, 1, 3);
+        Label lblDep = new Label("Est bloquée par :");
+        ListView<Tache> listeDependances = new ListView<>();
+        listeDependances.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listeDependances.setMaxHeight(100);
+
+        List<Tache> toutes = new ArrayList<>();
+        for (ListeDeTache liste : Projet.getInstance().getListes()) {
+            toutes.addAll(liste.getTaches());
+        }
+        listeDependances.getItems().addAll(toutes);
+
+        //Mise en place de la grille
+        grid.add(new Label("Nom :"), 0, 0);       grid.add(txtNom, 1, 0);
+        grid.add(new Label("Desc :"), 0, 1);      grid.add(txtDesc, 1, 1);
+        grid.add(new Label("Début :"), 0, 2);     grid.add(dateDebut, 1, 2);
+        grid.add(new Label("Fin :"), 0, 3);       grid.add(dateFin, 1, 3);
+
+        grid.add(new Label("Type :"), 0, 4);      grid.add(chkComposite, 1, 4);
+        grid.add(new Label("Durée (h) :"), 0, 5); grid.add(txtDuree, 1, 5);
+
+        grid.add(new Label("Bloqué par :"), 0, 6);grid.add(listeDependances, 1, 6);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -123,12 +150,26 @@ public class ColonneKanban extends VBox {
         });
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == btnTypeValider) {
-                String nom = txtNom.getText();
-                String desc = txtDesc.getText();
-                LocalDate dDebut = dateDebut.getValue();
-                LocalDate dFin = dateFin.getValue();
+                // Parsing de la durée
+                int duree = 0;
+                try {
+                    if (!chkComposite.isSelected()) {
+                        duree = Integer.parseInt(txtDuree.getText());
+                    }
+                } catch (NumberFormatException e) { duree = 0; }
 
-                controller.traiterAjoutTache(nom, desc, dDebut, dFin, listeModele);
+                List<Tache> selection = listeDependances.getSelectionModel().getSelectedItems();
+
+                controller.traiterAjoutTache(
+                        txtNom.getText(),
+                        txtDesc.getText(),
+                        dateDebut.getValue(),
+                        dateFin.getValue(),
+                        listeModele,
+                        new ArrayList<>(selection),
+                        chkComposite.isSelected(), // On passe le booléen
+                        duree // On passe la durée saisie
+                );
                 return true;
             }
             return null;

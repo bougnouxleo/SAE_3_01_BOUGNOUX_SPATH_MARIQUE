@@ -77,6 +77,11 @@ public class Projet implements Sujet, java.io.Serializable {
         return null;
     }
 
+    /**
+     * Méthode qui trouve la liste de tâche par une tâche donnée
+     * @param t la tâche dont on cherche la liste parente
+     * @return la liste de tâche parente
+     */
     public ListeDeTache trouverListeDeLaTache(Tache t) {
         for (ListeDeTache liste : this.listeDeTaches) {
             if (liste.getTaches().contains(t)) return liste;
@@ -158,6 +163,17 @@ public class Projet implements Sujet, java.io.Serializable {
 
     public void ajouterListe(ListeDeTache liste) {
         listeDeTaches.add(liste);
+    }
+
+    /**
+     * Méthode qui vérifie si une tâche est terminée
+     * @param t la tâche à vérifier
+     * @return true si la tâche est terminée, false sinon
+     */
+    public boolean estTacheTerminee(Tache t) {
+        ListeDeTache listeParent = trouverListeDeLaTache(t);
+        if (listeParent == null) return false;
+        return listeParent.getNom().equalsIgnoreCase("Terminé");
     }
 
 

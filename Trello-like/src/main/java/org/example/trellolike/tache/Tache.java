@@ -35,8 +35,10 @@ public abstract class Tache implements java.io.Serializable {
      * Liste des Etiquettes (peut etre null)
      */
     protected List<Etiquette> etiquettes;
-
-    protected Utilisateur utilisateur;
+    /**
+     * Liste des ids des taches pour les dépendances
+     */
+    protected List<Integer> idsDependances = new ArrayList<>();
 
     public Tache() { } // Requis pour XML
     /**
@@ -146,15 +148,32 @@ public abstract class Tache implements java.io.Serializable {
         return etiquettes;
     }
 
-    public Utilisateur getUtilisateurAssigne() {
-        return utilisateur;
+    public void ajouterDependance(Tache t) {
+        if (t.getId() != this.id) { // Empêche de dépendre de soi-même
+            this.idsDependances.add(t.getId());
+        }
     }
 
+    public List<Integer> getIdsDependances() {
+        return idsDependances;
+    }
 
+    /**
+     * Méthode qui indique si la tâche est bloquée (si une dépendance n'est pas terminée)
+     * @return true si la tâche est bloquée, false sinon
+     */
     public boolean estBloquee() {
-        //TODO
+        if (idsDependances.isEmpty()) return false;
+
+        for (Integer idDep : idsDependances) {
+            Tache t = Tache.findById(idDep);
+            if (t != null && !Projet.getInstance().estTacheTerminee(t)) {
+                return true; // Bloqué car une dépendance n'est pas finie
+            }
+        }
         return false;
     }
+
 
     public void setArchivee(boolean b) {
         //TODO

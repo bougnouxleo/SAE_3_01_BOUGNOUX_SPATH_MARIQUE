@@ -21,6 +21,13 @@ public class TacheComposite extends Tache {
         this.sousTaches = new ArrayList<>();
     }
     /**
+     * Constructeur par défaut (requis pour la sérialisation)
+     */
+    public TacheComposite() {
+        super();
+        this.sousTaches = new ArrayList<>();
+    }
+    /**
      * Methode qui retourne la duree de la tache
      * @return la duree de la tache
      */
@@ -45,6 +52,14 @@ public class TacheComposite extends Tache {
      */
     public void ajouterSousTache(Tache sousTache) {
         sousTaches.add(sousTache);
+    }
+
+    public List<Tache> getSousTaches() {
+        return sousTaches;
+    }
+
+    public void setSousTaches(List<Tache> sousTaches) {
+        this.sousTaches = sousTaches;
     }
 
 }

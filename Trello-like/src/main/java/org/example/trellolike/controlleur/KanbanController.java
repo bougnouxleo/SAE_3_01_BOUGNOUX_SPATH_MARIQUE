@@ -9,8 +9,10 @@ import javafx.stage.Stage;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.tache.TacheComposite;
 import org.example.trellolike.tache.TacheSimple;
 import java.time.LocalDate;
+import java.util.List;
 
 public class KanbanController {
     /**
@@ -31,11 +33,26 @@ public class KanbanController {
      * @param nom le nom de la tâche à ajouter
      * @param listeDest la liste de tâches destination
      */
-    public void traiterAjoutTache(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ListeDeTache listeDest) {
+    public void traiterAjoutTache(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ListeDeTache listeDest, List<Tache> lesDependances, boolean estComposite, int dureeEstimee) {
         if (nom == null || nom.trim().isEmpty()) return;
         String strDebut = (dateDebut != null) ? dateDebut.toString() : "";
         String strFin = (dateFin != null) ? dateFin.toString() : "";
-        Tache nouvelleTache = new TacheSimple(nom, description, strDebut, strFin, 0);
+
+        Tache nouvelleTache;
+
+        if (estComposite) {
+            nouvelleTache = new TacheComposite(nom, description, strDebut, strFin);
+        } else {
+            nouvelleTache = new TacheSimple(nom, description, strDebut, strFin, dureeEstimee);
+        }
+
+        // Gestion commune des dépendances (grâce à la classe mère Tache)
+        if (lesDependances != null) {
+            for (Tache dep : lesDependances) {
+                nouvelleTache.ajouterDependance(dep);
+            }
+        }
+
         listeDest.ajouterTache(nouvelleTache);
         projet.sauvegarderGlobalement();
     }
