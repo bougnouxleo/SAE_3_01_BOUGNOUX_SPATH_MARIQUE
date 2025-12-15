@@ -40,6 +40,11 @@ public abstract class Tache implements java.io.Serializable {
      */
     protected List<Integer> idsDependances = new ArrayList<>();
 
+    /**
+     * Indique si la tâche est archivée
+     */
+    private boolean estArchivee = false;
+
     public Tache() { } // Requis pour XML
     /**
      * Constructeur de la tâche
@@ -182,9 +187,20 @@ public abstract class Tache implements java.io.Serializable {
         return false;
     }
 
-
+    /**
+     * Méthode qui archive ou désarchive la tâche
+     * @param b true pour archiver, false pour désarchiver
+     */
     public void setArchivee(boolean b) {
-        //TODO
+        this.estArchivee = b;
+    }
+
+    /**
+     * Méthode qui indique si la tâche est archivée
+     * @return true si la tâche est archivée, false sinon
+     */
+    public boolean estArchivee() {
+        return estArchivee;
     }
 
     public int getDuree() {

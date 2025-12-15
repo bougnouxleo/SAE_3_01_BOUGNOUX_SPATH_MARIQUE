@@ -71,48 +71,6 @@
       <void method="add">
        <object class="org.example.trellolike.tache.TacheComposite">
         <void property="description">
-         <string>test</string>
-        </void>
-        <void property="id">
-         <int>1</int>
-        </void>
-        <void property="nom">
-         <string>test</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheComposite">
-        <void property="description">
-         <string>test</string>
-        </void>
-        <void property="id">
-         <int>1</int>
-        </void>
-        <void property="nom">
-         <string>test</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="description">
-         <string>aa</string>
-        </void>
-        <void property="duree">
-         <int>6</int>
-        </void>
-        <void property="id">
-         <int>1</int>
-        </void>
-        <void property="nom">
-         <string>aa</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheComposite">
-        <void property="description">
          <string>aaaaaaa</string>
         </void>
         <void property="id">
@@ -132,16 +90,6 @@
       <string>Terminé</string>
      </void>
      <void property="taches">
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="id">
-         <int>1</int>
-        </void>
-        <void property="nom">
-         <string>Configurer Git</string>
-        </void>
-       </object>
-      </void>
       <void method="add">
        <object class="org.example.trellolike.tache.TacheSimple">
         <void property="id">

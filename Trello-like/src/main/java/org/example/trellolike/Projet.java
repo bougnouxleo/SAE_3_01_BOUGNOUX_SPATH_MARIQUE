@@ -33,12 +33,16 @@ public class Projet implements Sujet, java.io.Serializable {
      */
     private ArrayList<Utilisateur> members;
 
-
+    /**
+     * Liste des tâches archivées
+     */
+    private List<Tache> listeDesArchives;
     // Constructeur public (requis pour la sérialisation XML)
     public Projet() {
         this.observateurs = new ArrayList<>();
         this.listeDeTaches = new ArrayList<>();
         this.members = new ArrayList<>();
+        this.listeDesArchives = new ArrayList<>();
     }
 
     /**
@@ -174,6 +178,24 @@ public class Projet implements Sujet, java.io.Serializable {
         ListeDeTache listeParent = trouverListeDeLaTache(t);
         if (listeParent == null) return false;
         return listeParent.getNom().equalsIgnoreCase("Terminé");
+    }
+
+
+    /**
+     * Méthode qui archive une tâche
+     * @param t la tâche à archiver
+     */
+    public void archiverTache(Tache t) {
+        t.setArchivee(true);
+
+        ListeDeTache listeCourante = trouverListeDeLaTache(t);
+
+        if (listeCourante != null) {
+            listeCourante.retirerTache(t);
+            this.listeDesArchives.add(t);
+        }
+
+        sauvegarderGlobalement();
     }
 
 

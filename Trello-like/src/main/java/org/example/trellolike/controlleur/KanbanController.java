@@ -127,28 +127,16 @@ public class KanbanController {
             boxDependances.getChildren().add(lblOk);
         }
 
-
-        Label depInfo;
-        if (t.estBloquee()) {
-            depInfo = new Label("⚠️ BLOQUÉE par des dépendances non terminées.");
-            depInfo.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-
-        } else {
-            depInfo = new Label("✅ Aucune dépendance bloquante.");
-            depInfo.setStyle("-fx-text-fill: green;");
-        }
-
         Button btnArchiver = new Button("Archiver la tâche");
         btnArchiver.setOnAction(e -> {
-            t.setArchivee(true);
-            projet.sauvegarderGlobalement();
+            projet.archiverTache(t);
             detailStage.close();
         });
 
         Button btnFermer = new Button("Fermer");
         btnFermer.setOnAction(e -> detailStage.close());
 
-        layout.getChildren().addAll(titre, dates, duree, depInfo, lblDesc, description, btnArchiver, btnFermer);
+        layout.getChildren().addAll(titre, dates, duree, boxDependances, lblDesc, description, btnArchiver, btnFermer);
 
         Scene scene = new Scene(layout, 400, 500);
         detailStage.setScene(scene);
