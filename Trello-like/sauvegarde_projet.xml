@@ -11,17 +11,20 @@
       <void method="add">
        <object class="org.example.trellolike.tache.TacheSimple">
         <void property="id">
-         <int>1</int>
+         <int>2</int>
+        </void>
+        <void property="nom">
+         <string>Faire la maquette Figma</string>
         </void>
        </object>
       </void>
       <void method="add">
        <object class="org.example.trellolike.tache.TacheSimple">
         <void property="id">
-         <int>1</int>
+         <int>3</int>
         </void>
         <void property="nom">
-         <string>gdtsfgfh</string>
+         <string>Coder le Modèle Java</string>
         </void>
        </object>
       </void>
@@ -44,17 +47,10 @@
       <void method="add">
        <object class="org.example.trellolike.tache.TacheSimple">
         <void property="id">
-         <int>2</int>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="id">
-         <int>2</int>
+         <int>1</int>
         </void>
         <void property="nom">
-         <string>qesrdf</string>
+         <string>Configurer Git</string>
         </void>
        </object>
       </void>
