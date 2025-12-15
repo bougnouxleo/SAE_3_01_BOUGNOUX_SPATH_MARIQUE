@@ -98,7 +98,7 @@ public class KanbanController {
         description.setMaxHeight(100);
 
         Label dates = new Label("Début : " + t.getDateDebut() + " | Fin : " + t.getDateFin());
-        Label duree = new Label("Durée estimée : " + t.getDuree() + "h");
+        Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "h");
 
         Label depInfo;
         if (t.estBloquee()) {
