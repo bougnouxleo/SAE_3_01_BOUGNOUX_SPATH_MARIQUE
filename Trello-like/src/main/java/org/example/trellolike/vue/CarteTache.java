@@ -7,10 +7,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.example.trellolike.tache.Tache;
 
+/**
+ * Composante graphique
+ */
 public class CarteTache extends VBox {
     public CarteTache(Tache t) {
         this.setPadding(new Insets(10));
-        this.setStyle("-fx-background-color: white; -fx-effect: dropshadow('...');");
+        this.setStyle("-fx-background-color: white;-fx-border-color: black; -fx-effect: dropshadow('...');");
 
         this.getChildren().add(new Label(t.getNom()));
 
