@@ -12,6 +12,7 @@ import org.example.trellolike.tache.Tache;
 import org.example.trellolike.tache.TacheComposite;
 import org.example.trellolike.tache.TacheSimple;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KanbanController {
@@ -93,17 +94,45 @@ public class KanbanController {
 
         Label lblDesc = new Label("Description :");
         TextArea description = new TextArea(t.getDescription());
-        description.setEditable(false);
+        description.setEditable(true);
         description.setWrapText(true);
         description.setMaxHeight(100);
 
         Label dates = new Label("Début : " + t.getDateDebut() + " | Fin : " + t.getDateFin());
         Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "h");
 
+        VBox boxDependances = new VBox(5);
+
+        List<Tache> tachesBloquantes = new ArrayList<>();
+
+        for (Integer idDep : t.getIdsDependances()) {
+            Tache dep = Tache.findById(idDep);
+            if (dep != null && !projet.estTacheTerminee(dep)) {
+                tachesBloquantes.add(dep);
+            }
+        }
+
+        if (!tachesBloquantes.isEmpty()) {
+            Label lblAlerte = new Label("⚠️ BLOQUÉE par " + tachesBloquantes.size() + " tâche(s) :");
+            lblAlerte.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
+            ListView<Tache> listeViewBloquants = new ListView<>();
+            listeViewBloquants.getItems().addAll(tachesBloquantes);
+            listeViewBloquants.setPrefHeight(100);
+
+            boxDependances.getChildren().addAll(lblAlerte, listeViewBloquants);
+        } else {
+            Label lblOk = new Label("✅ Aucune dépendance bloquante.");
+            lblOk.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+            boxDependances.getChildren().add(lblOk);
+        }
+
+
         Label depInfo;
         if (t.estBloquee()) {
             depInfo = new Label("⚠️ BLOQUÉE par des dépendances non terminées.");
             depInfo.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
         } else {
             depInfo = new Label("✅ Aucune dépendance bloquante.");
             depInfo.setStyle("-fx-text-fill: green;");

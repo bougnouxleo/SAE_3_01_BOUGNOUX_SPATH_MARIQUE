@@ -10,6 +10,11 @@ public class TacheComposite extends Tache {
     private List<Tache> sousTaches;
 
     /**
+     * Durée totale de la tache composite (somme des durées des sous-taches)
+     */
+    private int dureeTotale;
+
+    /**
      * Constructeur de la tache composite
      * @param nom nom de la tache
      * @param description description de la tache
@@ -32,7 +37,6 @@ public class TacheComposite extends Tache {
      * @return la duree de la tache
      */
     public int getDureeTotale(){
-        int dureeTotale = 0;
         for (Tache sousTache : sousTaches) {
             dureeTotale += sousTache.getDureeTotale();
         }

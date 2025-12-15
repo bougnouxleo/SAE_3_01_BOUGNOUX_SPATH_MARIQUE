@@ -128,6 +128,14 @@ public abstract class Tache implements java.io.Serializable {
         return dateDebut;
     }
 
+    public void setDateFin(String dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public void setDateDebut(String dateDebut) {
+        this.dateDebut = dateDebut;
+    }
+
     /**
      * Méthode qui retourne la date de fin de la tâche
      * @return la date de fin de la tâche
