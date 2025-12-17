@@ -59,6 +59,18 @@ public class KanbanController {
     }
 
     /**
+     * Gère l'ajout d'une nouvelle liste de tâches au projet.
+     * @param nomListe
+     */
+    public void traiterAjoutListe(String nomListe) {
+        if (nomListe == null || nomListe.trim().isEmpty()) return;
+
+        ListeDeTache nouvelleListe = new ListeDeTache(nomListe);
+        projet.ajouterListe(nouvelleListe);
+        projet.sauvegarderGlobalement();
+    }
+
+    /**
      * Vérifie si une tâche peut être déplacée (non bloquée).
      * @param t la tâche à vérifier
      * @return true si la tâche peut être déplacée, false sinon
@@ -220,4 +232,5 @@ public class KanbanController {
             alert.showAndWait();
         }
     }
+
 }

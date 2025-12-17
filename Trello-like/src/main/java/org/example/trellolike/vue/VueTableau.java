@@ -1,5 +1,6 @@
 package org.example.trellolike.vue;
 
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -9,6 +10,7 @@ import org.example.trellolike.Sujet;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
+import javafx.scene.control.Button;
 
 public class VueTableau extends HBox implements Observateur {
     /**
@@ -19,6 +21,10 @@ public class VueTableau extends HBox implements Observateur {
      * Le contrôleur gérant la logique du Kanban
      */
     private KanbanController controller;
+    /**
+     * Bouton pour ajouter une nouvelle liste de tâches
+     */
+    private Button btnAjouterListe;
 
     /**
      * Constructeur de la vue du tableau Kanban
@@ -31,6 +37,19 @@ public class VueTableau extends HBox implements Observateur {
 
         this.setSpacing(20);
         this.setStyle("-fx-padding: 20; -fx-background-color: #f4f4f4;");
+
+
+        /**
+         * * Bouton pour ajouter une nouvelle liste de tâches
+         */
+        this.btnAjouterListe = new Button("+");
+        this.btnAjouterListe.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Nouvelle Liste");
+            dialog.setHeaderText(null);
+            dialog.setContentText("Nom:");
+            dialog.showAndWait().ifPresent(nom -> controller.traiterAjoutListe(nom.trim()));
+        });
 
         this.projet.enregistrerObservateur(this);
 
@@ -61,6 +80,11 @@ public class VueTableau extends HBox implements Observateur {
 
             this.getChildren().add(colonneGraphique);
         }
+
+        /**
+         * * * Réajout du bouton d'ajout de liste à la fin
+         */
+        this.getChildren().add(btnAjouterListe);
     }
 
     /**
