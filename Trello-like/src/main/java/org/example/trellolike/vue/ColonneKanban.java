@@ -13,7 +13,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.example.trellolike.tache.Tache;
-
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
@@ -49,7 +50,43 @@ public class ColonneKanban extends VBox {
 
         Label lbl = new Label(liste.getNom());
         lbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-        this.getChildren().add(lbl);
+
+        //bouton pour la modif de Liste
+        Button btnOptions = new Button("...");
+        btnOptions.setOnAction(e -> {
+
+            ContextMenu menu = new ContextMenu();
+
+            MenuItem itemRenommer = new MenuItem("Renommer");
+            itemRenommer.setOnAction(ev -> {
+                TextInputDialog dialog = new TextInputDialog(liste.getNom());
+                dialog.setTitle("Renommer la liste");
+                dialog.setHeaderText(null);
+                dialog.setContentText("Nouveau nom:");
+                dialog.showAndWait().ifPresent(nom -> {
+                    if (!nom.trim().isEmpty()) {
+                        controller.traiterRenommerListe(liste, nom.trim());
+                    }
+                });
+            });
+
+            MenuItem itemArchiver = new MenuItem("Archiver");
+            itemArchiver.setOnAction(ev -> {
+                controller.traiterArchiverListeDeTaches(liste);
+            });
+
+            menu.getItems().addAll(itemRenommer, itemArchiver);
+            menu.show(btnOptions, javafx.geometry.Side.BOTTOM, 0, 0);
+        });
+
+        // apparence pour separation
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        // new Hbox avec separation
+        HBox header = new HBox();
+        header.getChildren().addAll(lbl, spacer, btnOptions);
+        this.getChildren().add(header);
 
         this.boxTaches = new VBox();
         this.boxTaches.setSpacing(10);

@@ -71,6 +71,24 @@ public class KanbanController {
     }
 
     /**
+     * Gère le renommage d'une liste de tâches
+     * @param liste la liste à renommer
+     * @param nouveauNom le nouveau nom
+     */
+    public void traiterRenommerListe(ListeDeTache liste, String nouveauNom) {
+        liste.setNom(nouveauNom);
+        projet.sauvegarderGlobalement();
+    }
+
+    /**
+     * Gère l'archivage d'une liste de tâches
+     * @param liste la liste à archiver
+     */
+    public void traiterArchiverListeDeTaches(ListeDeTache liste) {
+        projet.archiverListeDeTaches(liste);
+    }
+
+    /**
      * Vérifie si une tâche peut être déplacée (non bloquée).
      * @param t la tâche à vérifier
      * @return true si la tâche peut être déplacée, false sinon
