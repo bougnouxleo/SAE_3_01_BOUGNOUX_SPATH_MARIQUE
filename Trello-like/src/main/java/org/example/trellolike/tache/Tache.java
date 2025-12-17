@@ -161,6 +161,10 @@ public abstract class Tache implements java.io.Serializable {
         return etiquettes;
     }
 
+    public void setIdsDependances(List<Integer> idsDependances) {
+        this.idsDependances = idsDependances;
+    }
+
     public void ajouterDependance(Tache t) {
         if (t.getId() != this.id) { // Empêche de dépendre de soi-même
             this.idsDependances.add(t.getId());

@@ -1,69 +1,67 @@
-package org.example.trellolike.tache;
+    package org.example.trellolike.tache;
 
-import java.util.ArrayList;
-import java.util.List;
+    import java.util.ArrayList;
+    import java.util.List;
 
-public class TacheComposite extends Tache {
-    /**
-     * Liste des sous taches nécessaires à la réalisation de la tâche
-     */
-    private List<Tache> sousTaches;
+    public class TacheComposite extends Tache {
+        /**
+         * Liste des sous taches nécessaires à la réalisation de la tâche
+         */
+        private List<Tache> sousTaches;
 
-    /**
-     * Durée totale de la tache composite (somme des durées des sous-taches)
-     */
-    private int dureeTotale;
 
-    /**
-     * Constructeur de la tache composite
-     * @param nom nom de la tache
-     * @param description description de la tache
-     * @param dateDebut date de debut de la tache
-     * @param dateFin date de fin de la tache
-     */
-    public TacheComposite(String nom, String description, String dateDebut, String dateFin) {
-        super(nom, description, dateDebut, dateFin);
-        this.sousTaches = new ArrayList<>();
-    }
-    /**
-     * Constructeur par défaut (requis pour la sérialisation)
-     */
-    public TacheComposite() {
-        super();
-        this.sousTaches = new ArrayList<>();
-    }
-    /**
-     * Methode qui retourne la duree de la tache
-     * @return la duree de la tache
-     */
-    public int getDureeTotale(){
-        for (Tache sousTache : sousTaches) {
-            dureeTotale += sousTache.getDureeTotale();
+        /**
+         * Constructeur de la tache composite
+         * @param nom nom de la tache
+         * @param description description de la tache
+         * @param dateDebut date de debut de la tache
+         * @param dateFin date de fin de la tache
+         */
+        public TacheComposite(String nom, String description, String dateDebut, String dateFin) {
+            super(nom, description, dateDebut, dateFin);
+            this.sousTaches = new ArrayList<>();
         }
-        return dureeTotale;
-    }
+        /**
+         * Constructeur par défaut (requis pour la sérialisation)
+         */
+        public TacheComposite() {
+            super();
+            this.sousTaches = new ArrayList<>();
+        }
+        /**
+         * Methode qui retourne la duree de la tache
+         * @return la duree de la tache
+         */
+        public int getDureeTotale(){
+            int dureeTotale = 0;
+            if(sousTaches!=null) {
+                for (Tache sousTache : sousTaches) {
+                    dureeTotale += sousTache.getDureeTotale();
+                }
+            }
+            return dureeTotale;
+        }
 
-    /**
-     * Affiche en détail la tache
-     */
-    public void afficherDetail(){
-        System.out.println(this);
-    }
+        /**
+         * Affiche en détail la tache
+         */
+        public void afficherDetail() {
+            System.out.println("Tâche composite : " + getNom() + " (Durée : " + getDureeTotale() + ")");
+        }
+        /**
+         * Ajoute une sous tache dans la liste
+         * @param sousTache la sous tache
+         */
+        public void ajouterSousTache(Tache sousTache) {
+            sousTaches.add(sousTache);
+        }
 
-    /**
-     * Ajoute une sous tache dans la liste
-     * @param sousTache la sous tache
-     */
-    public void ajouterSousTache(Tache sousTache) {
-        sousTaches.add(sousTache);
-    }
+        public List<Tache> getSousTaches() {
+            return sousTaches;
+        }
 
-    public List<Tache> getSousTaches() {
-        return sousTaches;
-    }
+        public void setSousTaches(List<Tache> sousTaches) {
+            this.sousTaches = sousTaches;
+        }
 
-    public void setSousTaches(List<Tache> sousTaches) {
-        this.sousTaches = sousTaches;
     }
-
-}

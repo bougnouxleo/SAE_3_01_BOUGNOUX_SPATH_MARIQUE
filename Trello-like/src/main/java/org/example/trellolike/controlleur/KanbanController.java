@@ -92,17 +92,18 @@ public class KanbanController {
         Label titre = new Label(t.getNom());
         titre.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
+        Label dates = new Label("Début : " + t.getDateDebut() + " | Fin : " + t.getDateFin());
+
+        Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "h");
+        duree.setStyle("-fx-font-weight: bold; -fx-text-fill: blue;");
+
         Label lblDesc = new Label("Description :");
         TextArea description = new TextArea(t.getDescription());
         description.setEditable(true);
         description.setWrapText(true);
         description.setMaxHeight(100);
 
-        Label dates = new Label("Début : " + t.getDateDebut() + " | Fin : " + t.getDateFin());
-        Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "h");
-
         VBox boxDependances = new VBox(5);
-
         List<Tache> tachesBloquantes = new ArrayList<>();
 
         for (Integer idDep : t.getIdsDependances()) {
@@ -116,18 +117,65 @@ public class KanbanController {
             Label lblAlerte = new Label("⚠️ BLOQUÉE par " + tachesBloquantes.size() + " tâche(s) :");
             lblAlerte.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
-            ListView<Tache> listeViewBloquants = new ListView<>();
-            listeViewBloquants.getItems().addAll(tachesBloquantes);
-            listeViewBloquants.setPrefHeight(100);
+            boxDependances.getChildren().add(lblAlerte);
 
-            boxDependances.getChildren().addAll(lblAlerte, listeViewBloquants);
+            for (Tache bloquant : tachesBloquantes) {
+                Label lblNom = new Label(" • " + bloquant.getNom());
+                lblNom.setStyle("-fx-text-fill: red; -fx-padding: 0 0 0 20;");
+
+                boxDependances.getChildren().add(lblNom);
+            }
         } else {
             Label lblOk = new Label("✅ Aucune dépendance bloquante.");
             lblOk.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
             boxDependances.getChildren().add(lblOk);
         }
 
+        VBox boxComposite = new VBox(5);
+
+        if (t instanceof TacheComposite) {
+            TacheComposite composite = (TacheComposite) t;
+
+            Label lblSousTaches = new Label("Tâches dépendantes :");
+            lblSousTaches.setStyle("-fx-font-weight: bold; -fx-text-fill: #555;");
+
+            ListView<Tache> listSelectionEnfants = new ListView<>();
+            listSelectionEnfants.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            listSelectionEnfants.setMaxHeight(120);
+
+            List<Tache> candidats = new ArrayList<>();
+            for (ListeDeTache liste : projet.getListeDeTaches()) {
+                candidats.addAll(liste.getTaches());
+            }
+            candidats.remove(t);
+
+            listSelectionEnfants.getItems().addAll(candidats);
+
+            for (Tache sousTache : composite.getSousTaches()) {
+                listSelectionEnfants.getSelectionModel().select(sousTache);
+            }
+
+            Button btnValiderCompo = new Button("Mettre à jour les sous-tâches");
+            btnValiderCompo.setOnAction(e -> {
+                List<Tache> selection = listSelectionEnfants.getSelectionModel().getSelectedItems();
+                composite.setSousTaches(new ArrayList<>(selection));
+
+                duree.setText("Durée estimée : " + t.getDureeTotale() + "h");
+
+                projet.sauvegarderGlobalement();
+            });
+
+            boxComposite.getChildren().addAll(lblSousTaches, listSelectionEnfants, btnValiderCompo);
+        }
+
+        Button btnSaveDesc = new Button("Sauvegarder Description");
+        btnSaveDesc.setOnAction(e -> {
+            t.setDescription(description.getText());
+            projet.sauvegarderGlobalement();
+        });
+
         Button btnArchiver = new Button("Archiver la tâche");
+        btnArchiver.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: red;");
         btnArchiver.setOnAction(e -> {
             projet.archiverTache(t);
             detailStage.close();
@@ -136,9 +184,15 @@ public class KanbanController {
         Button btnFermer = new Button("Fermer");
         btnFermer.setOnAction(e -> detailStage.close());
 
-        layout.getChildren().addAll(titre, dates, duree, boxDependances, lblDesc, description, btnArchiver, btnFermer);
+        layout.getChildren().addAll(
+                titre, dates, duree,
+                boxDependances,
+                boxComposite,
+                lblDesc, description, btnSaveDesc,
+                btnArchiver, btnFermer
+        );
 
-        Scene scene = new Scene(layout, 400, 500);
+        Scene scene = new Scene(layout, 450, 750);
         detailStage.setScene(scene);
         detailStage.show();
     }
