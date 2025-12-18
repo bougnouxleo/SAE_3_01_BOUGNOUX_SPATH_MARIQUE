@@ -5,16 +5,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 import org.example.trellolike.tache.TacheSimple;
 import org.example.trellolike.vue.VueTableau;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Main extends Application {
     /**
@@ -64,26 +64,48 @@ public class Main extends Application {
     private HBox creerBarreDeNavigation() {
         HBox menu = new HBox(20);
         menu.setPadding(new Insets(15));
-        menu.setStyle("-fx-background-color: #333;");
+        menu.setStyle("-fx-background-color: violet;");
         menu.setAlignment(Pos.CENTER_LEFT);
 
         // --- Création des boutons ---
         Button btnKanban = new Button("Vue Kanban");
         Button btnListe = new Button("Vue Liste");
-        Button btnStats = new Button("Vue Gantt");
+        Button btnGantt = new Button("Vue Gantt");
+
+        //Images des boutons
+        //Gantt
+        Image img = new Image("/gantt.jpg");
+        ImageView view = new ImageView(img);
+        view.setFitHeight(40);
+        view.setPreserveRatio(true);
+
+        //Liste
+        Image img2 = new Image("/list.png");
+        ImageView view2 = new ImageView(img2);
+        view2.setFitHeight(40);
+        view2.setPreserveRatio(true);
+        btnListe.setGraphic(view2);
+
+        //Kanban
+        Image img3 = new Image("/kanban.png");
+        ImageView view3 = new ImageView(img3);
+        view3.setFitHeight(40);
+        view3.setPreserveRatio(true);
+        btnKanban.setGraphic(view3);
 
         // Style commun des boutons (Blanc sur gris)
         String styleBtn = "-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px; -fx-border-color: white; -fx-border-radius: 5;";
         btnKanban.setStyle(styleBtn);
         btnListe.setStyle(styleBtn);
-        btnStats.setStyle(styleBtn);
+        btnGantt.setStyle(styleBtn);
+        btnGantt.setGraphic(view);
 
         // --- Actions des boutons ---
         btnKanban.setOnAction(e -> changerVue("KANBAN"));
         btnListe.setOnAction(e -> changerVue("LISTE"));
-        btnStats.setOnAction(e -> changerVue("STATS"));
+        btnGantt.setOnAction(e -> changerVue("STATS"));
 
-        menu.getChildren().addAll(btnKanban, btnListe, btnStats);
+        menu.getChildren().addAll(btnKanban, btnListe, btnGantt);
         return menu;
     }
 
