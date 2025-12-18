@@ -198,6 +198,18 @@ public class Projet implements Sujet, java.io.Serializable {
         sauvegarderGlobalement();
     }
 
+    /**
+     * Méthode qui désarchive une tâche
+     * @param liste la liste de tâche où remettre la tâche désarchivée
+     */
+    public void archiverListeDeTaches(ListeDeTache liste) {
+        for (Tache t : new ArrayList<>(liste.getTaches())) {
+            archiverTache(t);
+        }
+        listeDeTaches.remove(liste);
+        sauvegarderGlobalement();
+    }
+
 
 }
 

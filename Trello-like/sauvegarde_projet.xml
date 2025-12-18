@@ -149,9 +149,6 @@
         </void>
        </object>
       </void>
-      <void method="add">
-       <object idref="TacheSimple0"/>
-      </void>
      </void>
     </object>
    </void>
@@ -166,6 +163,18 @@
     <object class="org.example.trellolike.tache.ListeDeTache">
      <void property="nom">
       <string>Seria?</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache2">
+     <void property="nom">
+      <string>aaaa</string>
+     </void>
+     <void property="taches">
+      <void method="add">
+       <object idref="TacheSimple0"/>
+      </void>
      </void>
     </object>
    </void>
