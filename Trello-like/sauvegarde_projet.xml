@@ -138,6 +138,9 @@
      <void property="taches">
       <void method="add">
        <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="description">
+         <string></string>
+        </void>
         <void property="id">
          <int>3</int>
         </void>
@@ -153,30 +156,9 @@
     </object>
    </void>
    <void method="add">
-    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache2">
+    <object class="org.example.trellolike.tache.ListeDeTache">
      <void property="nom">
       <string>test</string>
-     </void>
-     <void property="taches">
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2025-12-17</string>
-        </void>
-        <void property="dateFin">
-         <string>2025-12-18</string>
-        </void>
-        <void property="description">
-         <string></string>
-        </void>
-        <void property="id">
-         <int>1</int>
-        </void>
-        <void property="nom">
-         <string>dhgcygfd</string>
-        </void>
-       </object>
-      </void>
      </void>
     </object>
    </void>
