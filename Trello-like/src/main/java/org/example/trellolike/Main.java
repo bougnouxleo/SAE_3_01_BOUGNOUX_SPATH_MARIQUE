@@ -72,6 +72,7 @@ public class Main extends Application {
         Button btnKanban = new Button("Vue Kanban");
         Button btnListe = new Button("Vue Liste");
         Button btnGantt = new Button("Vue Gantt");
+        Button btnArchives = new Button("Archives");
 
         //Images des boutons
         //Gantt
@@ -79,6 +80,7 @@ public class Main extends Application {
         ImageView view = new ImageView(img);
         view.setFitHeight(40);
         view.setPreserveRatio(true);
+        btnGantt.setGraphic(view);
 
         //Liste
         Image img2 = new Image("/list.png");
@@ -94,19 +96,28 @@ public class Main extends Application {
         view3.setPreserveRatio(true);
         btnKanban.setGraphic(view3);
 
+        //Archives
+        Image img4 = new Image("/archive.png");
+        ImageView view4 = new ImageView(img4);
+        view4.setFitHeight(40);
+        view4.setPreserveRatio(true);
+        btnArchives.setGraphic(view4);
+
         // Style commun des boutons (Blanc sur gris)
         String styleBtn = "-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px; -fx-border-color: white; -fx-border-radius: 5;";
         btnKanban.setStyle(styleBtn);
         btnListe.setStyle(styleBtn);
         btnGantt.setStyle(styleBtn);
-        btnGantt.setGraphic(view);
+        btnArchives.setStyle(styleBtn);
+
 
         // --- Actions des boutons ---
         btnKanban.setOnAction(e -> changerVue("KANBAN"));
         btnListe.setOnAction(e -> changerVue("LISTE"));
         btnGantt.setOnAction(e -> changerVue("STATS"));
+        btnArchives.setOnAction(e -> changerVue("ARCHIVES"));
 
-        menu.getChildren().addAll(btnKanban, btnListe, btnGantt);
+        menu.getChildren().addAll(btnKanban, btnListe, btnGantt, btnArchives);
         return menu;
     }
 
@@ -127,6 +138,10 @@ public class Main extends Application {
 
             case "STATS":
                 //root.setCenter(creerVueGantt());
+                break;
+
+            case "ARCHIVES":
+                //root.setCenter(creerVueArchives());
                 break;
         }
     }
