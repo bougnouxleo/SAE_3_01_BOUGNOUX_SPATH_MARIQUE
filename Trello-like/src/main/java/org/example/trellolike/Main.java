@@ -1,7 +1,14 @@
 package org.example.trellolike;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
@@ -10,72 +17,114 @@ import org.example.trellolike.tache.TacheSimple;
 import org.example.trellolike.vue.VueTableau;
 
 public class Main extends Application {
-
+    /**
+     * Layout principal de l'application
+     */
     private Projet projet;
+    /**
+     * Layout principal de l'application
+     */
+    private KanbanController controller;
+    /**
+     * Layout principal de l'application
+     */
+    private BorderPane root;
 
     @Override
     public void start(Stage stage) {
-        // 1. CHARGEMENT DU MODÈLE (PERSISTANCE XML)
-        // On essaye de récupérer la sauvegarde. Si elle n'existe pas, ça crée un projet vide.
-        // Assurez-vous d'avoir implémenté la méthode statique dans Projet ou GestionPersistance
+        // 1. CHARGEMENT
         this.projet = Projet.getInstance();
-
-        // 2. JEU DE DONNÉES DE TEST (Seulement si nouveau projet)
-        // Cela permet de tester visuellement sans devoir tout créer à la main à chaque fois
         if (this.projet.getListes().isEmpty()) {
             initialiserDonneesDeTest();
         }
+        this.controller = new KanbanController(this.projet);
 
-        // 3. INITIALISATION DU CONTROLEUR
-        // Le contrôleur a besoin du modèle pour effectuer les actions (déplacer, etc.)
-        KanbanController controller = new KanbanController(this.projet);
+        // 2. CRÉATION DU LAYOUT PRINCIPAL (BorderPane)
+        this.root = new BorderPane();
 
-        // 4. INITIALISATION DE LA VUE (OBSERVATEUR)
-        // La vue a besoin du modèle (pour s'abonner) et du contrôleur (pour les actions)
-        VueTableau root = new VueTableau(this.projet, controller);
+        // 3. CRÉATION DU MENU (Barre de navigation)
+        HBox menuBar = creerBarreDeNavigation();
 
-        // 5. CONFIGURATION DE LA FENÊTRE
-        // On utilise 'root' (notre VueTableau qui hérite de HBox) directement comme racine
-        Scene scene = new Scene(root, 1024, 768); // Taille plus confortable pour un Kanban
+        // On place le menu tout en haut
+        root.setTop(menuBar);
 
-        // Ajout d'une feuille de style CSS (Optionnel mais recommandé pour le visuel des cartes)
-        // scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        // 4. AFFICHAGE DE LA VUE PAR DÉFAUT (Le Kanban)
+        changerVue("KANBAN");
 
+        // 5. CONFIGURATION DE LA SCÈNE
+        Scene scene = new Scene(root, 1024, 768);
         stage.setTitle("SAE 3.01 - Gestionnaire de Tâches (" + projet.getNom() + ")");
         stage.setScene(scene);
         stage.show();
     }
 
     /**
-     * Crée des données bidons pour tester les fonctionnalités :
-     * - Colonnes
-     * - Tâches simples
-     * - Tâche bloquée (Dépendance)
+     * Crée la barre de menu avec les 3 boutons
+     */
+    private HBox creerBarreDeNavigation() {
+        HBox menu = new HBox(20);
+        menu.setPadding(new Insets(15));
+        menu.setStyle("-fx-background-color: #333;");
+        menu.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Création des boutons ---
+        Button btnKanban = new Button("Vue Kanban");
+        Button btnListe = new Button("Vue Liste");
+        Button btnStats = new Button("Vue Gantt");
+
+        // Style commun des boutons (Blanc sur gris)
+        String styleBtn = "-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px; -fx-border-color: white; -fx-border-radius: 5;";
+        btnKanban.setStyle(styleBtn);
+        btnListe.setStyle(styleBtn);
+        btnStats.setStyle(styleBtn);
+
+        // --- Actions des boutons ---
+        btnKanban.setOnAction(e -> changerVue("KANBAN"));
+        btnListe.setOnAction(e -> changerVue("LISTE"));
+        btnStats.setOnAction(e -> changerVue("STATS"));
+
+        menu.getChildren().addAll(btnKanban, btnListe, btnStats);
+        return menu;
+    }
+
+    /**
+     * Change la vue affichée au centre de l'application
+     * @param typeVue Le type de vue à afficher ("KANBAN", "LISTE", "STATS")
+     */
+    private void changerVue(String typeVue) {
+        switch (typeVue) {
+            case "KANBAN":
+                VueTableau vueKanban = new VueTableau(this.projet, this.controller);
+                root.setCenter(vueKanban);
+                break;
+
+            case "LISTE":
+                //root.setCenter(creerVueListe());
+                break;
+
+            case "STATS":
+                //root.setCenter(creerVueGantt());
+                break;
+        }
+    }
+
+    /**
+     * Crée une vue liste bidon (à remplacer par la vraie vue liste)
      */
     private void initialiserDonneesDeTest() {
         System.out.println("Création du jeu de données de test...");
-
-        // A. Création des Listes (Colonnes)
         ListeDeTache todo = new ListeDeTache("À Faire");
         ListeDeTache doing = new ListeDeTache("En Cours");
         ListeDeTache done = new ListeDeTache("Terminé");
-
-        // Ajout au projet
         projet.ajouterListe(todo);
         projet.ajouterListe(doing);
         projet.ajouterListe(done);
-
-        // B. Création de Tâches
         Tache t1 = new TacheSimple("Configurer Git",null,null,null,0);
         Tache t2 = new TacheSimple("Faire la maquette Figma",null,null,null,0);
         Tache t3 = new TacheSimple("Coder le Modèle Java",null,null,null,0);
-
-
-        // D. Ajout des tâches dans les listes
-        done.ajouterTache(t1);      // Celle-ci est finie
+        done.ajouterTache(t1);
         todo.ajouterTache(t2);
         todo.ajouterTache(t3);
-        // E. Sauvegarde initiale
         projet.sauvegarderGlobalement();
     }
 
@@ -85,9 +134,6 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        // Sauvegarde automatique à la fermeture de l'application
-        if (this.projet != null) {
-            this.projet.sauvegarderGlobalement();
-        }
+        if (this.projet != null) this.projet.sauvegarderGlobalement();
     }
 }
