@@ -59,7 +59,8 @@ public class Main extends Application {
     }
 
     /**
-     * Crée la barre de menu avec les 3 boutons
+     * Crée la barre de navigation avec les boutons pour changer de vue
+     * @return La barre de navigation (HBox)
      */
     private HBox creerBarreDeNavigation() {
         HBox menu = new HBox(20);
