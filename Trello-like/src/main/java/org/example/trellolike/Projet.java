@@ -5,6 +5,7 @@ import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 import org.example.trellolike.vue.Observateur;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -175,9 +176,17 @@ public class Projet implements Sujet, java.io.Serializable {
      * @return true si la tâche est terminée, false sinon
      */
     public boolean estTacheTerminee(Tache t) {
-        ListeDeTache listeParent = trouverListeDeLaTache(t);
-        if (listeParent == null) return false;
-        return listeParent.getNom().equalsIgnoreCase("Terminé");
+        if (t.getDateFin() == null || t.getDateFin().isEmpty()) {
+            return false;
+        }
+        try {
+            LocalDate dateFinTache = LocalDate.parse(t.getDateFin());
+            LocalDate aujourdhui = LocalDate.now();
+            return aujourdhui.isAfter(dateFinTache);
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

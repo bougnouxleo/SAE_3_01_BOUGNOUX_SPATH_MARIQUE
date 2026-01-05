@@ -73,4 +73,5 @@ public class ListeDeTache implements Serializable {
         if (!(o instanceof ListeDeTache that)) return false;
         return Objects.equals(getNom(), that.getNom());
     }
+
 }
