@@ -105,7 +105,7 @@ public class Main extends Application {
         btnKanban.setGraphic(view3);
 
         //Archives
-        Image img4 = new Image("/archive.png");
+        Image img4 = new Image("/archive.jpg");
         ImageView view4 = new ImageView(img4);
         view4.setFitHeight(40);
         view4.setPreserveRatio(true);
