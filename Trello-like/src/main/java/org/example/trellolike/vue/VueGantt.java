@@ -53,7 +53,7 @@ public class VueGantt extends ScrollPane implements Observateur {
     public void actualiser(Sujet s) {
         grid.getChildren().clear();
 
-        List<Tache> toutesLesTaches = obtenirToutesLesTaches();
+        List<Tache> toutesLesTaches = this.projet.obtenirToutesLesTaches();
         if (toutesLesTaches.isEmpty()) {
             grid.add(new Label("Aucune tâche à afficher."), 0, 0);
             return;
@@ -79,13 +79,12 @@ public class VueGantt extends ScrollPane implements Observateur {
                 Rectangle barre = new Rectangle(dureeJours * LARGEUR_JOUR, HAUTEUR_BARRE);
                 barre.setArcHeight(10);
                 barre.setArcWidth(10);
-                //barre.setFill(determinerCouleur(t)); // Utilisation de la méthode de couleur
+                barre.setFill(determinerCouleur(t)); // Utilisation de la méthode de couleur
 
                 // 2. Création du Label (Texte sur la barre)
                 Label lblNom = new Label(t.getNom());
                 lblNom.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
                 lblNom.setMaxWidth(dureeJours * LARGEUR_JOUR - 10); // Empêche le texte de déborder
-                lblNom.setEllipsisString("..."); // Ajoute des points si le nom est trop long
 
                 // 3. Superposition dans un StackPane
                 StackPane stack = new StackPane();
@@ -102,16 +101,20 @@ public class VueGantt extends ScrollPane implements Observateur {
                 spacer.setMinWidth(decalageJours * LARGEUR_JOUR);
                 ligneTemps.getChildren().addAll(spacer, stack);
 
-                // On ajoute tout dans la colonne 0 car on n'a plus besoin de la colonne de noms
+                // On ajoute tout dans la colonne 0
                 grid.add(ligneTemps, 0, indexLigne);
 
                 indexLigne++;
             } catch (Exception e) {
-                // Ignore les erreurs de format de date
+                // Ignorer les tâches avec des dates invalides
             }
         }
     }
 
+    /**
+     * Méthode pour créer l'en-tête des dates
+     * @param dateMin la date minimale
+     */
     private void creerEnTete(LocalDate dateMin) {
         HBox bandeauDates = new HBox();
         for (int i = 0; i < 50; i++) {
@@ -125,7 +128,11 @@ public class VueGantt extends ScrollPane implements Observateur {
         grid.add(bandeauDates, 0, 0);
     }
 
-    /*
+    /**
+     * Méthode pour déterminer la couleur d'une tâche
+     * @param t la tâche
+     * @return la couleur
+     */
     private Color determinerCouleur(Tache t) {
         if (projet.estTacheTerminee(t)) {
             return Color.web("#2ecc71"); // Vert
@@ -136,16 +143,13 @@ public class VueGantt extends ScrollPane implements Observateur {
         }
         return Color.web("#95a5a6"); // Gris
     }
+
+
+    /**
+     * Méthode pour calculer la date minimale parmi les tâches
+     * @param taches la liste des tâches
+     * @return la date minimale
      */
-
-    private List<Tache> obtenirToutesLesTaches() {
-        List<Tache> listeFinale = new ArrayList<>();
-        for (ListeDeTache l : projet.getListes()) {
-            listeFinale.addAll(l.getTaches());
-        }
-        return listeFinale;
-    }
-
     private LocalDate calculerDateMin(List<Tache> taches) {
         LocalDate min = LocalDate.now();
         for (Tache t : taches) {

@@ -226,6 +226,18 @@ public class Projet implements Sujet, java.io.Serializable {
         this.listeDesArchives = listeDesArchives;
     }
 
+    /**
+     * Méthode qui retourne toutes les tâches du projet
+     * @return la liste de toutes les tâches
+     */
+    public List<Tache> obtenirToutesLesTaches() {
+        List<Tache> listeFinale = new ArrayList<>();
+        for (ListeDeTache l : this.getListes()) {
+            listeFinale.addAll(l.getTaches());
+        }
+        return listeFinale;
+    }
+
 
 }
 
