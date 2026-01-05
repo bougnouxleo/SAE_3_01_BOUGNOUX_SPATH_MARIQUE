@@ -193,6 +193,28 @@
         </void>
        </object>
       </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-05</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-10</string>
+        </void>
+        <void property="description">
+         <string>rezere</string>
+        </void>
+        <void property="duree">
+         <int>3</int>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>vues liste</string>
+        </void>
+       </object>
+      </void>
      </void>
     </object>
    </void>

@@ -12,6 +12,7 @@ import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 import org.example.trellolike.tache.TacheSimple;
+import org.example.trellolike.vue.VueListe;
 import org.example.trellolike.vue.VueTableau;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -133,7 +134,8 @@ public class Main extends Application {
                 break;
 
             case "LISTE":
-                //root.setCenter(creerVueListe());
+                VueListe vueListe = new VueListe(this.projet);
+                root.setCenter(vueListe);
                 break;
 
             case "STATS":
