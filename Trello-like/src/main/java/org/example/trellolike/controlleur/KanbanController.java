@@ -124,7 +124,7 @@ public class KanbanController {
 
         Label dates = new Label("Début : " + t.getDateDebut() + " | Fin : " + t.getDateFin());
 
-        Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "h");
+        Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "J");
         duree.setStyle("-fx-font-weight: bold; -fx-text-fill: blue;");
 
         Label lblDesc = new Label("Description :");

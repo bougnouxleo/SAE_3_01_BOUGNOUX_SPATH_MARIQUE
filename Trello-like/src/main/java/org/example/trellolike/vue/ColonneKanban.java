@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.example.trellolike.Projet;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
@@ -137,14 +138,17 @@ public class ColonneKanban extends VBox {
 
         CheckBox chkComposite = new CheckBox("Est un projet (Tâche Composite)");
 
-        TextField txtDuree = new TextField("0");
-        txtDuree.setPromptText("Heures");
+        Text txtDuree = new Text("0");
 
-        //Peut pas être une tâche composite et avoir une durée fixe
+        dateDebut.valueProperty().addListener((obs, oldVal, newVal) ->
+                mettreAJourDuree(dateDebut, dateFin, txtDuree, chkComposite));
+
+        dateFin.valueProperty().addListener((obs, oldVal, newVal) ->
+                mettreAJourDuree(dateDebut, dateFin, txtDuree, chkComposite));
+
         chkComposite.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
             txtDuree.setDisable(isSelected);
-            if (isSelected) txtDuree.setText("Calculé auto.");
-            else txtDuree.setText("0");
+            mettreAJourDuree(dateDebut, dateFin, txtDuree, chkComposite);
         });
 
         Label lblDep = new Label("Est bloquée par :");
@@ -165,7 +169,7 @@ public class ColonneKanban extends VBox {
         grid.add(new Label("Fin :"), 0, 3);       grid.add(dateFin, 1, 3);
 
         grid.add(new Label("Type :"), 0, 4);      grid.add(chkComposite, 1, 4);
-        grid.add(new Label("Durée (h) :"), 0, 5); grid.add(txtDuree, 1, 5);
+        grid.add(new Label("Durée (J) :"), 0, 5); grid.add(txtDuree, 1, 5);
 
         grid.add(new Label("Bloqué par :"), 0, 6);grid.add(listeDependances, 1, 6);
 
@@ -174,17 +178,29 @@ public class ColonneKanban extends VBox {
         Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnTypeValider);
 
         btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            LocalDate d = dateDebut.getValue();
+            LocalDate debut = dateDebut.getValue();
+            LocalDate fin = dateFin.getValue();
 
-            if (d != null && d.isBefore(LocalDate.now())) {
+            // 1. Vérifier si les dates sont remplies
+            if (debut == null || fin == null) {
                 event.consume();
+                afficherAlerte("Champs vides", "Veuillez renseigner les deux dates.");
+                return;
+            }
 
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Date invalide");
-                alert.setContentText("Vous ne pouvez pas choisir une date dans le passé !");
-                alert.show();
+            // 2. Vérifier que le début n'est pas dans le passé
+            if (debut.isBefore(LocalDate.now())) {
+                event.consume();
+                afficherAlerte("Date invalide", "La date de début ne peut pas être dans le passé !");
+            }
+            // 3. Vérifier que la fin est APRES le début
+            else if (fin.isBefore(debut)) {
+                event.consume();
+                afficherAlerte("Incohérence", "La date de fin ne peut pas être avant la date de début !");
             }
         });
+
+
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == btnTypeValider) {
                 // Parsing de la durée
@@ -212,5 +228,43 @@ public class ColonneKanban extends VBox {
             return null;
         });
         dialog.showAndWait();
+    }
+
+    /**
+     * Affiche une alerte avec le titre et le message donnés
+     * @param titre
+     * @param message
+     */
+    private void afficherAlerte(String titre, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titre);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
+
+    /**
+     * Met à jour le champ durée en fonction des dates et du type de tâche
+     * @param debut
+     * @param fin
+     * @param txtDuree
+     * @param chkComposite
+     */
+    private void mettreAJourDuree(DatePicker debut, DatePicker fin, Text txtDuree, CheckBox chkComposite) {
+        if (chkComposite.isSelected()) {
+            txtDuree.setText("Calculé auto.");
+            return;
+        }
+
+        LocalDate d1 = debut.getValue();
+        LocalDate d2 = fin.getValue();
+
+        if (d1 != null && d2 != null) {
+            long jours = java.time.temporal.ChronoUnit.DAYS.between(d1, d2);
+
+            txtDuree.setText(String.valueOf(Math.max(0, jours)));
+        } else {
+            txtDuree.setText("0");
+        }
     }
 }

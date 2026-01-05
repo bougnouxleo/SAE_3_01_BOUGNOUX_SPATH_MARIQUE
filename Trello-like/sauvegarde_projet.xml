@@ -117,6 +117,82 @@
         </void>
        </object>
       </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheComposite" id="TacheComposite2">
+        <void property="dateDebut">
+         <string>2025-12-18</string>
+        </void>
+        <void property="dateFin">
+         <string>2025-12-25</string>
+        </void>
+        <void property="description">
+         <string></string>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="idsDependances">
+         <void method="add">
+          <int>3</int>
+         </void>
+         <void method="add">
+          <int>3</int>
+         </void>
+        </void>
+        <void property="nom">
+         <string>projet</string>
+        </void>
+        <void property="sousTaches">
+         <void method="add">
+          <object idref="TacheComposite1"/>
+         </void>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-05</string>
+        </void>
+        <void property="dateFin">
+         <string>2025-12-31</string>
+        </void>
+        <void property="description">
+         <string>aaa</string>
+        </void>
+        <void property="duree">
+         <int>-5</int>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>aaaa</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-05</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-08</string>
+        </void>
+        <void property="description">
+         <string>aaaaaaaaaaaaa</string>
+        </void>
+        <void property="duree">
+         <int>3</int>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>aaaaaaaaaa</string>
+        </void>
+       </object>
+      </void>
      </void>
     </object>
    </void>
@@ -136,7 +212,7 @@
       <void method="add">
        <object class="org.example.trellolike.tache.TacheSimple">
         <void property="description">
-         <string></string>
+         <string>gyftftf</string>
         </void>
         <void property="id">
          <int>3</int>
@@ -145,9 +221,6 @@
          <string>Coder le Modèle Java</string>
         </void>
        </object>
-      </void>
-      <void method="add">
-       <object idref="TacheSimple0"/>
       </void>
      </void>
     </object>
@@ -161,6 +234,16 @@
       <void method="add">
        <object idref="TacheSimple1"/>
       </void>
+      <void method="add">
+       <object idref="TacheSimple0"/>
+      </void>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.example.trellolike.tache.ListeDeTache">
+     <void property="nom">
+      <string>test$</string>
      </void>
     </object>
    </void>

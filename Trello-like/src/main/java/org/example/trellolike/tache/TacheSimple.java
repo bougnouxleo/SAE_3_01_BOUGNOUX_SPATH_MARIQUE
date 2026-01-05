@@ -1,9 +1,12 @@
 package org.example.trellolike.tache;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 public class TacheSimple extends Tache {
 
     /**
-     * Duree de la tache
+     * Duree de la tache en jours
      * IMPORTANT : On retire 'final' pour permettre au XMLDecoder de modifier la valeur après création.
      */
     private int duree;
@@ -20,9 +23,11 @@ public class TacheSimple extends Tache {
      * Constructeur complet (celui que vous utilisez dans le Main)
      */
     public TacheSimple(String nom, String description, String dateDebut, String dateFin, int duree){
-        // Attention : assurez-vous que Tache a aussi un constructeur adapté
         super(nom, description, dateDebut, dateFin);
-        this.duree = duree;
+        LocalDate debut = LocalDate.parse(dateDebut);
+        LocalDate fin = LocalDate.parse(dateFin);
+
+        this.duree = (int) ChronoUnit.DAYS.between(debut, fin);
     }
 
     /**
