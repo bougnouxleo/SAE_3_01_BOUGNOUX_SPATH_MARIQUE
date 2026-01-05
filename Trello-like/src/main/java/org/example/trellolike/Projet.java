@@ -210,6 +210,22 @@ public class Projet implements Sujet, java.io.Serializable {
         sauvegarderGlobalement();
     }
 
+    /**
+     * Méthode qui retourne la liste des tâches archivées
+     * @return la liste des tâches archivées
+     */
+    public List<Tache> getListeDesArchives() {
+        return listeDesArchives;
+    }
+
+    /**
+     * Méthode qui définit la liste des tâches archivées
+     * @param listeDesArchives la liste des tâches archivées
+     */
+    public void setListeDesArchives(List<Tache> listeDesArchives) {
+        this.listeDesArchives = listeDesArchives;
+    }
+
 
 }
 

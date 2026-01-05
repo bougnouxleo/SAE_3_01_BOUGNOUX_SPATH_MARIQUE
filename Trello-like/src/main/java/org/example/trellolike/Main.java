@@ -8,10 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.example.trellolike.controlleur.GanttController;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 import org.example.trellolike.tache.TacheSimple;
+import org.example.trellolike.vue.VueGantt;
 import org.example.trellolike.vue.VueListe;
 import org.example.trellolike.vue.VueTableau;
 import javafx.scene.image.Image;
@@ -30,6 +32,10 @@ public class Main extends Application {
      * Layout principal de l'application
      */
     private BorderPane root;
+    /**
+     * Controller de la vue Gantt
+     */
+    private GanttController ganttController;
 
     @Override
     public void start(Stage stage) {
@@ -39,6 +45,7 @@ public class Main extends Application {
             initialiserDonneesDeTest();
         }
         this.controller = new KanbanController(this.projet);
+        this.ganttController = new GanttController(this.projet);
 
         // 2. CRÉATION DU LAYOUT PRINCIPAL (BorderPane)
         this.root = new BorderPane();
@@ -115,7 +122,7 @@ public class Main extends Application {
         // --- Actions des boutons ---
         btnKanban.setOnAction(e -> changerVue("KANBAN"));
         btnListe.setOnAction(e -> changerVue("LISTE"));
-        btnGantt.setOnAction(e -> changerVue("STATS"));
+        btnGantt.setOnAction(e -> changerVue("GANTT"));
         btnArchives.setOnAction(e -> changerVue("ARCHIVES"));
 
         menu.getChildren().addAll(btnKanban, btnListe, btnGantt, btnArchives);
@@ -134,12 +141,13 @@ public class Main extends Application {
                 break;
 
             case "LISTE":
-                VueListe vueListe = new VueListe(this.projet);
-                root.setCenter(vueListe);
+                //VueListe vueListe = new VueListe(this.projet);
+                //root.setCenter(vueListe);
                 break;
 
-            case "STATS":
-                //root.setCenter(creerVueGantt());
+            case "GANTT":
+                VueGantt vueGantt = new VueGantt(this.projet, this.ganttController);
+                root.setCenter(vueGantt);
                 break;
 
             case "ARCHIVES":
