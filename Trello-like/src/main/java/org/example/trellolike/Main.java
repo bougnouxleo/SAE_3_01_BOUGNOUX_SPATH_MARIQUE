@@ -141,8 +141,8 @@ public class Main extends Application {
                 break;
 
             case "LISTE":
-                //VueListe vueListe = new VueListe(this.projet);
-                //root.setCenter(vueListe);
+                VueListe vueListe = new VueListe(this.projet);
+                root.setCenter(vueListe);
                 break;
 
             case "GANTT":
