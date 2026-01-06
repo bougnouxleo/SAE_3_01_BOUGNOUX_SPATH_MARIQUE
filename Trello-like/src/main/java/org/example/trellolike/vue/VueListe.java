@@ -60,7 +60,7 @@ public class VueListe extends ScrollPane implements Observateur {
             // 2. Création de l'affichage pour chaque jour
             for (Map.Entry<LocalDate, List<Tache>> entry : tachesParJour.entrySet()) {
                 LocalDate date = entry.getKey();
-                List<Tache> tachesDuJour = entry.getValue();
+                  List<Tache> tachesDuJour = entry.getValue();
 
                 // A. Titre du jour (ex: "Lundi")
                 Label titreJour = new Label(controller.getNomJour(date));

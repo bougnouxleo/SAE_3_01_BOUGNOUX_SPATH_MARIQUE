@@ -16,6 +16,7 @@ import org.example.trellolike.tache.TacheSimple;
 import org.example.trellolike.vue.VueGantt;
 import org.example.trellolike.vue.VueListe;
 import org.example.trellolike.vue.VueTableau;
+import org.example.trellolike.vue.VueArchives;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -160,7 +161,8 @@ public class Main extends Application {
                 break;
 
             case "ARCHIVES":
-                //root.setCenter(creerVueArchives());
+                VueArchives vueArchives = new VueArchives(this.projet);
+                root.setCenter(vueArchives);
                 break;
         }
     }
