@@ -1,0 +1,123 @@
+/* Configuration Globale */
+.root {
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-background-color: #F8F9FA; /* Gris très clair pour le fond */
+}
+
+/* Barre de Navigation (Le bandeau du haut) */
+.menu-bar-container {
+    -fx-background-color: #E082D7; /* Rose/Violet pastel du screen */
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.nav-button {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-color: white;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Colonnes Kanban */
+.kanban-column {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #DEE2E6;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+}
+
+.column-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+    -fx-padding: 5 0 15 0;
+}
+
+/* Cartes de Tâches (Kanban et Liste) */
+.task-card {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E9ECEF;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 12;
+    -fx-margin: 5;
+}
+
+.task-card:hover {
+    -fx-border-color: #D0BFFF; /* Teinte violette au survol */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+/* Couleurs de Statut (Pastels) */
+.status-finished {
+    -fx-fill: #A8E6CF; /* Vert pastel */
+    -fx-background-color: #A8E6CF;
+}
+
+.status-in-progress {
+    -fx-fill: #AEDFF7; /* Bleu pastel */
+    -fx-background-color: #AEDFF7;
+}
+
+.status-planned {
+    -fx-fill: #DCDDE1; /* Gris pastel */
+    -fx-background-color: #DCDDE1;
+}
+
+/* Badges de retard ou durée (Les cercles rouges) */
+.badge-count {
+    -fx-background-color: #FFD3D3; /* Rouge très clair */
+    -fx-text-fill: #FF6B6B;       /* Texte corail */
+    -fx-background-radius: 15;
+    -fx-padding: 2 8 2 8;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+/* Boutons d'action (+ Ajouter une tâche) */
+.btn-add {
+    -fx-background-color: #F1F3F5;
+    -fx-text-fill: #495057;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-add:hover {
+    -fx-background-color: #E9ECEF;
+}
+
+/* Date Pickers et Inputs */
+.date-picker, .text-field {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #CED4DA;
+}
+
+/* Dans ton fichier style.css */
+
+.status-finished Rectangle {
+    -fx-fill: #A8E6CF; /* Vert pastel */
+}
+
+.status-in-progress Rectangle {
+    -fx-fill: #AEDFF7; /* Bleu pastel */
+}
+
+.status-planned Rectangle {
+    -fx-fill: #DCDDE1; /* Gris pastel */
+}
+
+.gantt-task-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

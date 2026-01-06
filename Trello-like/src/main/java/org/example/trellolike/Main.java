@@ -52,6 +52,7 @@ public class Main extends Application {
 
         // 3. CRÉATION DU MENU (Barre de navigation)
         HBox menuBar = creerBarreDeNavigation();
+        menuBar.getStyleClass().add("menu-bar-container");
 
         // On place le menu tout en haut
         root.setTop(menuBar);
@@ -61,6 +62,7 @@ public class Main extends Application {
 
         // 5. CONFIGURATION DE LA SCÈNE
         Scene scene = new Scene(root, 1024, 768);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.setTitle("SAE 3.01 - Gestionnaire de Tâches (" + projet.getNom() + ")");
         stage.setScene(scene);
         stage.show();
@@ -124,6 +126,13 @@ public class Main extends Application {
         btnListe.setOnAction(e -> changerVue("LISTE"));
         btnGantt.setOnAction(e -> changerVue("GANTT"));
         btnArchives.setOnAction(e -> changerVue("ARCHIVES"));
+
+
+        // --- Ajout style bouton ---
+        btnKanban.getStyleClass().add("nav-button");
+        btnGantt.getStyleClass().add("nav-button");
+        btnListe.getStyleClass().add("nav-button");
+        btnArchives.getStyleClass().add("nav-button");
 
         menu.getChildren().addAll(btnKanban, btnListe, btnGantt, btnArchives);
         return menu;

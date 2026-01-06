@@ -79,17 +79,30 @@ public class VueGantt extends ScrollPane implements Observateur {
                 Rectangle barre = new Rectangle(dureeJours * LARGEUR_JOUR, HAUTEUR_BARRE);
                 barre.setArcHeight(10);
                 barre.setArcWidth(10);
-                barre.setFill(determinerCouleur(t)); // Utilisation de la méthode de couleur
+                //barre.setFill(determinerCouleur(t)); // Utilisation de la méthode de couleur
 
                 // 2. Création du Label (Texte sur la barre)
                 Label lblNom = new Label(t.getNom());
-                lblNom.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
+                //lblNom.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12px;");
+                lblNom.getStyleClass().add("gantt-task-label");
                 lblNom.setMaxWidth(dureeJours * LARGEUR_JOUR - 10); // Empêche le texte de déborder
 
                 // 3. Superposition dans un StackPane
                 StackPane stack = new StackPane();
                 stack.getChildren().addAll(barre, lblNom);
-                stack.setAlignment(Pos.CENTER); // Centre le texte sur la barre
+                stack.setAlignment(Pos.CENTER);// Centre le texte sur la barre
+
+                // Ajout des styles CSS selon le statut
+                if (projet.estTacheTerminee(t)) {
+                    stack.getStyleClass().add("status-finished");
+                } else {
+                    ListeDeTache liste = projet.trouverListeDeLaTache(t);
+                    if (liste != null && liste.getNom().equalsIgnoreCase("En Cours")) {
+                        stack.getStyleClass().add("status-in-progress");
+                    } else {
+                        stack.getStyleClass().add("status-planned");
+                    }
+                }
 
                 // Effet de survol
                 stack.setOnMouseEntered(e -> stack.setOpacity(0.8));

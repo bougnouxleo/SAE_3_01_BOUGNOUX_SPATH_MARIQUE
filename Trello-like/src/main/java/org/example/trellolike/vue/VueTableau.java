@@ -37,13 +37,15 @@ public class VueTableau extends ScrollPane implements Observateur {
         this.conteneurColonnes.setSpacing(20);
         this.conteneurColonnes.setPadding(new Insets(20));
         this.conteneurColonnes.setAlignment(Pos.TOP_LEFT);
-        this.conteneurColonnes.setStyle("-fx-background-color: #f4f4f4;");
+        //this.conteneurColonnes.setStyle("-fx-background-color: #f4f4f4;");
+        this.conteneurColonnes.getStyleClass().add("kanban-view");
 
         this.setContent(conteneurColonnes);
 
         this.btnAjouterListe = new Button("+ Ajouter une liste");
         this.btnAjouterListe.setMinWidth(200);
-        this.btnAjouterListe.setStyle("-fx-background-color: rgba(0,0,0,0.1); -fx-font-size: 14px; -fx-cursor: hand;");
+        //this.btnAjouterListe.setStyle("-fx-background-color: rgba(0,0,0,0.1); -fx-font-size: 14px; -fx-cursor: hand;");
+        this.btnAjouterListe.getStyleClass().add("btn-add");
 
         this.btnAjouterListe.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog();
@@ -65,6 +67,7 @@ public class VueTableau extends ScrollPane implements Observateur {
 
         for (ListeDeTache liste : projet.getListeDeTaches()) {
             ColonneKanban colonneGraphique = new ColonneKanban(liste, this.controller);
+            colonneGraphique.getStyleClass().add("kanban-column");
 
             HBox.setHgrow(colonneGraphique, Priority.ALWAYS);
 
@@ -72,6 +75,7 @@ public class VueTableau extends ScrollPane implements Observateur {
 
             for (Tache t : liste.getTaches()) {
                 CarteTache carteGraphique = new CarteTache(t);
+                carteGraphique.getStyleClass().add("task-card");
                 configurerEvenementsCarte(carteGraphique, t);
                 colonneGraphique.ajouterCarte(carteGraphique);
             }
