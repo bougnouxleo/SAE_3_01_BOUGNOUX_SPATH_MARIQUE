@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.example.trellolike.Projet;
 import org.example.trellolike.Sujet;
+import org.example.trellolike.controlleur.ArchiveController;
 import org.example.trellolike.tache.Tache;
 
 import java.util.List;
@@ -18,12 +19,22 @@ import java.util.List;
  * Style identique à VueListe - une seule liste contenant les tâches archivées.
  */
 public class VueArchives extends ScrollPane implements Observateur {
-
+    /**
+     * Le projet associé
+     */
     private Projet projet;
+    /**
+     * Conteneur principal vertical
+     */
     private VBox conteneurPrincipal;
+    /**
+     * Le contrôleur des archives
+     */
+    private ArchiveController archiveController;
 
-    public VueArchives(Projet projet) {
+    public VueArchives(Projet projet,ArchiveController controller) {
         this.projet = projet;
+        this.archiveController = controller;
 
         // Configuration du ScrollPane (identique à VueListe)
         this.setFitToWidth(true);
@@ -35,10 +46,8 @@ public class VueArchives extends ScrollPane implements Observateur {
         this.conteneurPrincipal.setSpacing(20);
         this.setContent(conteneurPrincipal);
 
-        // Abonnement au pattern Observer
         this.projet.enregistrerObservateur(this);
 
-        // Premier affichage
         this.actualiser(projet);
     }
 
@@ -73,10 +82,15 @@ public class VueArchives extends ScrollPane implements Observateur {
             for (Tache t : tachesArchivees) {
                 LigneTache ligne = new LigneTache(t);
                 listeArchives.getChildren().add(ligne);
+
+                conteneurPrincipal.setOnMouseClicked(e -> {
+                    if (e.getClickCount() == 2) this.archiveController.traiterOuvertureDetail(t);
+                });
             }
 
             // Ajout au conteneur principal
             conteneurPrincipal.getChildren().addAll(titreSection, listeArchives);
         };
+
     }
 }

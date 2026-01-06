@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.example.trellolike.controlleur.ArchiveController;
 import org.example.trellolike.controlleur.GanttController;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
@@ -37,6 +38,10 @@ public class Main extends Application {
      * Controller de la vue Gantt
      */
     private GanttController ganttController;
+    /**
+     * Controller de la vue Archives
+     */
+    private ArchiveController archiveController;
 
     @Override
     public void start(Stage stage) {
@@ -47,6 +52,7 @@ public class Main extends Application {
         }
         this.controller = new KanbanController(this.projet);
         this.ganttController = new GanttController(this.projet);
+        this.archiveController = new ArchiveController(this.projet);
 
         // 2. CRÉATION DU LAYOUT PRINCIPAL (BorderPane)
         this.root = new BorderPane();
@@ -153,7 +159,7 @@ public class Main extends Application {
                 break;
 
             case "ARCHIVES":
-                VueArchives vueArchives = new VueArchives(this.projet);
+                VueArchives vueArchives = new VueArchives(this.projet, this.archiveController);
                 root.setCenter(vueArchives);
                 break;
         }
