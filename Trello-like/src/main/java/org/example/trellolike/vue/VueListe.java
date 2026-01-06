@@ -49,49 +49,48 @@ public class VueListe extends ScrollPane implements Observateur {
 
     @Override
     public void actualiser(Sujet s) {
+        // Vérification de sécurité
         if (!(s instanceof Projet)) return;
 
-        Platform.runLater(() -> {
-            conteneurPrincipal.getChildren().clear();
 
-            // 1. Récupération des tâches groupées par jour via le Controller
-            Map<LocalDate, List<Tache>> tachesParJour = controller.getTachesGroupeesParJour();
+        // 1. On vide l'affichage
+        conteneurPrincipal.getChildren().clear();
 
-            // 2. Création de l'affichage pour chaque jour
-            for (Map.Entry<LocalDate, List<Tache>> entry : tachesParJour.entrySet()) {
-                LocalDate date = entry.getKey();
-                  List<Tache> tachesDuJour = entry.getValue();
+        // 2. Récupération des données via le contrôleur
+        Map<LocalDate, List<Tache>> tachesParJour = controller.getTachesGroupeesParJour();
 
-                // A. Titre du jour (ex: "Lundi")
-                Label titreJour = new Label(controller.getNomJour(date));
-                titreJour.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        // 3. Reconstruction de l'interface
+        for (Map.Entry<LocalDate, List<Tache>> entry : tachesParJour.entrySet()) {
+            LocalDate date = entry.getKey();
+            List<Tache> tachesDuJour = entry.getValue();
 
-                // B. Conteneur pour les tâches de ce jour
-                VBox listeDuJour = new VBox();
-                listeDuJour.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);");
+            // Titre
+            Label titreJour = new Label(controller.getNomJour(date));
+            titreJour.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-                // C. Création des lignes
-                for (Tache t : tachesDuJour) {
-                    LigneTache ligne = new LigneTache(t);
+            // Liste verticale pour ce jour
+            VBox listeDuJour = new VBox();
+            listeDuJour.setStyle("-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);");
 
-                    // Interaction : Double clic pour voir les détails
-                    ligne.setOnMouseClicked(e -> {
-                        if (e.getClickCount() == 2) controller.traiterOuvertureDetail(t);
-                    });
+            // Ajout des lignes
+            for (Tache t : tachesDuJour) {
+                LigneTache ligne = new LigneTache(t);
 
-                    listeDuJour.getChildren().add(ligne);
-                }
+                ligne.setOnMouseClicked(e -> {
+                    if (e.getClickCount() == 2) controller.traiterOuvertureDetail(t);
+                });
 
-                // Ajout au conteneur principal
-                conteneurPrincipal.getChildren().addAll(titreJour, listeDuJour);
+                listeDuJour.getChildren().add(ligne);
             }
 
-            // Gestion du cas vide
-            if (tachesParJour.isEmpty()) {
-                conteneurPrincipal.getChildren().add(new Label("Aucune tâche planifiée avec une date."));
-            }
-        });
+            conteneurPrincipal.getChildren().addAll(titreJour, listeDuJour);
+        }
 
-
+        // Message si vide
+        if (tachesParJour.isEmpty()) {
+            Label vide = new Label("Aucune tâche planifiée.");
+            vide.setStyle("-fx-text-fill: grey; -fx-padding: 20;");
+            conteneurPrincipal.getChildren().add(vide);
+        }
     }
 }
