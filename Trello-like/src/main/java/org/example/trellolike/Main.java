@@ -76,7 +76,6 @@ public class Main extends Application {
     private HBox creerBarreDeNavigation() {
         HBox menu = new HBox(20);
         menu.setPadding(new Insets(15));
-        menu.setStyle("-fx-background-color: violet;");
         menu.setAlignment(Pos.CENTER_LEFT);
 
         // --- Création des boutons ---
@@ -113,13 +112,6 @@ public class Main extends Application {
         view4.setFitHeight(40);
         view4.setPreserveRatio(true);
         btnArchives.setGraphic(view4);
-
-        // Style commun des boutons (Blanc sur gris)
-        String styleBtn = "-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14px; -fx-border-color: white; -fx-border-radius: 5;";
-        btnKanban.setStyle(styleBtn);
-        btnListe.setStyle(styleBtn);
-        btnGantt.setStyle(styleBtn);
-        btnArchives.setStyle(styleBtn);
 
 
         // --- Actions des boutons ---
