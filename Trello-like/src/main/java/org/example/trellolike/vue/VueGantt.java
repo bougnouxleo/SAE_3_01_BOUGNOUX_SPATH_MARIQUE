@@ -79,7 +79,6 @@ public class VueGantt extends ScrollPane implements Observateur {
                 Rectangle barre = new Rectangle(dureeJours * LARGEUR_JOUR, HAUTEUR_BARRE);
                 barre.setArcHeight(10);
                 barre.setArcWidth(10);
-                //barre.setFill(determinerCouleur(t)); // Utilisation de la méthode de couleur
 
                 // 2. Création du Label (Texte sur la barre)
                 Label lblNom = new Label(t.getNom());
@@ -94,19 +93,24 @@ public class VueGantt extends ScrollPane implements Observateur {
 
                 // Ajout des styles CSS selon le statut
                 if (projet.estTacheTerminee(t)) {
-                    stack.getStyleClass().add("status-finished");
+                    stack.getStyleClass().add("status-finished"); //Vert clair
                 } else {
                     ListeDeTache liste = projet.trouverListeDeLaTache(t);
-                    if (liste != null && liste.getNom().equalsIgnoreCase("En Cours")) {
+                    if (liste != null && liste.getNom().equalsIgnoreCase("En Cours")) { //Bleu clair
                         stack.getStyleClass().add("status-in-progress");
                     } else {
-                        stack.getStyleClass().add("status-planned");
+                        stack.getStyleClass().add("status-planned"); //Gris clair
                     }
                 }
 
                 // Effet de survol
                 stack.setOnMouseEntered(e -> stack.setOpacity(0.8));
                 stack.setOnMouseExited(e -> stack.setOpacity(1.0));
+
+                // Double clic pour voir les détails
+                stack.setOnMouseClicked(e -> {
+                    if (e.getClickCount() == 2) controller.traiterOuvertureDetail(t);
+                });
 
                 // 4. Positionnement avec le décalage temporel
                 HBox ligneTemps = new HBox();
@@ -139,22 +143,6 @@ public class VueGantt extends ScrollPane implements Observateur {
             bandeauDates.getChildren().add(lblJour);
         }
         grid.add(bandeauDates, 0, 0);
-    }
-
-    /**
-     * Méthode pour déterminer la couleur d'une tâche
-     * @param t la tâche
-     * @return la couleur
-     */
-    private Color determinerCouleur(Tache t) {
-        if (projet.estTacheTerminee(t)) {
-            return Color.web("#2ecc71"); // Vert
-        }
-        ListeDeTache liste = projet.trouverListeDeLaTache(t);
-        if (liste != null && liste.getNom().equalsIgnoreCase("En Cours")) {
-            return Color.web("#3498db"); // Bleu
-        }
-        return Color.web("#95a5a6"); // Gris
     }
 
 

@@ -103,8 +103,6 @@
     -fx-border-color: #CED4DA;
 }
 
-/* Dans ton fichier style.css */
-
 .status-finished Rectangle {
     -fx-fill: #A8E6CF; /* Vert pastel */
 }
