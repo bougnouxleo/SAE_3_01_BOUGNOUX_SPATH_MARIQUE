@@ -367,4 +367,10 @@ public class KanbanController {
         return matchTexte && matchPriorite;
     }
 
+    /**
+     * Traite le déplacement d'une colonne.
+     */
+    public void traiterDeplacementListe(int indexSource, int indexCible) {
+        projet.deplacerListe(indexSource, indexCible);
+    }
 }

@@ -17,6 +17,8 @@ import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 
+import java.util.List;
+
 public class VueTableau extends ScrollPane implements Observateur {
     /**
      * Le projet associé à cette vue
@@ -111,14 +113,14 @@ public class VueTableau extends ScrollPane implements Observateur {
 
         this.conteneurColonnes.getChildren().clear();
 
-        for (ListeDeTache liste : projet.getListeDeTaches()) {
+        List<ListeDeTache> lesListes = projet.getListeDeTaches();
+
+        // On utilise un index 'i' pour savoir quelle est la position de la colonne
+        for (int i = 0; i < lesListes.size(); i++) {
+            ListeDeTache liste = lesListes.get(i);
+
             ColonneKanban colonneGraphique = new ColonneKanban(liste, this.controller);
-            colonneGraphique.getStyleClass().add("kanban-column");
-
-            HBox.setHgrow(colonneGraphique, Priority.ALWAYS);
-
-            configurerEvenementsColonne(colonneGraphique, liste);
-
+            configurerDragAndDropGlobal(colonneGraphique, liste, i);
             for (Tache t : liste.getTaches()) {
                 if (controller.doitAfficherTache(t)) {
                     CarteTache carteGraphique = new CarteTache(t);
@@ -222,25 +224,72 @@ public class VueTableau extends ScrollPane implements Observateur {
     }
 
     /**
-     * Configure les événements pour une colonne Kanban
-     * @param col la colonne Kanban
-     * @param listeAssociee la liste de tâches associée
+     * Configure le Drag & Drop pour gérer à la fois les Tâches ET les Colonnes.
+     * @param col La vue de la colonne
+     * @param listeModel Le modèle de la liste
+     * @param indexColonne L'index actuel de cette colonne (0, 1, 2...)
      */
-    private void configurerEvenementsColonne(ColonneKanban col, ListeDeTache listeAssociee) {
-        col.setOnDragOver(e -> {
-            if (e.getDragboard().hasString()) e.acceptTransferModes(TransferMode.MOVE);
-            e.consume();
+    private void configurerDragAndDropGlobal(ColonneKanban col, ListeDeTache listeModel, int indexColonne) {
+
+        // --- 1. DÉPART DU DRAG (Si on veut déplacer CETTE colonne) ---
+        col.setOnDragDetected(event -> {
+            // Si la source est une CarteTache, on ne fait rien ici (c'est géré par la carte)
+            if (event.getTarget() instanceof CarteTache) return;
+
+            Dragboard db = col.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+
+            // ASTUCE : On met un préfixe "LISTE:" pour dire que c'est une colonne
+            content.putString("LISTE:" + indexColonne);
+
+            db.setContent(content);
+            event.consume();
         });
-        col.setOnDragDropped(e -> {
-            Dragboard db = e.getDragboard();
-            boolean success = false;
-            if (db.hasString()) {
-                int id = Integer.parseInt(db.getString());
-                controller.traiterDepotTache(id, listeAssociee);
-                success = true;
+
+        // --- 2. SURVOL (DragOver) ---
+        col.setOnDragOver(event -> {
+            // On accepte tout ce qui est texte (ID de tâche OU "LISTE:...")
+            if (event.getDragboard().hasString()) {
+                event.acceptTransferModes(TransferMode.MOVE);
             }
-            e.setDropCompleted(success);
-            e.consume();
+            event.consume();
+        });
+
+        // --- 3. LÂCHER (Drop) ---
+        col.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+
+            if (db.hasString()) {
+                String data = db.getString();
+
+                if (data.startsWith("LISTE:")) {
+                    // === CAS A : On a lâché une COLONNE ===
+                    try {
+                        // On récupère l'index de la colonne qu'on déplaçait (ex: "LISTE:0")
+                        int indexSource = Integer.parseInt(data.split(":")[1]);
+
+                        // On demande au contrôleur d'intervertir avec la colonne actuelle (indexColonne)
+                        controller.traiterDeplacementListe(indexSource, indexColonne);
+                        success = true;
+                    } catch (Exception e) {
+                        System.err.println("Erreur drag colonne: " + e.getMessage());
+                    }
+
+                } else {
+                    // === CAS B : On a lâché une TÂCHE (ID simple) ===
+                    try {
+                        int idTache = Integer.parseInt(data);
+                        controller.traiterDepotTache(idTache, listeModel);
+                        success = true;
+                    } catch (NumberFormatException e) {
+                        // Ce n'était pas un ID valide
+                    }
+                }
+            }
+
+            event.setDropCompleted(success);
+            event.consume();
         });
     }
 }

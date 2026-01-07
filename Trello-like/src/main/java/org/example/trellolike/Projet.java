@@ -152,6 +152,25 @@ public class Projet implements Sujet, java.io.Serializable {
         this.members.add(membre);
 
     }
+    /**
+     * Change l'ordre des colonnes dans le projet.
+     * @param indexSource L'index actuel de la liste (avant déplacement)
+     * @param indexCible L'index où on veut la déposer
+     */
+    public void deplacerListe(int indexSource, int indexCible) {
+        // 1. Sécurités
+        if (indexSource < 0 || indexSource >= listeDeTaches.size()) return;
+        if (indexCible < 0 || indexCible >= listeDeTaches.size()) return;
+        if (indexSource == indexCible) return;
+
+        // 2. Déplacement dans la liste Java (On retire et on réinsère)
+        ListeDeTache listeADeplacer = listeDeTaches.remove(indexSource);
+        listeDeTaches.add(indexCible, listeADeplacer);
+
+        // 3. Sauvegarde et Notification
+        this.sauvegarderGlobalement();
+    }
+
 
     /**
      * Méthode qui supprime un membre du projet

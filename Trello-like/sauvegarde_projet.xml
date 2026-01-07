@@ -102,6 +102,31 @@
          <string>2026-01-14</string>
         </void>
         <void property="description">
+         <string>P3 tache</string>
+        </void>
+        <void property="duree">
+         <int>7</int>
+        </void>
+        <void property="id">
+         <int>7</int>
+        </void>
+        <void property="nom">
+         <string>P3</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-14</string>
+        </void>
+        <void property="description">
          <string>P1 tache
 </string>
         </void>
@@ -138,31 +163,6 @@
         </void>
         <void property="nom">
          <string>P2</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-14</string>
-        </void>
-        <void property="description">
-         <string>P3 tache</string>
-        </void>
-        <void property="duree">
-         <int>7</int>
-        </void>
-        <void property="id">
-         <int>7</int>
-        </void>
-        <void property="nom">
-         <string>P3</string>
         </void>
         <void property="priorite">
          <string>Moyenne</string>
