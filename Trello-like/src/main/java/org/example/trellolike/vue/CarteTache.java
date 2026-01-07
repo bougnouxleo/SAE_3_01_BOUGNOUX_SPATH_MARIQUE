@@ -45,7 +45,6 @@ public class CarteTache extends VBox {
         // 2. Nom de la tâche
         Label lblNom = new Label(t.getNom());
         this.getChildren().add(lblNom);
-        this.getChildren().add(new Label(t.getNom()));
 
         // Logique purement visuelle (Présentation)
         if (t.estBloquee()) {

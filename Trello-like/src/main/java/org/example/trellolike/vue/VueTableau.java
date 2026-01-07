@@ -76,6 +76,9 @@ public class VueTableau extends ScrollPane implements Observateur {
             for (Tache t : liste.getTaches()) {
                 CarteTache carteGraphique = new CarteTache(t);
                 carteGraphique.getStyleClass().add("task-card");
+                carteGraphique.setOnEtiquetteSupprimee(etiquetteASupprimer -> {
+                    controller.traiterSuppressionEtiquette(t, etiquetteASupprimer);
+                });
                 configurerEvenementsCarte(carteGraphique, t);
                 colonneGraphique.ajouterCarte(carteGraphique);
             }
