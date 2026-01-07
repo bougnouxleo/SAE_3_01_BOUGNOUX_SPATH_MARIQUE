@@ -34,6 +34,11 @@ public class ListeController {
     private String filtrePriorite = "Toutes les priorités";
 
     /**
+     * État de la duree en jours pour le filtrage (0 = tous, 1 = croissant, 2 = décroissant)
+     */
+    private int etatTriDuree = 0;
+
+    /**
      * Constructeur du contrôleur de la vue Liste
      * @param projet
      */
@@ -48,32 +53,46 @@ public class ListeController {
     public Map<LocalDate, List<Tache>> getTachesGroupeesParJour() {
         Map<LocalDate, List<Tache>> resultat = new TreeMap<>(); // TreeMap pour trier les dates
 
-        // 1. On récupère TOUTES les tâches de TOUTES les listes (Aplatissement)
-        List<Tache> toutesLesTaches = new ArrayList<>();
-        for (ListeDeTache liste : projet.getListeDeTaches()) { // ou getListes()
-            toutesLesTaches.addAll(liste.getTaches());
-        }
+        //On récupère TOUTES les tâches de TOUTES les listes
+        for (ListeDeTache liste : projet.getListeDeTaches()) {
+            for (Tache t : liste.getTaches()) {
+                // Sécurisation contre les valeurs nulles
+                String nom = (t.getNom() != null) ? t.getNom().toLowerCase() : "";
+                String desc = (t.getDescription() != null) ? t.getDescription().toLowerCase() : "";
 
-        // 2. On trie et groupe par date
-        for (Tache t : toutesLesTaches) {
-            boolean matchTexte = t.getNom().toLowerCase().contains(filtreTexte) ||
-                    t.getDescription().toLowerCase().contains(filtreTexte);
+                boolean matchTexte = nom.contains(filtreTexte) || desc.contains(filtreTexte);
+                boolean matchPriorite = filtrePriorite.equals("Toutes les priorités") ||
+                        (t.getPriorite() != null && t.getPriorite().equals(filtrePriorite));
 
-            boolean matchPriorite = filtrePriorite.equals("Toutes les priorités") ||
-                    (t.getPriorite() != null && t.getPriorite().equals(filtrePriorite));
-
-            if (matchTexte && matchPriorite) {
-                LocalDate date = parserDate(t.getDateDebut()); // Supposons qu'on trie par date de début
-                if (date != null) {
-                    resultat.computeIfAbsent(date, k -> new ArrayList<>()).add(t);
+                if (matchTexte && matchPriorite) {
+                    LocalDate date = parserDate(t.getDateDebut());
+                    if (date != null) {
+                        resultat.computeIfAbsent(date, k -> new ArrayList<>()).add(t);
+                    }
                 }
             }
         }
+
+        // Tri par durée sur les listes de chaque jour
+        if (etatTriDuree != 0) {
+            for (List<Tache> tachesDuJour : resultat.values()) {
+                if (etatTriDuree == 1) {
+                    // Tri Croissant
+                    tachesDuJour.sort(Comparator.comparingInt(Tache::getDureeTotale));
+                } else {
+                    // Tri Décroissant
+                    tachesDuJour.sort((t1, t2) -> Integer.compare(t2.getDureeTotale(), t1.getDureeTotale()));
+                }
+            }
+        }
+
         return resultat;
     }
 
     /**
      * Helper pour transformer le String date de la Tache en LocalDate Java
+     * @dateStr la date en String
+     * @return la date en LocalDate
      */
     private LocalDate parserDate(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) return null;
@@ -263,6 +282,25 @@ public class ListeController {
         this.filtrePriorite = priorite;
         projet.sauvegarderGlobalement();
     }
+
+    /**
+     * Met à jour l'état du tri par durée.
+     * 0 = pas de tri, 1 = croissant, 2 = décroissant
+     */
+    public void mettreAJourTriDuree() {
+        this.etatTriDuree = (this.etatTriDuree + 1) % 3;
+        projet.sauvegarderGlobalement();
+    }
+
+    /**
+     * Getter état tri durée
+     * @return l'état du tri durée
+     */
+    public int getEtatTriDuree() {
+        return this.etatTriDuree;
+    }
+
+
 
 
 }
