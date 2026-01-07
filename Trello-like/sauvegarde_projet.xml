@@ -201,6 +201,25 @@
         </void>
        </object>
       </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheComposite">
+        <void property="dateDebut">
+         <string>2026-01-06</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-15</string>
+        </void>
+        <void property="description">
+         <string>bhjb,b,</string>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>kjl</string>
+        </void>
+       </object>
+      </void>
      </void>
     </object>
    </void>
