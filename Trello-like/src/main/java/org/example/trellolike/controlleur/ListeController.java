@@ -83,7 +83,9 @@ public class ListeController {
         tache.ajouterEtiquette(nouvelleEtiquette);
         projet.sauvegarderGlobalement();
     }
-
+    /**
+     * Méthode partagée avec KanbanController : Suppression d'étiquette + Sauvegarde
+     */
     public void traiterSuppressionEtiquette(Tache tache, Etiquette etiquette) {
         // 1. Modif du modèle
         tache.retirerEtiquette(etiquette);
