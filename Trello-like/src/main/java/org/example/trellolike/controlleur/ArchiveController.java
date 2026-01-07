@@ -54,6 +54,11 @@ public class ArchiveController {
         description.setEditable(false);
         description.setMaxHeight(100);
 
+        Button supprimerBtn = new Button("Supprimer définitivement");
+        supprimerBtn.setOnAction(e -> {
+            projet.supprimerTacheArchive(t);
+            detailStage.close();
+        });
 
         Button btnFermer = new Button("Fermer");
         btnFermer.setOnAction(e -> detailStage.close());
@@ -61,6 +66,7 @@ public class ArchiveController {
         layout.getChildren().addAll(
                 titre, dates, duree,
                 lblDesc, description,
+                supprimerBtn,
                 btnFermer
         );
 

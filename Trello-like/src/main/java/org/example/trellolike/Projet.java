@@ -247,6 +247,17 @@ public class Projet implements Sujet, java.io.Serializable {
         return listeFinale;
     }
 
+    /**
+     * Méthode qui supprime une tâche archivée
+     * @param t la tâche à supprimer
+     */
+    public void supprimerTacheArchive(Tache t) {
+        if(this.listeDesArchives.contains(t)){
+            this.listeDesArchives.remove(t);
+        }
+        sauvegarderGlobalement();
+    }
+
 
 }
 
