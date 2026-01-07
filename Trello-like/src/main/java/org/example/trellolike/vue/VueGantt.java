@@ -130,6 +130,10 @@ public class VueGantt extends ScrollPane implements Observateur {
                 long decalageJours = ChronoUnit.DAYS.between(dateDebutProjet, debut);
                 long dureeJours = ChronoUnit.DAYS.between(debut, fin) + 1;
 
+                // Sécurité : si la durée est négative ou nulle à cause d'une erreur de saisie
+                if (dureeJours <= 0) {
+                    dureeJours = 1; // On affiche au moins une barre d'un jour
+                }
                 //Création de la barre (Fond)
                 Rectangle barre = new Rectangle(dureeJours * LARGEUR_JOUR, HAUTEUR_BARRE);
                 barre.setArcHeight(10);

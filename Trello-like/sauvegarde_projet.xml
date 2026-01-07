@@ -17,7 +17,7 @@
          <string>2026-01-09</string>
         </void>
         <void property="description">
-         <string>aaa</string>
+         <string>aaaaaa</string>
         </void>
         <void property="duree">
          <int>2</int>
@@ -39,7 +39,7 @@
          <string>2026-01-09</string>
         </void>
         <void property="description">
-         <string>bbbb</string>
+         <string>bbbbbbbb</string>
         </void>
         <void property="duree">
          <int>1</int>
@@ -58,13 +58,13 @@
          <string>2026-01-07</string>
         </void>
         <void property="dateFin">
-         <string>2026-01-10</string>
+         <string>2026-01-12</string>
         </void>
         <void property="description">
-         <string>ccccccccccc</string>
+         <string>cccccccccc</string>
         </void>
         <void property="duree">
-         <int>3</int>
+         <int>5</int>
         </void>
         <void property="id">
          <int>3</int>
@@ -77,13 +77,13 @@
       <void method="add">
        <object class="org.example.trellolike.tache.TacheComposite" id="TacheComposite0">
         <void property="dateDebut">
-         <string>2026-01-10</string>
+         <string>2026-01-13</string>
         </void>
         <void property="dateFin">
-         <string>2026-01-02</string>
+         <string>2026-01-31</string>
         </void>
         <void property="description">
-         <string>dddddddddddddddd</string>
+         <string>dffdfdfdfdf</string>
         </void>
         <void property="id">
          <int>4</int>

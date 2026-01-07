@@ -202,6 +202,7 @@ public class ColonneKanban extends VBox {
         // Filtre de validation (activé seulement si aucune dépendance n'est sélectionnée)
         btnOk.addEventFilter(ActionEvent.ACTION, event -> {
             if (listeDependances.getSelectionModel().getSelectedItems().isEmpty()) {
+
                 LocalDate debut = dateDebut.getValue();
                 LocalDate fin = dateFin.getValue();
 

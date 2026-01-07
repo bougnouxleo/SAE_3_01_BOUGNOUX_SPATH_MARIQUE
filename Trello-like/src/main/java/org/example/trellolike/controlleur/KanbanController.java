@@ -57,11 +57,15 @@ public class KanbanController {
 
             if (dateFinLaPlusTardive != null) {
                 // La nouvelle tâche commence là où la dépendance la plus longue s'arrête
-                debutFinal = dateFinLaPlusTardive;
+                debutFinal = dateFinLaPlusTardive.plusDays(1);
 
                 // Pour une tâche simple, on calcule la fin en ajoutant la durée saisie
                 if (!estComposite) {
                     finFinal = debutFinal.plusDays(dureeEstimee);
+                }
+                // Si c'est un projet, on s'assure qu'il finit au moins le même jour que son début
+                else if (finFinal.isBefore(debutFinal)) {
+                    finFinal = debutFinal.plusDays(1);
                 }
             }
         }
