@@ -183,6 +183,12 @@ public class ColonneKanban extends VBox {
             mettreAJourDuree(dateDebut, dateFin, txtDuree, chkComposite);
         });
 
+        // --- Sélecteur de priorité ---
+        Label lblPriorite = new Label("Priorité :");
+        ComboBox<String> comboPriorite = new ComboBox<>();
+        comboPriorite.getItems().addAll("Basse", "Moyenne", "Haute","Urgente");
+        comboPriorite.setValue("Moyenne"); // Valeur par défaut
+
         // --- Mise en place de la grille ---
         grid.add(new Label("Nom :"), 0, 0);       grid.add(txtNom, 1, 0);
         grid.add(new Label("Desc :"), 0, 1);      grid.add(txtDesc, 1, 1);
@@ -190,10 +196,11 @@ public class ColonneKanban extends VBox {
         grid.add(new Label("Fin :"), 0, 3);       grid.add(dateFin, 1, 3);
         grid.add(new Label("Type :"), 0, 4);      grid.add(chkComposite, 1, 4);
         grid.add(new Label("Durée (J) :"), 0, 5); grid.add(txtDuree, 1, 5);
-        grid.add(lblDep, 0, 6);                   grid.add(listeDependances, 1, 6);
+        grid.add(lblPriorite, 0, 6);                   grid.add(comboPriorite, 1, 6);
+        grid.add(lblDep, 0, 7);              grid.add(listeDependances, 1, 7);
 
         // Ajout du label d'avertissement sous la liste des dépendances
-        grid.add(lblAutoDate, 1, 7);
+        grid.add(lblAutoDate, 1, 8);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -240,7 +247,8 @@ public class ColonneKanban extends VBox {
                         listeModele,
                         selection,
                         chkComposite.isSelected(),
-                        duree
+                        duree,
+                        comboPriorite.getValue()
                 );
                 return true;
             }

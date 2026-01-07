@@ -1,8 +1,10 @@
 package org.example.trellolike.controlleur;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,7 +23,20 @@ import java.util.stream.Collectors;
 public class ListeController {
 
     private Projet projet;
+    /**
+     * Texte de filtre pour la recherche dans les tâches
+     */
+    private String filtreTexte = "";
 
+    /**
+     * Texte de filtre pour la priorité des tâches
+     */
+    private String filtrePriorite = "Toutes les priorités";
+
+    /**
+     * Constructeur du contrôleur de la vue Liste
+     * @param projet
+     */
     public ListeController(Projet projet) {
         this.projet = projet;
     }
@@ -41,16 +56,19 @@ public class ListeController {
 
         // 2. On trie et groupe par date
         for (Tache t : toutesLesTaches) {
-            LocalDate date = parserDate(t.getDateDebut()); // Supposons qu'on trie par date de début
+            boolean matchTexte = t.getNom().toLowerCase().contains(filtreTexte) ||
+                    t.getDescription().toLowerCase().contains(filtreTexte);
 
-            if (date != null) {
-                resultat.computeIfAbsent(date, k -> new ArrayList<>()).add(t);
-            } else {
-                // Gestion des tâches sans date (optionnel : mettre à aujourd'hui ou dans une section "Sans date")
-                // Pour l'exemple, on ignore ou on met à aujourd'hui
+            boolean matchPriorite = filtrePriorite.equals("Toutes les priorités") ||
+                    (t.getPriorite() != null && t.getPriorite().equals(filtrePriorite));
+
+            if (matchTexte && matchPriorite) {
+                LocalDate date = parserDate(t.getDateDebut()); // Supposons qu'on trie par date de début
+                if (date != null) {
+                    resultat.computeIfAbsent(date, k -> new ArrayList<>()).add(t);
+                }
             }
         }
-
         return resultat;
     }
 
@@ -113,6 +131,26 @@ public class ListeController {
 
         Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "J");
         duree.setStyle("-fx-font-weight: bold; -fx-text-fill: blue;");
+
+        Label lblPrioTitle = new Label("Priorité :");
+        lblPrioTitle.setStyle("-fx-font-weight: bold;");
+
+        ComboBox<String> comboPrio = new ComboBox<>();
+        comboPrio.getItems().addAll("Basse", "Moyenne", "Haute","Urgente");
+
+        // On récupère la priorité actuelle
+        String prioriteActuelle = (t.getPriorite() != null) ? t.getPriorite() : "Moyenne";
+        comboPrio.setValue(prioriteActuelle);
+
+        // Mise à jour automatique lors du changement
+        comboPrio.setOnAction(e -> {
+            t.setPriorite(comboPrio.getValue());
+            projet.sauvegarderGlobalement(); // Sauvegarde immédiate
+        });
+
+        // Horizontal Box pour aligner le label et la combo
+        HBox boxPrio = new HBox(10, lblPrioTitle, comboPrio);
+        boxPrio.setAlignment(Pos.CENTER_LEFT);
 
         Label lblDesc = new Label("Description :");
         TextArea description = new TextArea(t.getDescription());
@@ -203,6 +241,7 @@ public class ListeController {
 
         layout.getChildren().addAll(
                 titre, dates, duree,
+                boxPrio,
                 boxDependances,
                 boxComposite,
                 lblDesc, description, btnSaveDesc,
@@ -213,4 +252,17 @@ public class ListeController {
         detailStage.setScene(scene);
         detailStage.show();
     }
+
+    /**
+     * Met à jour les filtres de recherche pour les tâches.
+     * @param texte
+     * @param priorite
+     */
+    public void mettreAJourFiltres(String texte, String priorite) {
+        this.filtreTexte = texte.toLowerCase();
+        this.filtrePriorite = priorite;
+        projet.sauvegarderGlobalement();
+    }
+
+
 }

@@ -1,10 +1,12 @@
 package org.example.trellolike.vue;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import org.example.trellolike.Sujet;
 
@@ -31,6 +33,29 @@ public class VueListe extends ScrollPane implements Observateur {
         this.projet = projet;
         this.controller = new ListeController(projet); // Le contrôleur logique
 
+        //Barre Recherche + Filtres
+        HBox barreOutils = new HBox(10);
+        barreOutils.setPadding(new Insets(10));
+        barreOutils.setAlignment(Pos.CENTER_LEFT);
+        barreOutils.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;");
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Rechercher une tâche...");
+        searchField.setPrefWidth(300);
+
+        ComboBox<String> comboPriorite = new ComboBox<>();
+        comboPriorite.getItems().addAll("Toutes les priorités", "Urgente", "Haute", "Moyenne", "Basse");
+        comboPriorite.setValue("Toutes les priorités");
+
+        // Écouteurs pour mettre à jour le filtrage en temps réel
+        searchField.textProperty().addListener((obs, old, nouveau) ->
+                controller.mettreAJourFiltres(nouveau, comboPriorite.getValue()));
+
+        comboPriorite.valueProperty().addListener((obs, old, nouveau) ->
+                controller.mettreAJourFiltres(searchField.getText(), nouveau));
+
+        barreOutils.getChildren().addAll(new Label("🔍"), searchField,new Label("Priorité :") ,comboPriorite);
+
         // Configuration du ScrollPane
         this.setFitToWidth(true);
         this.setStyle("-fx-background-color: white;");
@@ -41,6 +66,11 @@ public class VueListe extends ScrollPane implements Observateur {
         this.conteneurPrincipal.setSpacing(20); // Espace entre les blocs "Jours"
         this.setContent(conteneurPrincipal);
 
+        //Layout principal avec la barre d'outils en haut
+        VBox layoutPrincipal = new VBox();
+        layoutPrincipal.getChildren().addAll(barreOutils, conteneurPrincipal);
+        this.setContent(layoutPrincipal);
+
         // Abonnement
         this.projet.enregistrerObservateur(this);
 
@@ -48,6 +78,10 @@ public class VueListe extends ScrollPane implements Observateur {
         this.actualiser(projet);
     }
 
+    /**
+     * Mise à jour de l'affichage
+     * @param s le projet
+     */
     @Override
     public void actualiser(Sujet s) {
         // Vérification de sécurité

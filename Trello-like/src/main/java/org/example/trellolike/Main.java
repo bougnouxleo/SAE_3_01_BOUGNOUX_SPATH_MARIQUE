@@ -11,9 +11,6 @@ import javafx.stage.Stage;
 import org.example.trellolike.controlleur.ArchiveController;
 import org.example.trellolike.controlleur.GanttController;
 import org.example.trellolike.controlleur.KanbanController;
-import org.example.trellolike.tache.ListeDeTache;
-import org.example.trellolike.tache.Tache;
-import org.example.trellolike.tache.TacheSimple;
 import org.example.trellolike.vue.VueGantt;
 import org.example.trellolike.vue.VueListe;
 import org.example.trellolike.vue.VueTableau;
@@ -47,9 +44,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         // 1. CHARGEMENT
         this.projet = Projet.getInstance();
-        if (this.projet.getListes().isEmpty()) {
-            initialiserDonneesDeTest();
-        }
+
         this.controller = new KanbanController(this.projet);
         this.ganttController = new GanttController(this.projet);
         this.archiveController = new ArchiveController(this.projet);
@@ -163,26 +158,6 @@ public class Main extends Application {
                 root.setCenter(vueArchives);
                 break;
         }
-    }
-
-    /**
-     * Crée une vue liste bidon (à remplacer par la vraie vue liste)
-     */
-    private void initialiserDonneesDeTest() {
-        System.out.println("Création du jeu de données de test...");
-        ListeDeTache todo = new ListeDeTache("À Faire");
-        ListeDeTache doing = new ListeDeTache("En Cours");
-        ListeDeTache done = new ListeDeTache("Terminé");
-        projet.ajouterListe(todo);
-        projet.ajouterListe(doing);
-        projet.ajouterListe(done);
-        Tache t1 = new TacheSimple("Configurer Git",null,null,null,0);
-        Tache t2 = new TacheSimple("Faire la maquette Figma",null,null,null,0);
-        Tache t3 = new TacheSimple("Coder le Modèle Java",null,null,null,0);
-        done.ajouterTache(t1);
-        todo.ajouterTache(t2);
-        todo.ajouterTache(t3);
-        projet.sauvegarderGlobalement();
     }
 
     public static void main(String[] args) {

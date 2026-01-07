@@ -17,8 +17,8 @@
          * @param dateDebut date de debut de la tache
          * @param dateFin date de fin de la tache
          */
-        public TacheComposite(String nom, String description, String dateDebut, String dateFin) {
-            super(nom, description, dateDebut, dateFin);
+        public TacheComposite(String nom, String description, String dateDebut, String dateFin, String priorite) {
+            super(nom, description, dateDebut, dateFin, priorite);
             this.sousTaches = new ArrayList<>();
         }
         /**

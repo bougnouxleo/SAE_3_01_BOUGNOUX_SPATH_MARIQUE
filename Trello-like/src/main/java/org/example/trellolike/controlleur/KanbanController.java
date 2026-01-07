@@ -1,8 +1,10 @@
 package org.example.trellolike.controlleur;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,6 +23,14 @@ public class KanbanController {
      * Le projet associé au Kanban
      */
     private Projet projet;
+    /**
+     * Texte de filtre pour la recherche dans les tâches
+     */
+    private String filtreTexte = "";
+    /**
+     * Texte de filtre pour la priorité des tâches
+     */
+    private String filtrePriorite = "Toutes les priorités";
 
     /**
      * Constructeur du KanbanController
@@ -35,7 +45,7 @@ public class KanbanController {
      * @param nom le nom de la tâche à ajouter
      * @param listeDest la liste de tâches destination
      */
-    public void traiterAjoutTache(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ListeDeTache listeDest, List<Tache> lesDependances, boolean estComposite, int dureeEstimee) {
+    public void traiterAjoutTache(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ListeDeTache listeDest, List<Tache> lesDependances, boolean estComposite, int dureeEstimee,String priorite) {
         if (nom == null || nom.trim().isEmpty()) return;
 
         // On initialise avec les dates choisies par défaut
@@ -78,9 +88,9 @@ public class KanbanController {
         Tache nouvelleTache;
 
         if (estComposite) {
-            nouvelleTache = new TacheComposite(nom, description, strDebut, strFin);
+            nouvelleTache = new TacheComposite(nom, description, strDebut, strFin, priorite);
         } else {
-            nouvelleTache = new TacheSimple(nom, description, strDebut, strFin, dureeEstimee);
+            nouvelleTache = new TacheSimple(nom, description, strDebut, strFin, dureeEstimee, priorite);
         }
 
         // Gestion commune des dépendances (grâce à la classe mère Tache)
@@ -185,6 +195,26 @@ public class KanbanController {
         Label duree = new Label("Durée estimée : " + t.getDureeTotale() + "J");
         duree.setStyle("-fx-font-weight: bold; -fx-text-fill: blue;");
 
+        Label lblPrioTitle = new Label("Priorité :");
+        lblPrioTitle.setStyle("-fx-font-weight: bold;");
+
+        ComboBox<String> comboPrio = new ComboBox<>();
+        comboPrio.getItems().addAll("Basse", "Moyenne", "Haute","Urgente");
+
+        // On récupère la priorité actuelle
+        String prioriteActuelle = (t.getPriorite() != null) ? t.getPriorite() : "Moyenne";
+        comboPrio.setValue(prioriteActuelle);
+
+        // Mise à jour automatique lors du changement
+        comboPrio.setOnAction(e -> {
+            t.setPriorite(comboPrio.getValue());
+            projet.sauvegarderGlobalement(); // Sauvegarde immédiate
+        });
+
+        // Horizontal Box pour aligner le label et la combo
+        HBox boxPrio = new HBox(10, lblPrioTitle, comboPrio);
+        boxPrio.setAlignment(Pos.CENTER_LEFT);
+
         Label lblDesc = new Label("Description :");
         TextArea description = new TextArea(t.getDescription());
         description.setEditable(true);
@@ -274,6 +304,7 @@ public class KanbanController {
 
         layout.getChildren().addAll(
                 titre, dates, duree,
+                boxPrio,
                 boxDependances,
                 boxComposite,
                 lblDesc, description, btnSaveDesc,
@@ -307,6 +338,33 @@ public class KanbanController {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    /**
+     * Met à jour les filtres de recherche pour les tâches.
+     * @param texte
+     * @param priorite
+     */
+    public void mettreAJourFiltres(String texte, String priorite) {
+        this.filtreTexte = (texte != null) ? texte.toLowerCase() : "";
+        this.filtrePriorite = (priorite != null) ? priorite : "Toutes les priorités";
+        projet.sauvegarderGlobalement();
+    }
+
+    /**
+     * Détermine si une tâche doit être affichée selon les filtres actuels.
+     * @param t la tâche à vérifier
+     * @return true si la tâche doit être affichée, false sinon
+     */
+    public boolean doitAfficherTache(Tache t) {
+        String nom = (t.getNom() != null) ? t.getNom().toLowerCase() : "";
+        String desc = (t.getDescription() != null) ? t.getDescription().toLowerCase() : "";
+        String prio = (t.getPriorite() != null) ? t.getPriorite() : "Moyenne";
+
+        boolean matchTexte = nom.contains(filtreTexte) || desc.contains(filtreTexte);
+        boolean matchPriorite = filtrePriorite.equals("Toutes les priorités") || prio.equals(filtrePriorite);
+
+        return matchTexte && matchPriorite;
     }
 
 }

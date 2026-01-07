@@ -22,8 +22,8 @@ public class TacheSimple extends Tache {
     /**
      * Constructeur complet (celui que vous utilisez dans le Main)
      */
-    public TacheSimple(String nom, String description, String dateDebut, String dateFin, int duree){
-        super(nom, description, dateDebut, dateFin);
+    public TacheSimple(String nom, String description, String dateDebut, String dateFin, int duree, String priorite) {
+        super(nom, description, dateDebut, dateFin, priorite);
         LocalDate debut = LocalDate.parse(dateDebut);
         LocalDate fin = LocalDate.parse(dateFin);
 

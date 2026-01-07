@@ -45,19 +45,25 @@ public abstract class Tache implements java.io.Serializable {
      */
     private boolean estArchivee = false;
 
+    /**
+     * Priorité de la tâche
+     */
+    protected String priorite;
+
     public Tache() { } // Requis pour XML
     /**
      * Constructeur de la tâche
      * @param nom le nom de la tâche
      * @param description la description de la tâche
      */
-    public Tache(String nom, String description, String dateDebut, String dateFin) {
+    public Tache(String nom, String description, String dateDebut, String dateFin,String priorite) {
         this.id = ++compteurId;
         this.nom = nom;
         this.description = description;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.etiquettes = new ArrayList<>();
+        this.priorite = priorite;
     }
 
     public static Tache findById(int id) {
@@ -89,6 +95,15 @@ public abstract class Tache implements java.io.Serializable {
     public String getNom() {
         return nom;
     }
+
+    public String getPriorite() {
+        return priorite;
+    }
+
+    public void setPriorite(String priorite) {
+        this.priorite = priorite;
+    }
+
 
     /**
      * Méthode qui retourne la description de la tâche
