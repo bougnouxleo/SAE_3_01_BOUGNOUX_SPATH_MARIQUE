@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.example.trellolike.Projet;
 import org.example.trellolike.Sujet;
@@ -17,6 +18,14 @@ import javafx.scene.control.CheckBox;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.geometry.Bounds;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
+import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import javafx.embed.swing.SwingFXUtils;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -52,6 +61,11 @@ public class VueGantt extends ScrollPane implements Observateur {
     private final int LARGEUR_JOUR = 40;
     private final int HAUTEUR_BARRE = 30;
 
+    /**
+     * Constructeur de la vue Gantt
+     * @param projet le projet
+     * @param controller le contrôleur
+     */
     public VueGantt(Projet projet, GanttController controller) {
         this.projet = projet;
         this.controller = controller;
@@ -72,7 +86,11 @@ public class VueGantt extends ScrollPane implements Observateur {
             controller.gererDependances(chkAfficherDependances.isSelected());
         });
 
-        toolBar.getChildren().add(chkAfficherDependances);
+        // Bouton pour exporter en image
+        Button btnExporter = new Button("📷 Exporter en Image");
+        btnExporter.getStyleClass().add("btn-export");
+
+        toolBar.getChildren().addAll(chkAfficherDependances, btnExporter);
 
         this.grid = new GridPane();
         this.grid.setHgap(0);
@@ -87,6 +105,9 @@ public class VueGantt extends ScrollPane implements Observateur {
         // Superposition des 2
         StackPane stackDiagramme = new StackPane(grid, overlayPane);
         stackDiagramme.setAlignment(Pos.TOP_LEFT);
+
+        // Action du bouton d'exportation
+        btnExporter.setOnAction(e -> exporterEnImage(stackDiagramme));
 
         conteneurPrincipal.getChildren().addAll(toolBar, stackDiagramme);
 
@@ -309,5 +330,32 @@ public class VueGantt extends ScrollPane implements Observateur {
             } catch (Exception ignored) {}
         }
         return min.minusDays(2);
+    }
+
+    /**
+     * Capture le diagramme et l'enregistre dans un fichier image
+     * @param node Le composant graphique à capturer (le StackPane du diagramme)
+     */
+    private void exporterEnImage(StackPane node) {
+        SnapshotParameters params = new SnapshotParameters();
+        // On peut forcer un fond blanc pour l'image exportée
+        params.setFill(Color.WHITE);
+
+        WritableImage image = node.snapshot(params, null);
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Exporter le diagramme de Gantt");
+        fileChooser.setInitialFileName("gantt_" + projet.getNom() + ".png");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image PNG", "*.png"));
+
+        File file = fileChooser.showSaveDialog(this.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

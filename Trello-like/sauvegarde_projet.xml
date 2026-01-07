@@ -9,7 +9,7 @@
      </void>
      <void property="taches">
       <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
+       <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple0">
         <void property="dateDebut">
          <string>2026-01-07</string>
         </void>
@@ -21,6 +21,18 @@
         </void>
         <void property="duree">
          <int>7</int>
+        </void>
+        <void property="etiquettes">
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#FF0000</string>
+           </void>
+           <void property="nom">
+            <string>test</string>
+           </void>
+          </object>
+         </void>
         </void>
         <void property="id">
          <int>2</int>
@@ -102,31 +114,6 @@
          <string>2026-01-14</string>
         </void>
         <void property="description">
-         <string>P3 tache</string>
-        </void>
-        <void property="duree">
-         <int>7</int>
-        </void>
-        <void property="id">
-         <int>7</int>
-        </void>
-        <void property="nom">
-         <string>P3</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-14</string>
-        </void>
-        <void property="description">
          <string>P1 tache
 </string>
         </void>
@@ -163,6 +150,31 @@
         </void>
         <void property="nom">
          <string>P2</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-14</string>
+        </void>
+        <void property="description">
+         <string>P3 tache</string>
+        </void>
+        <void property="duree">
+         <int>7</int>
+        </void>
+        <void property="id">
+         <int>7</int>
+        </void>
+        <void property="nom">
+         <string>P3</string>
         </void>
         <void property="priorite">
          <string>Moyenne</string>
@@ -595,56 +607,6 @@
        </object>
       </void>
       <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-13</string>
-        </void>
-        <void property="description">
-         <string>a1 tache</string>
-        </void>
-        <void property="duree">
-         <int>6</int>
-        </void>
-        <void property="id">
-         <int>23</int>
-        </void>
-        <void property="nom">
-         <string>A1</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-16</string>
-        </void>
-        <void property="description">
-         <string>A2 tache </string>
-        </void>
-        <void property="duree">
-         <int>9</int>
-        </void>
-        <void property="id">
-         <int>24</int>
-        </void>
-        <void property="nom">
-         <string>A2</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
        <object class="org.example.trellolike.tache.TacheComposite" id="TacheComposite2">
         <void property="dateDebut">
          <string>2026-01-17</string>
@@ -751,6 +713,31 @@
         </void>
        </object>
       </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-08</string>
+        </void>
+        <void property="description">
+         <string>aaa</string>
+        </void>
+        <void property="duree">
+         <int>1</int>
+        </void>
+        <void property="id">
+         <int>1</int>
+        </void>
+        <void property="nom">
+         <string>aaaaa</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
      </void>
     </object>
    </void>
@@ -829,6 +816,56 @@
         </void>
         <void property="nom">
          <string>Y3</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-13</string>
+        </void>
+        <void property="description">
+         <string>a1 tache</string>
+        </void>
+        <void property="duree">
+         <int>6</int>
+        </void>
+        <void property="id">
+         <int>23</int>
+        </void>
+        <void property="nom">
+         <string>A1</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-16</string>
+        </void>
+        <void property="description">
+         <string>A2 tache </string>
+        </void>
+        <void property="duree">
+         <int>9</int>
+        </void>
+        <void property="id">
+         <int>24</int>
+        </void>
+        <void property="nom">
+         <string>A2</string>
         </void>
         <void property="priorite">
          <string>Moyenne</string>
