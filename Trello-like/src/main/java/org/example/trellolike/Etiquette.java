@@ -1,62 +1,27 @@
 package org.example.trellolike;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-public class Etiquette {
-    /**
-     * Nom de l'étiquette
-     */
+public class Etiquette implements Serializable {
+
     private String nom;
+    private String codeCouleur; // Stocké en Hex (ex: "#e74c3c")
 
-    /**
-     * Couleur de l'étiquette
-     */
-    private String couleur;
+    // Constructeur vide (OBLIGATOIRE XML)
+    public Etiquette() {}
 
-    /**
-     * Description de l'étiquette
-     */
-    private String description;
-
-    /**
-     * Constructeur de l'étiquette
-     * @param nom nom de l'etiquette
-     * @param couleur couleur de l'étiquette
-     * @param description description de l'étiquette
-     */
-    public Etiquette(String nom, String couleur, String description) {
+    public Etiquette(String nom, String codeCouleur) {
         this.nom = nom;
-        this.couleur = couleur;
-        this.description = description;
+        this.codeCouleur = codeCouleur;
     }
+
+    // Getters & Setters
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public String getCodeCouleur() { return codeCouleur; }
+    public void setCodeCouleur(String codeCouleur) { this.codeCouleur = codeCouleur; }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Etiquette etiquette)) return false;
-        return Objects.equals(nom, etiquette.nom) && Objects.equals(couleur, etiquette.couleur) && Objects.equals(description, etiquette.description);
-    }
-
-    /**
-     * Méthode qui retourne le nom de l'étiquette
-     * @return le nom de l'étiquette
-     */
-    public String getNom() {
-        return nom;
-    }
-
-    /**
-     * Méthode qui retourne la couleur de l'étiquette
-     * @return la couleur de l'étiquette
-     */
-    public String getCouleur() {
-        return couleur;
-    }
-
-    /**
-     * Méthode qui retourne la description de l'étiquette
-     * @return la description de l'étiquette
-     */
-    public String getDescription() {
-        return description;
-    }
+    public String toString() { return nom; }
 }

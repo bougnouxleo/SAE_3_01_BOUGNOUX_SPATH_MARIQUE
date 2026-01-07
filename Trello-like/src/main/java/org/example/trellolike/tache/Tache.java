@@ -34,7 +34,7 @@ public abstract class Tache implements java.io.Serializable {
     /**
      * Liste des Etiquettes (peut etre null)
      */
-    protected List<Etiquette> etiquettes;
+    protected List<Etiquette> etiquettes = new ArrayList<>();
     /**
      * Liste des ids des taches pour les dépendances
      */
@@ -110,8 +110,8 @@ public abstract class Tache implements java.io.Serializable {
      * Méthode qui ajoute une Etiquette à la Tache
      * @param e l'Etiquette
      */
-    public void ajouterEtiquette(Etiquette e){
-        etiquettes.add(e);
+    public void ajouterEtiquette(Etiquette e) {
+        this.etiquettes.add(e);
     }
 
     /**
@@ -141,6 +141,10 @@ public abstract class Tache implements java.io.Serializable {
         this.dateDebut = dateDebut;
     }
 
+    public void retirerEtiquette(Etiquette e) {
+        this.etiquettes.remove(e);
+    }
+
     /**
      * Méthode qui retourne la date de fin de la tâche
      * @return la date de fin de la tâche
@@ -160,6 +164,8 @@ public abstract class Tache implements java.io.Serializable {
     public List<Etiquette> getEtiquettes() {
         return etiquettes;
     }
+
+    public void setEtiquettes(List<Etiquette> etiquettes) { this.etiquettes = etiquettes; }
 
     public void setIdsDependances(List<Integer> idsDependances) {
         this.idsDependances = idsDependances;

@@ -2,14 +2,14 @@ package org.example.trellolike.vue;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import org.example.trellolike.Projet;
 import org.example.trellolike.Sujet;
 import org.example.trellolike.controlleur.KanbanController;
@@ -86,6 +86,50 @@ public class VueTableau extends ScrollPane implements Observateur {
         this.conteneurColonnes.getChildren().add(btnAjouterListe);
     }
 
+    // Méthode privée à l'intérieur de VueTableau
+    private void afficherDialogCreationEtiquette(Tache tacheCible) {
+        // --- 1. Partie purement GRAPHIQUE (La Vue gère les pixels) ---
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Nouvelle Étiquette");
+        dialog.setHeaderText("Ajouter une étiquette à : " + tacheCible.getNom());
+
+        ButtonType btnValider = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnValider, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField txtNom = new TextField();
+        ColorPicker colorPicker = new ColorPicker(Color.RED);
+
+        grid.add(new Label("Nom :"), 0, 0);
+        grid.add(txtNom, 1, 0);
+        grid.add(new Label("Couleur :"), 0, 1);
+        grid.add(colorPicker, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // --- 2. Partie LIEN AVEC CONTROLEUR ---
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == btnValider) {
+                // Conversion Couleur -> String Hex (C'est du travail de Vue)
+                Color c = colorPicker.getValue();
+                String hex = String.format("#%02X%02X%02X",
+                        (int)(c.getRed() * 255),
+                        (int)(c.getGreen() * 255),
+                        (int)(c.getBlue() * 255));
+
+                // APPEL AU CONTROLEUR (On délègue le travail)
+                controller.traiterAjoutEtiquette(tacheCible, txtNom.getText(), hex);
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
     private void configurerEvenementsCarte(CarteTache carte, Tache t) {
         carte.setOnDragDetected(e -> {
             if (controller.verifierDroitDeplacer(t)) {
@@ -99,6 +143,21 @@ public class VueTableau extends ScrollPane implements Observateur {
         carte.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) controller.traiterOuvertureDetail(t);
         });
+        // Clic Droit pour gérer les étiquettes
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem itemAjoutEtiquette = new MenuItem("Ajouter une étiquette...");
+        itemAjoutEtiquette.setOnAction(event -> {
+            // Ouvre une boite de dialogue pour créer l'étiquette
+            afficherDialogCreationEtiquette(t);
+        });
+
+        contextMenu.getItems().add(itemAjoutEtiquette);
+
+        // Attacher le menu à la carte
+        carte.setOnContextMenuRequested(e ->
+                contextMenu.show(carte, e.getScreenX(), e.getScreenY())
+        );
     }
 
     private void configurerEvenementsColonne(ColonneKanban col, ListeDeTache listeAssociee) {

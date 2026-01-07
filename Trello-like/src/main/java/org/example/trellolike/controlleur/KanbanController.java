@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.trellolike.Etiquette;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
@@ -115,6 +116,28 @@ public class KanbanController {
         projet.sauvegarderGlobalement();
     }
 
+
+    /**
+     * Reçoit les données brutes de la Vue et effectue l'action métier.
+     */
+    public void traiterAjoutEtiquette(Tache tache, String nom, String codeCouleurHex) {
+        // 1. Logique métier : Création de l'objet
+        Etiquette nouvelleEtiquette = new Etiquette(nom, codeCouleurHex);
+
+        // 2. Modification du Modèle
+        tache.ajouterEtiquette(nouvelleEtiquette);
+
+        // 3. Persistance (Sauvegarde XML)
+        projet.sauvegarderGlobalement();
+    }
+
+    public void traiterSuppressionEtiquette(Tache tache, Etiquette etiquette) {
+        // 1. Modif du modèle
+        tache.retirerEtiquette(etiquette);
+
+        // 2. Sauvegarde (Ecrit le fichier XML)
+        projet.sauvegarderGlobalement();
+    }
     /**
      * Gère l'archivage d'une liste de tâches
      * @param liste la liste à archiver

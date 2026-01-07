@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.trellolike.Etiquette;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
@@ -74,7 +75,22 @@ public class ListeController {
         String jour = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRENCH);
         return jour.substring(0, 1).toUpperCase() + jour.substring(1); // Première lettre majuscule
     }
+    /**
+     * Méthode partagée avec KanbanController : Ajout d'étiquette + Sauvegarde
+     */
+    public void traiterAjoutEtiquette(Tache tache, String nom, String codeCouleurHex) {
+        Etiquette nouvelleEtiquette = new Etiquette(nom, codeCouleurHex);
+        tache.ajouterEtiquette(nouvelleEtiquette);
+        projet.sauvegarderGlobalement();
+    }
 
+    public void traiterSuppressionEtiquette(Tache tache, Etiquette etiquette) {
+        // 1. Modif du modèle
+        tache.retirerEtiquette(etiquette);
+
+        // 2. Sauvegarde (Ecrit le fichier XML)
+        projet.sauvegarderGlobalement();
+    }
     /**
      * Gère l'ouverture de la fenêtre de détails d'une tâche.
      * @param t la tâche dont on veut afficher les détails

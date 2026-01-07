@@ -22,6 +22,18 @@
         <void property="duree">
          <int>2</int>
         </void>
+        <void property="etiquettes">
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#FF0000</string>
+           </void>
+           <void property="nom">
+            <string>Urgent</string>
+           </void>
+          </object>
+         </void>
+        </void>
         <void property="id">
          <int>1</int>
         </void>
@@ -43,6 +55,18 @@
         </void>
         <void property="duree">
          <int>1</int>
+        </void>
+        <void property="etiquettes">
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#4D66CC</string>
+           </void>
+           <void property="nom">
+            <string>Technique</string>
+           </void>
+          </object>
+         </void>
         </void>
         <void property="id">
          <int>2</int>
