@@ -189,13 +189,17 @@ public class VueGantt extends ScrollPane implements Observateur {
      */
     private void dessinerFlecheDependances(){
         overlayPane.getChildren().clear();
+        grid.applyCss();
+        grid.layout();
         for (Tache t : projet.obtenirToutesLesTaches()) {
-            StackPane sourceNode = taskNodes.get(t.getId());
+            StackPane sourceNode = taskNodes.get(t.getId()); // La tâche bloquée
             if (sourceNode == null) continue;
 
             for (Integer idDep : t.getIdsDependances()) {
-                StackPane targetNode = taskNodes.get(idDep);
+                StackPane targetNode = taskNodes.get(idDep); // La tâche bloquante
                 if (targetNode == null) continue;
+
+                if (sourceNode.getScene() == null || targetNode.getScene() == null) continue;
 
                 // On récupère les limites (Bounds) des deux barres dans la Scène
                 Bounds boundsBloquant = targetNode.localToScene(targetNode.getBoundsInLocal());
@@ -213,18 +217,39 @@ public class VueGantt extends ScrollPane implements Observateur {
                 double endX = bCible.getMinX();
                 double endY = bCible.getMinY() + bCible.getHeight() / 2;
 
-                // Création de la ligne
-                Line line = new Line(startX, startY, endX, endY);
-                //line.setStrokeWidth(2);
+                // Calcul des points pour la flèche
+                double longueurFleche = 8.0;
+                double dx = endX - startX;
+                double dy = endY - startY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                // On calcule le point d'arrêt de la ligne (8 pixels avant la pointe)
+                double lineEndX = endX;
+                double lineEndY = endY;
+
+                if (distance > longueurFleche) {
+                    lineEndX = endX - (longueurFleche * dx / distance);
+                    lineEndY = endY - (longueurFleche * dy / distance);
+                }
+
+                // Création de la ligne s'arrêtant au nouveau point
+                Line line = new Line(startX, startY, lineEndX, lineEndY);
                 line.getStyleClass().add("dependency-line");
 
                 // Création de la flèche
                 Polygon arrowHead = new Polygon();
+
+                // Calcul de l'angle pour orienter la pointe de la flèche
+                double angle = Math.atan2(dy, dx);
+                double cos = Math.cos(angle);
+                double sin = Math.sin(angle);
+
                 arrowHead.getPoints().addAll(
-                        endX, endY,
-                        endX - 8, endY - 5,
-                        endX - 8, endY + 5
+                        endX, endY,                                     // Pointe
+                        endX - 6 * cos + 3 * sin, endY - 8 * sin - 5 * cos, // Haut base
+                        endX - 6 * cos - 3 * sin, endY - 8 * sin + 5 * cos  // Bas base
                 );
+
                 arrowHead.getStyleClass().add("dependency-arrow");
 
                 overlayPane.getChildren().addAll(line, arrowHead);
