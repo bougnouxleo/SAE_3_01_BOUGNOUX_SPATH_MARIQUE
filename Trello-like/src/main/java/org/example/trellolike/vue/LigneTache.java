@@ -33,7 +33,7 @@ public class LigneTache extends HBox {
         lblDate.setPrefWidth(100);
 
         // 5. Étiquette (Type de travail - Simulation visuelle basée sur la photo)
-        Label lblTag = new Label(""+t.getDureeTotale());
+        Label lblTag = new Label(t.getDureeTotale()+"J");
         lblTag.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: #cc0000; -fx-padding: 3 8; -fx-background-radius: 10;");
 
         // Assemblage
