@@ -6,7 +6,8 @@
 
 /* --- Barre de Navigation --- */
 .menu-bar-container {
-    -fx-background-color: Violet; /* Rose doux */
+    /* Remplacer Violet par un mauve pastel plus élégant */
+    -fx-background-color: #D6A6ED;
     -fx-padding: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
 }
@@ -92,3 +93,26 @@
 .status-finished Rectangle { -fx-fill: #A8E6CF; }
 .status-in-progress Rectangle { -fx-fill: #AEDFF7; }
 .status-planned Rectangle { -fx-fill: #FFD3B6; } /* Orange pastel pour changer */
+
+
+/* Style de la ligne de dépendance */
+.dependency-line {
+    -fx-stroke: #B0BEC5;           /* Bleu-gris pastel très doux */
+    -fx-stroke-width: 2;           /* Épaisseur de la ligne */
+    -fx-stroke-dash-array: 6 4;    /* Définit les pointillés (6px trait, 4px vide) */
+    -fx-opacity: 0.7;              /* Légère transparence pour ne pas surcharger la vue */
+}
+
+/* Style de la pointe de la flèche */
+.dependency-arrow {
+    -fx-fill: #B0BEC5;             /* Même couleur que la ligne */
+    -fx-opacity: 0.8;
+
+}
+
+/* Effet au survol (optionnel) */
+.dependency-line:hover, .dependency-arrow:hover {
+    -fx-stroke: #90A4AE;           /* Devient un peu plus foncé au survol */
+    -fx-fill: #90A4AE;
+    -fx-opacity: 1.0;
+}

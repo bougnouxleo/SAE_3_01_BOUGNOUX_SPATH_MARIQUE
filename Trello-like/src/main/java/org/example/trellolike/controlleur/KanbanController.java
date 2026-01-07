@@ -36,8 +36,39 @@ public class KanbanController {
      */
     public void traiterAjoutTache(String nom, String description, LocalDate dateDebut, LocalDate dateFin, ListeDeTache listeDest, List<Tache> lesDependances, boolean estComposite, int dureeEstimee) {
         if (nom == null || nom.trim().isEmpty()) return;
-        String strDebut = (dateDebut != null) ? dateDebut.toString() : "";
-        String strFin = (dateFin != null) ? dateFin.toString() : "";
+
+        // On initialise avec les dates choisies par défaut
+        LocalDate debutFinal = dateDebut;
+        LocalDate finFinal = dateFin;
+
+        // Calcul automatique si des dépendances existent
+        if (lesDependances != null && !lesDependances.isEmpty()) {
+            LocalDate dateFinLaPlusTardive = null;
+
+            for (Tache dep : lesDependances) {
+                if (dep.getDateFin() != null && !dep.getDateFin().isEmpty()) {
+                    LocalDate dFin = LocalDate.parse(dep.getDateFin());
+                    // On cherche la date de fin la plus éloignée
+                    if (dateFinLaPlusTardive == null || dFin.isAfter(dateFinLaPlusTardive)) {
+                        dateFinLaPlusTardive = dFin;
+                    }
+                }
+            }
+
+            if (dateFinLaPlusTardive != null) {
+                // La nouvelle tâche commence là où la dépendance la plus longue s'arrête
+                debutFinal = dateFinLaPlusTardive;
+
+                // Pour une tâche simple, on calcule la fin en ajoutant la durée saisie
+                if (!estComposite) {
+                    finFinal = debutFinal.plusDays(dureeEstimee);
+                }
+            }
+        }
+
+        // Conversion en String pour le constructeur
+        String strDebut = (debutFinal != null) ? debutFinal.toString() : "";
+        String strFin = (finFinal != null) ? finFinal.toString() : "";
 
         Tache nouvelleTache;
 
@@ -190,7 +221,7 @@ public class KanbanController {
                 List<Tache> selection = listSelectionEnfants.getSelectionModel().getSelectedItems();
                 composite.setSousTaches(new ArrayList<>(selection));
 
-                duree.setText("Durée estimée : " + t.getDureeTotale() + "h");
+                duree.setText("Durée estimée : " + t.getDureeTotale() + "J");
 
                 projet.sauvegarderGlobalement();
             });

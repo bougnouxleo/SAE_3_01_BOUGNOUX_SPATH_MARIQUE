@@ -21,12 +21,34 @@ public class GanttController {
     private Projet projet;
 
     /**
+     * Indique si les dépendances doivent être affichées
+     */
+    private boolean afficherDependances = false;
+
+    /**
      * Constructeur du GanttController
      * @param projet le projet associé
      */
     public GanttController(Projet projet) {
 
         this.projet = projet;
+    }
+
+    /**
+     * Gère l'affichage des dépendances dans la vue Gantt.
+     * @param selectionnee true pour afficher les dépendances, false pour les masquer
+     */
+    public void gererDependances(boolean selectionnee) {
+        this.afficherDependances = selectionnee;
+        this.projet.notifierObservateurs();
+    }
+
+    /**
+     * Indique si les dépendances doivent être affichées.
+     * @return true si les dépendances sont affichées, false sinon
+     */
+    public boolean isAfficherDependances() {
+        return afficherDependances;
     }
 
     /**

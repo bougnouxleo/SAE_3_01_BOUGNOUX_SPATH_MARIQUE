@@ -137,9 +137,41 @@ public class ColonneKanban extends VBox {
         DatePicker dateFin = new DatePicker();
 
         CheckBox chkComposite = new CheckBox("Est un projet (Tâche Composite)");
-
         Text txtDuree = new Text("0");
 
+        // --- AJOUT DU MESSAGE D'AVERTISSEMENT DYNAMIQUE ---
+        Label lblAutoDate = new Label("⚠️ Dates calculées automatiquement par les dépendances");
+        lblAutoDate.setStyle("-fx-text-fill: #e67e22; -fx-font-style: italic; -fx-font-size: 11px;");
+        lblAutoDate.setVisible(false); // Caché par défaut
+        lblAutoDate.setManaged(false); // Ne prend pas de place quand il est caché
+
+        // --- Liste des dépendances ---
+        Label lblDep = new Label("Est bloquée par :");
+        ListView<Tache> listeDependances = new ListView<>();
+        listeDependances.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listeDependances.setMaxHeight(100);
+
+        // Chargement des tâches pour les dépendances via le Singleton Projet
+        List<Tache> toutes = new ArrayList<>();
+        for (ListeDeTache liste : Projet.getInstance().getListeDeTaches()) {
+            toutes.addAll(liste.getTaches());
+        }
+        listeDependances.getItems().addAll(toutes);
+
+        // --- LOGIQUE D'ÉCOUTE POUR L'AUTOMATISATION DES DATES ---
+        listeDependances.getSelectionModel().getSelectedItems().addListener((javafx.collections.ListChangeListener<Tache>) c -> {
+            boolean aDesDeps = !listeDependances.getSelectionModel().getSelectedItems().isEmpty();
+
+            //Afficher/Cacher le message d'avertissement
+            lblAutoDate.setVisible(aDesDeps);
+            lblAutoDate.setManaged(aDesDeps);
+
+            //Désactiver les champs de date car le contrôleur va les écraser
+            dateDebut.setDisable(aDesDeps);
+            dateFin.setDisable(aDesDeps);
+        });
+
+        // Écouteurs pour la mise à jour de la durée
         dateDebut.valueProperty().addListener((obs, oldVal, newVal) ->
                 mettreAJourDuree(dateDebut, dateFin, txtDuree, chkComposite));
 
@@ -151,59 +183,44 @@ public class ColonneKanban extends VBox {
             mettreAJourDuree(dateDebut, dateFin, txtDuree, chkComposite);
         });
 
-        Label lblDep = new Label("Est bloquée par :");
-        ListView<Tache> listeDependances = new ListView<>();
-        listeDependances.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        listeDependances.setMaxHeight(100);
-
-        List<Tache> toutes = new ArrayList<>();
-        for (ListeDeTache liste : Projet.getInstance().getListes()) {
-            toutes.addAll(liste.getTaches());
-        }
-        listeDependances.getItems().addAll(toutes);
-
-        //Mise en place de la grille
+        // --- Mise en place de la grille ---
         grid.add(new Label("Nom :"), 0, 0);       grid.add(txtNom, 1, 0);
         grid.add(new Label("Desc :"), 0, 1);      grid.add(txtDesc, 1, 1);
         grid.add(new Label("Début :"), 0, 2);     grid.add(dateDebut, 1, 2);
         grid.add(new Label("Fin :"), 0, 3);       grid.add(dateFin, 1, 3);
-
         grid.add(new Label("Type :"), 0, 4);      grid.add(chkComposite, 1, 4);
         grid.add(new Label("Durée (J) :"), 0, 5); grid.add(txtDuree, 1, 5);
+        grid.add(lblDep, 0, 6);                   grid.add(listeDependances, 1, 6);
 
-        grid.add(new Label("Bloqué par :"), 0, 6);grid.add(listeDependances, 1, 6);
+        // Ajout du label d'avertissement sous la liste des dépendances
+        grid.add(lblAutoDate, 1, 7);
 
         dialog.getDialogPane().setContent(grid);
 
         Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnTypeValider);
 
+        // Filtre de validation (activé seulement si aucune dépendance n'est sélectionnée)
         btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            LocalDate debut = dateDebut.getValue();
-            LocalDate fin = dateFin.getValue();
+            if (listeDependances.getSelectionModel().getSelectedItems().isEmpty()) {
+                LocalDate debut = dateDebut.getValue();
+                LocalDate fin = dateFin.getValue();
 
-            // 1. Vérifier si les dates sont remplies
-            if (debut == null || fin == null) {
-                event.consume();
-                afficherAlerte("Champs vides", "Veuillez renseigner les deux dates.");
-                return;
-            }
-
-            // 2. Vérifier que le début n'est pas dans le passé
-            if (debut.isBefore(LocalDate.now())) {
-                event.consume();
-                afficherAlerte("Date invalide", "La date de début ne peut pas être dans le passé !");
-            }
-            // 3. Vérifier que la fin est APRES le début
-            else if (fin.isBefore(debut)) {
-                event.consume();
-                afficherAlerte("Incohérence", "La date de fin ne peut pas être avant la date de début !");
+                if (debut == null || fin == null) {
+                    event.consume();
+                    afficherAlerte("Champs vides", "Veuillez renseigner les deux dates.");
+                } else if (debut.isBefore(LocalDate.now())) {
+                    event.consume();
+                    afficherAlerte("Date invalide", "La date de début ne peut pas être dans le passé !");
+                } else if (fin.isBefore(debut)) {
+                    event.consume();
+                    afficherAlerte("Incohérence", "La date de fin ne peut pas être avant la date de début !");
+                }
             }
         });
 
-
+        // --- Gestion de la validation ---
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == btnTypeValider) {
-                // Parsing de la durée
                 int duree = 0;
                 try {
                     if (!chkComposite.isSelected()) {
@@ -211,17 +228,18 @@ public class ColonneKanban extends VBox {
                     }
                 } catch (NumberFormatException e) { duree = 0; }
 
-                List<Tache> selection = listeDependances.getSelectionModel().getSelectedItems();
+                List<Tache> selection = new ArrayList<>(listeDependances.getSelectionModel().getSelectedItems());
 
+                // Envoi des données au contrôleur pour le calcul final
                 controller.traiterAjoutTache(
                         txtNom.getText(),
                         txtDesc.getText(),
                         dateDebut.getValue(),
                         dateFin.getValue(),
                         listeModele,
-                        new ArrayList<>(selection),
-                        chkComposite.isSelected(), // On passe le booléen
-                        duree // On passe la durée saisie
+                        selection,
+                        chkComposite.isSelected(),
+                        duree
                 );
                 return true;
             }
