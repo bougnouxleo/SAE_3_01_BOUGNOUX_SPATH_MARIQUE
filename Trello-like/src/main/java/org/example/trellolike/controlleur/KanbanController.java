@@ -16,6 +16,7 @@ import org.example.trellolike.tache.TacheComposite;
 import org.example.trellolike.tache.TacheSimple;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class KanbanController {
@@ -31,6 +32,11 @@ public class KanbanController {
      * Texte de filtre pour la priorité des tâches
      */
     private String filtrePriorite = "Toutes les priorités";
+
+    /**
+     * État du tri par durée
+     */
+    private int etatTriDuree = 0; // 0 = pas de tri, 1 = croissant, 2 = décroissant
 
     /**
      * Constructeur du KanbanController
@@ -373,4 +379,32 @@ public class KanbanController {
     public void traiterDeplacementListe(int indexSource, int indexCible) {
         projet.deplacerListe(indexSource, indexCible);
     }
+    /**
+     * Met à jour l'état du tri par durée.
+     * 0 = pas de tri, 1 = croissant, 2 = décroissant
+     */
+    public void mettreAJourTriDuree() {
+        this.etatTriDuree = (this.etatTriDuree + 1) % 3;
+        projet.sauvegarderGlobalement();
+    }
+
+    /**
+     * Getter état tri durée
+     * @return l'état du tri durée
+     */
+    public int getEtatTriDuree() {
+        return this.etatTriDuree;
+    }
+    /**
+     * Trie une liste de tâches selon l'état du tri par durée.
+     * @param liste la liste de tâches à trier
+     */
+    public void trierTaches(List<Tache> liste) {
+        if (etatTriDuree == 1) { // Croissant
+            liste.sort(Comparator.comparingInt(Tache::getDureeTotale));
+        } else if (etatTriDuree == 2) { // Décroissant
+            liste.sort((t1, t2) -> Integer.compare(t2.getDureeTotale(), t1.getDureeTotale()));
+        }
+    }
+
 }

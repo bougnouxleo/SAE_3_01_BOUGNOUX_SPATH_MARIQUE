@@ -2,19 +2,13 @@ package org.example.trellolike.vue;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import org.example.trellolike.Sujet;
-
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import org.example.trellolike.Projet;
-import org.example.trellolike.Sujet;
 import org.example.trellolike.controlleur.ListeController;
 import org.example.trellolike.tache.Tache;
 
@@ -54,7 +48,21 @@ public class VueListe extends ScrollPane implements Observateur {
         comboPriorite.valueProperty().addListener((obs, old, nouveau) ->
                 controller.mettreAJourFiltres(searchField.getText(), nouveau));
 
-        barreOutils.getChildren().addAll(new Label("🔍"), searchField,new Label("Priorité :") ,comboPriorite);
+        // Bouton de tri par durée
+        Button btnTriDuree = new Button("Tri Durée : ↕");
+        btnTriDuree.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #ddd;");
+
+        btnTriDuree.setOnAction(e -> {
+            controller.mettreAJourTriDuree();
+
+            // Mise à jour visuelle du bouton
+            int etat = controller.getEtatTriDuree();
+            if (etat == 0) btnTriDuree.setText("Tri Durée : ↕");
+            else if (etat == 1) btnTriDuree.setText("Tri Durée : ↑ (Croissant)");
+            else btnTriDuree.setText("Tri Durée : ↓ (Décroissant)");
+        });
+
+        barreOutils.getChildren().addAll(new Label("🔍"), searchField,new Label("Priorité :") ,comboPriorite, btnTriDuree);
 
         // Configuration du ScrollPane
         this.setFitToWidth(true);

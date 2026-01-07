@@ -17,6 +17,7 @@ import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VueTableau extends ScrollPane implements Observateur {
@@ -68,7 +69,21 @@ public class VueTableau extends ScrollPane implements Observateur {
         comboPriorite.valueProperty().addListener((obs, old, nouveau) ->
                 controller.mettreAJourFiltres(searchField.getText(), comboPriorite.getValue()));
 
-        barreOutils.getChildren().addAll(new Label("🔍"), searchField, new Label("Priorité :"), comboPriorite);
+        // Bouton de tri par durée
+        Button btnTriDuree = new Button("Tri Durée : ↕");
+        btnTriDuree.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #ddd;");
+
+        btnTriDuree.setOnAction(e -> {
+            controller.mettreAJourTriDuree();
+
+            // Mise à jour visuelle du bouton
+            int etat = controller.getEtatTriDuree();
+            if (etat == 0) btnTriDuree.setText("Tri Durée : ↕");
+            else if (etat == 1) btnTriDuree.setText("Tri Durée : ↑ (Croissant)");
+            else btnTriDuree.setText("Tri Durée : ↓ (Décroissant)");
+        });
+
+        barreOutils.getChildren().addAll(new Label("🔍"), searchField, new Label("Priorité :"), comboPriorite, btnTriDuree);
 
         this.setFitToHeight(true);
         this.setFitToWidth(true);
@@ -121,18 +136,31 @@ public class VueTableau extends ScrollPane implements Observateur {
 
             ColonneKanban colonneGraphique = new ColonneKanban(liste, this.controller);
             configurerDragAndDropGlobal(colonneGraphique, liste, i);
+            colonneGraphique.getStyleClass().add("kanban-column");
+            HBox.setHgrow(colonneGraphique, Priority.ALWAYS);
+
+            // --- 1. FILTRAGE : On récupère d'abord les tâches visibles ---
+            List<Tache> tachesFiltrees = new ArrayList<>();
             for (Tache t : liste.getTaches()) {
                 if (controller.doitAfficherTache(t)) {
-                    CarteTache carteGraphique = new CarteTache(t);
-                    carteGraphique.getStyleClass().add("task-card");
+                    tachesFiltrees.add(t);
+                }
+            }
 
-                    carteGraphique.setOnEtiquetteSupprimee(etiquetteASupprimer -> {
-                        controller.traiterSuppressionEtiquette(t, etiquetteASupprimer);
-                    });
+            // --- 2. TRI : On demande au contrôleur de trier cette liste ---
+            controller.trierTaches(tachesFiltrees);
 
-                    configurerEvenementsCarte(carteGraphique, t);
-                    colonneGraphique.ajouterCarte(carteGraphique);
-                };
+            // --- 3. AJOUT DES CARTES ---
+            for (Tache t : tachesFiltrees) {
+                CarteTache carteGraphique = new CarteTache(t);
+                carteGraphique.getStyleClass().add("task-card");
+
+                carteGraphique.setOnEtiquetteSupprimee(etiquetteASupprimer -> {
+                    controller.traiterSuppressionEtiquette(t, etiquetteASupprimer);
+                });
+
+                configurerEvenementsCarte(carteGraphique, t);
+                colonneGraphique.ajouterCarte(carteGraphique);
             }
 
             this.conteneurColonnes.getChildren().add(colonneGraphique);
