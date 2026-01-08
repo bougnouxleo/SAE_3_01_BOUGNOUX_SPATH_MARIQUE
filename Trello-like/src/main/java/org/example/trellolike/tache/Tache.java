@@ -1,7 +1,7 @@
 package org.example.trellolike.tache;
 
-import org.example.trellolike.Etiquette;
-import org.example.trellolike.Projet;
+import org.example.trellolike.Etiquette.Etiquette;
+import org.example.trellolike.modele.Projet;
 
 import java.util.ArrayList;
 import java.util.List;

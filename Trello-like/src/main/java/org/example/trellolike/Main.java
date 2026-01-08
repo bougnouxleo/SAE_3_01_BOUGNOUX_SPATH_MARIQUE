@@ -11,14 +11,15 @@ import javafx.stage.Stage;
 import org.example.trellolike.controlleur.ArchiveController;
 import org.example.trellolike.controlleur.GanttController;
 import org.example.trellolike.controlleur.KanbanController;
-import org.example.trellolike.vue.VueGantt;
-import org.example.trellolike.vue.VueListe;
-import org.example.trellolike.vue.VueTableau;
-import org.example.trellolike.vue.VueArchives;
+import org.example.trellolike.modele.Projet;
+import org.example.trellolike.vue.VueGantt.VueGantt;
+import org.example.trellolike.vue.Liste_Archives.VueListe;
+import org.example.trellolike.vue.Kanban.VueTableau;
+import org.example.trellolike.vue.Liste_Archives.VueArchives;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.example.trellolike.controlleur.CalendarController;
-import org.example.trellolike.vue.VueCalendrier;
+import org.example.trellolike.vue.Calendrier.VueCalendrier;
 
 public class Main extends Application {
     /**

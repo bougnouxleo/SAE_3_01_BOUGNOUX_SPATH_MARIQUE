@@ -1,4 +1,4 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.VueGantt;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,8 +7,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.example.trellolike.Projet;
-import org.example.trellolike.Sujet;
+import org.example.trellolike.modele.Projet;
+import org.example.trellolike.modele.Sujet;
 import org.example.trellolike.controlleur.GanttController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
+import org.example.trellolike.vue.Observateur;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

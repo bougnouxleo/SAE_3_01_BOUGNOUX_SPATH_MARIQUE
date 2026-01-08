@@ -6,10 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.trellolike.Projet;
-import org.example.trellolike.tache.ListeDeTache;
+import org.example.trellolike.modele.Projet;
 import org.example.trellolike.tache.Tache;
-import org.example.trellolike.tache.TacheComposite;
 
 import java.util.ArrayList;
 import java.util.List;

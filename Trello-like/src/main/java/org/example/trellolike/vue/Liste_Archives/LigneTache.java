@@ -1,4 +1,4 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Liste_Archives;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,8 +10,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import org.example.trellolike.Etiquette;
+import org.example.trellolike.Etiquette.Etiquette;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.vue.Etiquette.BadgeEtiquette;
 
 import java.util.function.Consumer;
 

@@ -1,16 +1,16 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Liste_Archives;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.example.trellolike.Projet;
-import org.example.trellolike.Sujet;
+import org.example.trellolike.modele.Projet;
+import org.example.trellolike.modele.Sujet;
 import org.example.trellolike.controlleur.ArchiveController;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.vue.Observateur;
 
 import java.util.List;
 

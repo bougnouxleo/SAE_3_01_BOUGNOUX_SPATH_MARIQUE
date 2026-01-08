@@ -1,4 +1,4 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Kanban;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -6,10 +6,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.geometry.Insets;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import org.example.trellolike.Etiquette;
+import org.example.trellolike.Etiquette.Etiquette;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.vue.Etiquette.BadgeEtiquette;
 
 import java.util.function.Consumer;
 

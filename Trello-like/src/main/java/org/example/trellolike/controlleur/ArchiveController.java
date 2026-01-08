@@ -8,12 +8,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.trellolike.Journal;
-import org.example.trellolike.Projet;
+import org.example.trellolike.log.Journal;
+import org.example.trellolike.modele.Projet;
 import org.example.trellolike.tache.Tache;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ArchiveController {
     /**

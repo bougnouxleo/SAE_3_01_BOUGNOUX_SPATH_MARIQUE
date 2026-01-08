@@ -8,9 +8,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.trellolike.Etiquette;
-import org.example.trellolike.Journal;
-import org.example.trellolike.Projet;
+import org.example.trellolike.Etiquette.Etiquette;
+import org.example.trellolike.log.Journal;
+import org.example.trellolike.modele.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
 import org.example.trellolike.tache.TacheComposite;
@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ListeController {
 

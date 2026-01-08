@@ -1,4 +1,4 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Kanban;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,11 +11,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.example.trellolike.Projet;
-import org.example.trellolike.Sujet;
+import org.example.trellolike.modele.Projet;
+import org.example.trellolike.modele.Sujet;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.vue.Observateur;
 
 import java.util.ArrayList;
 import java.util.List;

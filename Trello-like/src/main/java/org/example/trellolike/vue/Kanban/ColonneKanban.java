@@ -1,4 +1,4 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Kanban;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -7,7 +7,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.example.trellolike.Projet;
+import org.example.trellolike.modele.Projet;
 import org.example.trellolike.controlleur.KanbanController;
 import org.example.trellolike.tache.ListeDeTache;
 import javafx.geometry.Insets;
@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import org.example.trellolike.tache.Tache;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+
 import java.time.LocalDate;
 
 import java.util.ArrayList;

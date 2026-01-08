@@ -1,4 +1,4 @@
-package org.example.trellolike;
+package org.example.trellolike.Etiquette;
 
 import java.io.Serializable;
 

@@ -1,9 +1,9 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Etiquette;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import org.example.trellolike.Etiquette;
+import org.example.trellolike.Etiquette.Etiquette;
 
 public class BadgeEtiquette extends Label {
 

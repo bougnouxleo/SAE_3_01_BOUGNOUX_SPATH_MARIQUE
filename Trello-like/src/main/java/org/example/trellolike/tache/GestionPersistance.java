@@ -1,6 +1,6 @@
 package org.example.trellolike.tache;
 
-import org.example.trellolike.Projet;
+import org.example.trellolike.modele.Projet;
 
 import java.beans.XMLEncoder;
 import java.beans.XMLDecoder;

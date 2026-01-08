@@ -1,16 +1,17 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Liste_Archives;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.example.trellolike.Sujet;
+import org.example.trellolike.modele.Sujet;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
-import org.example.trellolike.Projet;
+import org.example.trellolike.modele.Projet;
 import org.example.trellolike.controlleur.ListeController;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.vue.Observateur;
 
 import java.time.LocalDate;
 import java.util.List;

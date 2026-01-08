@@ -1,4 +1,4 @@
-package org.example.trellolike;
+package org.example.trellolike.modele;
 
 import org.example.trellolike.vue.Observateur;
 

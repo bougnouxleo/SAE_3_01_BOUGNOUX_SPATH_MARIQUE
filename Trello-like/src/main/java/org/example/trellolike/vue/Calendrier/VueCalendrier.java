@@ -1,4 +1,4 @@
-package org.example.trellolike.vue;
+package org.example.trellolike.vue.Calendrier;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,10 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import org.example.trellolike.Projet;
-import org.example.trellolike.Sujet;
+import org.example.trellolike.modele.Projet;
+import org.example.trellolike.modele.Sujet;
 import org.example.trellolike.controlleur.CalendarController;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.vue.Observateur;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
