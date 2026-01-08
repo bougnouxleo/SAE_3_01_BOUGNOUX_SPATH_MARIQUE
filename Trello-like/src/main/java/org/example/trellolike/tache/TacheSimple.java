@@ -54,6 +54,9 @@ public class TacheSimple extends Tache {
         return duree;
     }
 
+    /**
+     * Methode métier du pattern Composite
+     */
     @Override
     public void afficherDetail(){
         System.out.println("Tâche simple : " + getNom() + " | Durée : " + duree);

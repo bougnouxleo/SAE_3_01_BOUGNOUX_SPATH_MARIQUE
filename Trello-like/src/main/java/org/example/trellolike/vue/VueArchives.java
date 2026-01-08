@@ -51,6 +51,10 @@ public class VueArchives extends ScrollPane implements Observateur {
         this.actualiser(projet);
     }
 
+    /**
+     * Actualise la vue avec les tâches archivées du projet
+     * @param s le projet
+     */
     @Override
     public void actualiser(Sujet s) {
         if (!(s instanceof Projet)) return;

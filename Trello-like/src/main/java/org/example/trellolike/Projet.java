@@ -3,6 +3,7 @@ package org.example.trellolike;
 import org.example.trellolike.tache.GestionPersistance;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
+import org.example.trellolike.tache.TacheComposite;
 import org.example.trellolike.vue.Observateur;
 
 import java.time.LocalDate;
@@ -29,10 +30,6 @@ public class Projet implements Sujet, java.io.Serializable {
      */
     private List<ListeDeTache> listeDeTaches;
 
-    /**
-     * Liste des membres du projet
-     */
-    private ArrayList<Utilisateur> members;
 
     /**
      * Liste des tâches archivées
@@ -42,7 +39,6 @@ public class Projet implements Sujet, java.io.Serializable {
     public Projet() {
         this.observateurs = new ArrayList<>();
         this.listeDeTaches = new ArrayList<>();
-        this.members = new ArrayList<>();
         this.listeDesArchives = new ArrayList<>();
     }
 
@@ -82,16 +78,21 @@ public class Projet implements Sujet, java.io.Serializable {
         return null;
     }
 
-    /**
-     * Méthode qui trouve la liste de tâche par une tâche donnée
-     * @param t la tâche dont on cherche la liste parente
-     * @return la liste de tâche parente
+     /**
+     * Recherche robuste par ID
+     * Trouve la liste contenant une tâche en comparant les IDs (pas les pointeurs mémoire).
      */
     public ListeDeTache trouverListeDeLaTache(Tache t) {
+        if (t == null) return null;
         for (ListeDeTache liste : this.listeDeTaches) {
-            if (liste.getTaches().contains(t)) return liste;
+            for (Tache tDansListe : liste.getTaches()) {
+                // On compare les ID : C'est la clé du succès !
+                if (tDansListe.getId() == t.getId()) {
+                    return liste;
+                }
+            }
         }
-        return null; // Devrait lancer une exception
+        return null;
     }
 
     // Getters & Setters (Requis pour sérialisation XML)
@@ -101,6 +102,7 @@ public class Projet implements Sujet, java.io.Serializable {
 
     public void setNom(String nom) { this.nom = nom; }
 
+    // Méthodes obligatoires pour observateur
     public void enregistrerObservateur(Observateur o) {
         observateurs.add(o);
     }
@@ -116,16 +118,61 @@ public class Projet implements Sujet, java.io.Serializable {
     }
 
     /**
-     * deplacement d'une tache d'une liste à une autre
-     *
-     * @param t
-     * @param l1
-     * @param l2
+     * Point d'entrée pour déplacer une tâche.
+     * Déclenche le déplacement en cascade pour les composites.
      */
-    public void deplacerTache(Tache t, ListeDeTache l1, ListeDeTache l2) {
-        l1.retirerTache(t);
-        l2.ajouterTache(t);
-        notifierObservateurs();
+    public void deplacerTache(Tache t, ListeDeTache source, ListeDeTache destination) {
+        // 1. On lance la récursion (déplace t et tous ses enfants)
+        deplacerTacheRecursif(t, destination);
+
+        // 2. On sauvegarde et on notifie une seule fois à la fin
+        this.sauvegarderGlobalement();
+    }
+
+    /**
+     * Permet le déplacement récursif des taches composites
+     * @param t
+     * @param destination
+     */
+    private void deplacerTacheRecursif(Tache t, ListeDeTache destination) {
+        // 1. On cherche où est la tâche actuellement (via ID)
+        ListeDeTache sourceActuelle = trouverListeDeLaTache(t);
+
+        // 2. Si elle est trouvée ailleurs que dans la destination
+        if (sourceActuelle != null && !sourceActuelle.equals(destination)) {
+
+            // --- ASTUCE CRITIQUE ---
+            // On ne fait pas sourceActuelle.retirerTache(t) direct, car 't' vient peut-être
+            // du Composite et n'est pas l'objet exact de la liste.
+            // On cherche l'objet RÉEL dans la liste source pour le retirer.
+            Tache instanceReelle = null;
+            for (Tache candidat : sourceActuelle.getTaches()) {
+                if (candidat.getId() == t.getId()) {
+                    instanceReelle = candidat;
+                    break;
+                }
+            }
+
+            if (instanceReelle != null) {
+                sourceActuelle.retirerTache(instanceReelle); // On retire l'ancien
+                destination.ajouterTache(instanceReelle);    // On déplace le réel
+            }
+        }
+
+        // 3. Récursion pour les enfants (Composite)
+        if (t instanceof TacheComposite) {
+            TacheComposite composite = (TacheComposite) t;
+            // On vérifie que la liste n'est pas vide
+            if (composite.getSousTaches() != null && !composite.getSousTaches().isEmpty()) {
+                // On copie la liste pour itérer sans risque (ConcurrentModification)
+                List<Tache> enfants = new ArrayList<>(composite.getSousTaches());
+
+                for (Tache sousTache : enfants) {
+                    // Appel récursif : L'enfant rejoint la MÊME destination que papa
+                    deplacerTacheRecursif(sousTache, destination);
+                }
+            }
+        }
     }
 
     /**
@@ -143,15 +190,7 @@ public class Projet implements Sujet, java.io.Serializable {
         return Objects.equals(getNom(), projet.getNom());
     }
 
-    /**
-     * Méthode qui ajoute un membre au projet
-     *
-     * @param membre le membre à ajouter
-     */
-    public void addMembers(Utilisateur membre) {
-        this.members.add(membre);
 
-    }
     /**
      * Change l'ordre des colonnes dans le projet.
      * @param indexSource L'index actuel de la liste (avant déplacement)
@@ -172,14 +211,7 @@ public class Projet implements Sujet, java.io.Serializable {
     }
 
 
-    /**
-     * Méthode qui supprime un membre du projet
-     *
-     * @param membre le membre à supprimer
-     */
-    public void removeMembers(Utilisateur membre) {
-        this.members.remove(membre);
-    }
+
 
     public List<ListeDeTache> getListeDeTaches() {
         return listeDeTaches;

@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.example.trellolike.Journal;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.Tache;
 
@@ -57,6 +58,7 @@ public class ArchiveController {
         Button supprimerBtn = new Button("Supprimer définitivement");
         supprimerBtn.setOnAction(e -> {
             projet.supprimerTacheArchive(t);
+            Journal.log("Suppression définitive de la tâche archivée : " + t.getNom());
             detailStage.close();
         });
 

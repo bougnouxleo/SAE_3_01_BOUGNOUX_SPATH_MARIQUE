@@ -21,99 +21,93 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VueTableau extends ScrollPane implements Observateur {
-    /**
-     * Le projet associé à cette vue
-     */
+
+    // Composants logiques
     private Projet projet;
-    /**
-     * Le contrôleur associé à cette vue
-     */
     private KanbanController controller;
-    /**
-     * Bouton pour ajouter une nouvelle liste
-     */
-    private Button btnAjouterListe;
 
-    /**
-     * Conteneur horizontal pour les colonnes du tableau Kanban
-     */
+    // Composants UI principaux
     private HBox conteneurColonnes;
+    private Button btnAjouterListe;
+    private Button btnTriDuree; // On le garde en attribut pour changer son texte
 
     /**
-     * Constructeur de la vue tableau Kanban
-     * @param projet Le projet à afficher
-     * @param controller Le contrôleur associé
+     * Constructeur de la vue Tableau
+     * @param projet
+     * @param controller
      */
     public VueTableau(Projet projet, KanbanController controller) {
         this.projet = projet;
         this.controller = controller;
 
-        // --- Barre de recherche et filtres ---
+        // --- 1. BARRE D'OUTILS (Haut) ---
         HBox barreOutils = new HBox(15);
         barreOutils.setPadding(new Insets(15));
         barreOutils.setAlignment(Pos.CENTER_LEFT);
         barreOutils.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;");
 
+        // Champ Recherche
         TextField searchField = new TextField();
-        searchField.setPromptText("Rechercher une tâche...");
-        searchField.setPrefWidth(250);
+        searchField.setPromptText("Rechercher...");
+        searchField.setPrefWidth(200);
 
+        // Filtre Priorité
         ComboBox<String> comboPriorite = new ComboBox<>();
-        comboPriorite.getItems().addAll("Toutes les priorités", "Basse", "Moyenne", "Haute","Urgente");
+        comboPriorite.getItems().addAll("Toutes les priorités", "Basse", "Moyenne", "Haute", "Urgente");
         comboPriorite.setValue("Toutes les priorités");
 
-        // Écouteurs pour mettre à jour le filtrage en temps réel
+        // Listeners pour les filtres
         searchField.textProperty().addListener((obs, old, nouveau) ->
                 controller.mettreAJourFiltres(nouveau, comboPriorite.getValue()));
 
         comboPriorite.valueProperty().addListener((obs, old, nouveau) ->
                 controller.mettreAJourFiltres(searchField.getText(), comboPriorite.getValue()));
 
-        // Bouton de tri par durée
-        Button btnTriDuree = new Button("Tri Durée : ↕");
-        btnTriDuree.setStyle("-fx-background-color: #f8f9fa; -fx-border-color: #ddd;");
-
+        // Bouton Tri Durée
+        this.btnTriDuree = new Button("Tri Durée : -");
+        btnTriDuree.setStyle("-fx-background-color: #f0f0f0; -fx-cursor: hand;");
         btnTriDuree.setOnAction(e -> {
             controller.mettreAJourTriDuree();
-
-            // Mise à jour visuelle du bouton
-            int etat = controller.getEtatTriDuree();
-            if (etat == 0) btnTriDuree.setText("Tri Durée : ↕");
-            else if (etat == 1) btnTriDuree.setText("Tri Durée : ↑ (Croissant)");
-            else btnTriDuree.setText("Tri Durée : ↓ (Décroissant)");
+            // Le texte du bouton sera mis à jour dans actualiser()
         });
 
-        barreOutils.getChildren().addAll(new Label("🔍"), searchField, new Label("Priorité :"), comboPriorite, btnTriDuree);
+        barreOutils.getChildren().addAll(
+                new Label("🔍"), searchField,
+                new Label("Priorité :"), comboPriorite,
+                btnTriDuree
+        );
 
+        // --- 2. CONFIGURATION SCROLLPANE ---
         this.setFitToHeight(true);
         this.setFitToWidth(true);
-        this.setPannable(true);
+        this.setPannable(true); // Permet de glisser avec la souris
         this.setStyle("-fx-background-color: #f4f4f4;");
 
+        // --- 3. ZONE PRINCIPALE (Colonnes) ---
         this.conteneurColonnes = new HBox();
         this.conteneurColonnes.setSpacing(20);
         this.conteneurColonnes.setPadding(new Insets(20));
         this.conteneurColonnes.setAlignment(Pos.TOP_LEFT);
-        this.conteneurColonnes.getStyleClass().add("kanban-view");
 
-        // Layout principal avec la barre d'outils en haut
+        // Layout global
         VBox layoutPrincipal = new VBox();
         layoutPrincipal.getChildren().addAll(barreOutils, conteneurColonnes);
-
         this.setContent(layoutPrincipal);
 
+        // --- 4. BOUTON AJOUTER LISTE ---
         this.btnAjouterListe = new Button("+ Ajouter une liste");
-        this.btnAjouterListe.setMinWidth(200);
-        this.btnAjouterListe.getStyleClass().add("btn-add");
+        this.btnAjouterListe.setMinWidth(250);
+        this.btnAjouterListe.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #555; -fx-background-radius: 5;");
 
         this.btnAjouterListe.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Nouvelle Liste");
             dialog.setHeaderText(null);
-            dialog.setContentText("Nom:");
+            dialog.setContentText("Nom de la liste:");
             dialog.showAndWait().ifPresent(nom -> controller.traiterAjoutListe(nom.trim()));
         });
 
+        // --- 5. INITIALISATION ---
         this.projet.enregistrerObservateur(this);
         this.actualiser(projet);
     }
@@ -126,35 +120,45 @@ public class VueTableau extends ScrollPane implements Observateur {
     public void actualiser(Sujet s) {
         if (!(s instanceof Projet)) return;
 
+        // 1. Mise à jour du texte du bouton Tri (Feedback visuel)
+        int etatTri = controller.getEtatTriDuree();
+        if (etatTri == 0) btnTriDuree.setText("Tri Durée : Aucun");
+        else if (etatTri == 1) btnTriDuree.setText("Tri Durée : Croissant (↑)");
+        else btnTriDuree.setText("Tri Durée : Décroissant (↓)");
+
+        // 2. Nettoyage de l'interface
         this.conteneurColonnes.getChildren().clear();
 
+        // 3. Reconstruction des colonnes
         List<ListeDeTache> lesListes = projet.getListeDeTaches();
 
-        // On utilise un index 'i' pour savoir quelle est la position de la colonne
+        // Boucle avec index 'i' pour gérer le Drag & Drop des colonnes
         for (int i = 0; i < lesListes.size(); i++) {
             ListeDeTache liste = lesListes.get(i);
 
+            // Création de la colonne graphique (supposons que ColonneKanban existe)
             ColonneKanban colonneGraphique = new ColonneKanban(liste, this.controller);
-            configurerDragAndDropGlobal(colonneGraphique, liste, i);
-            colonneGraphique.getStyleClass().add("kanban-column");
-            HBox.setHgrow(colonneGraphique, Priority.ALWAYS);
+            HBox.setHgrow(colonneGraphique, Priority.ALWAYS); // Prend la place dispo
 
-            // --- 1. FILTRAGE : On récupère d'abord les tâches visibles ---
-            List<Tache> tachesFiltrees = new ArrayList<>();
+            // CONFIGURATION DRAG & DROP GLOBAL (Tâche + Colonne)
+            configurerDragAndDropGlobal(colonneGraphique, liste, i);
+
+            // A. Filtrage des tâches
+            List<Tache> tachesVisibles = new ArrayList<>();
             for (Tache t : liste.getTaches()) {
                 if (controller.doitAfficherTache(t)) {
-                    tachesFiltrees.add(t);
+                    tachesVisibles.add(t);
                 }
             }
 
-            // --- 2. TRI : On demande au contrôleur de trier cette liste ---
-            controller.trierTaches(tachesFiltrees);
+            // B. Tri des tâches
+            controller.trierTaches(tachesVisibles);
 
-            // --- 3. AJOUT DES CARTES ---
-            for (Tache t : tachesFiltrees) {
+            // C. Affichage des cartes
+            for (Tache t : tachesVisibles) {
                 CarteTache carteGraphique = new CarteTache(t);
-                carteGraphique.getStyleClass().add("task-card");
 
+                // Callback pour la suppression d'étiquette
                 carteGraphique.setOnEtiquetteSupprimee(etiquetteASupprimer -> {
                     controller.traiterSuppressionEtiquette(t, etiquetteASupprimer);
                 });
@@ -166,26 +170,117 @@ public class VueTableau extends ScrollPane implements Observateur {
             this.conteneurColonnes.getChildren().add(colonneGraphique);
         }
 
+        // Ajout du bouton "+" à la fin
         this.conteneurColonnes.getChildren().add(btnAjouterListe);
     }
 
     /**
-     * Affiche une boîte de dialogue pour créer une nouvelle étiquette
-     * @param tacheCible La tâche à laquelle ajouter l'étiquette
+     * Gère TOUT le Drag & Drop sur une colonne (Tâches ET Colonnes)
+     */
+    private void configurerDragAndDropGlobal(ColonneKanban col, ListeDeTache listeModel, int indexColonne) {
+
+        // 1. DÉPART DU DRAG (Si on déplace la colonne elle-même)
+        col.setOnDragDetected(event -> {
+            // Si la cible est une carte, on laisse la carte gérer son drag
+            if (event.getTarget() instanceof CarteTache) return;
+
+            Dragboard db = col.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            // Marqueur spécifique pour les colonnes
+            content.putString("LISTE:" + indexColonne);
+            db.setContent(content);
+            event.consume();
+        });
+
+        // 2. SURVOL
+        col.setOnDragOver(event -> {
+            if (event.getDragboard().hasString()) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+
+        // 3. LÂCHER (DROP)
+        col.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+
+            if (db.hasString()) {
+                String data = db.getString();
+
+                if (data.startsWith("LISTE:")) {
+                    // --- CAS A : Déplacement de COLONNE ---
+                    try {
+                        int indexSource = Integer.parseInt(data.split(":")[1]);
+                        controller.traiterDeplacementListe(indexSource, indexColonne);
+                        success = true;
+                    } catch (Exception e) { System.err.println("Erreur drop colonne"); }
+
+                } else if (data.startsWith("TASK:")) {
+                    // --- CAS B : Déplacement de TÂCHE ---
+                    try {
+                        int idTache = Integer.parseInt(data.split(":")[1]);
+                        controller.traiterDepotTache(idTache, listeModel);
+                        success = true;
+                    } catch (Exception e) { System.err.println("Erreur drop tache"); }
+                }
+                // Fallback pour compatibilité (si juste ID envoyé)
+                else {
+                    try {
+                        int idTache = Integer.parseInt(data);
+                        controller.traiterDepotTache(idTache, listeModel);
+                        success = true;
+                    } catch (NumberFormatException e) { }
+                }
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+    }
+
+    /**
+     * Configure les événements spécifiques à une Carte (Tâche)
+     */
+    private void configurerEvenementsCarte(CarteTache carte, Tache t) {
+        // Drag Start
+        carte.setOnDragDetected(e -> {
+            Dragboard db = carte.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            // On ajoute le préfixe TASK: pour différencier des colonnes
+            content.putString("TASK:" + t.getId());
+            db.setContent(content);
+            e.consume();
+        });
+
+        // Double Click -> Détails
+        carte.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) controller.traiterOuvertureDetail(t);
+        });
+
+        // Clic Droit -> Menu Contextuel
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem itemAjoutEtiquette = new MenuItem("Ajouter une étiquette...");
+        itemAjoutEtiquette.setOnAction(event -> afficherDialogCreationEtiquette(t));
+        contextMenu.getItems().add(itemAjoutEtiquette);
+
+        carte.setOnContextMenuRequested(e ->
+                contextMenu.show(carte, e.getScreenX(), e.getScreenY())
+        );
+    }
+
+    /**
+     * Boîte de dialogue pour créer une étiquette
      */
     private void afficherDialogCreationEtiquette(Tache tacheCible) {
-        // --- 1. Partie purement GRAPHIQUE (La Vue gère les pixels) ---
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Nouvelle Étiquette");
-        dialog.setHeaderText("Ajouter une étiquette à : " + tacheCible.getNom());
+        dialog.setHeaderText("Pour : " + tacheCible.getNom());
 
-        ButtonType btnValider = new ButtonType("Ajouter", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnValider = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(btnValider, ButtonType.CANCEL);
 
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setHgap(10); grid.setVgap(10); grid.setPadding(new Insets(20));
 
         TextField txtNom = new TextField();
         ColorPicker colorPicker = new ColorPicker(Color.RED);
@@ -197,127 +292,16 @@ public class VueTableau extends ScrollPane implements Observateur {
 
         dialog.getDialogPane().setContent(grid);
 
-        // --- 2. Partie LIEN AVEC CONTROLEUR ---
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == btnValider) {
-                // Conversion Couleur -> String Hex (C'est du travail de Vue)
                 Color c = colorPicker.getValue();
                 String hex = String.format("#%02X%02X%02X",
-                        (int)(c.getRed() * 255),
-                        (int)(c.getGreen() * 255),
-                        (int)(c.getBlue() * 255));
-
-                // APPEL AU CONTROLEUR (On délègue le travail)
+                        (int)(c.getRed() * 255), (int)(c.getGreen() * 255), (int)(c.getBlue() * 255));
                 controller.traiterAjoutEtiquette(tacheCible, txtNom.getText(), hex);
             }
             return null;
         });
 
         dialog.showAndWait();
-    }
-
-    /**
-     * Configure les événements pour une carte de tâche
-     * @param carte
-     * @param t
-     */
-    private void configurerEvenementsCarte(CarteTache carte, Tache t) {
-        carte.setOnDragDetected(e -> {
-            if (controller.verifierDroitDeplacer(t)) {
-                Dragboard db = carte.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent content = new ClipboardContent();
-                content.putString(String.valueOf(t.getId()));
-                db.setContent(content);
-            }
-            e.consume();
-        });
-        carte.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) controller.traiterOuvertureDetail(t);
-        });
-        // Clic Droit pour gérer les étiquettes
-        ContextMenu contextMenu = new ContextMenu();
-
-        MenuItem itemAjoutEtiquette = new MenuItem("Ajouter une étiquette...");
-        itemAjoutEtiquette.setOnAction(event -> {
-            // Ouvre une boite de dialogue pour créer l'étiquette
-            afficherDialogCreationEtiquette(t);
-        });
-
-        contextMenu.getItems().add(itemAjoutEtiquette);
-
-        // Attacher le menu à la carte
-        carte.setOnContextMenuRequested(e ->
-                contextMenu.show(carte, e.getScreenX(), e.getScreenY())
-        );
-    }
-
-    /**
-     * Configure le Drag & Drop pour gérer à la fois les Tâches ET les Colonnes.
-     * @param col La vue de la colonne
-     * @param listeModel Le modèle de la liste
-     * @param indexColonne L'index actuel de cette colonne (0, 1, 2...)
-     */
-    private void configurerDragAndDropGlobal(ColonneKanban col, ListeDeTache listeModel, int indexColonne) {
-
-        // --- 1. DÉPART DU DRAG (Si on veut déplacer CETTE colonne) ---
-        col.setOnDragDetected(event -> {
-            // Si la source est une CarteTache, on ne fait rien ici (c'est géré par la carte)
-            if (event.getTarget() instanceof CarteTache) return;
-
-            Dragboard db = col.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-
-            // ASTUCE : On met un préfixe "LISTE:" pour dire que c'est une colonne
-            content.putString("LISTE:" + indexColonne);
-
-            db.setContent(content);
-            event.consume();
-        });
-
-        // --- 2. SURVOL (DragOver) ---
-        col.setOnDragOver(event -> {
-            // On accepte tout ce qui est texte (ID de tâche OU "LISTE:...")
-            if (event.getDragboard().hasString()) {
-                event.acceptTransferModes(TransferMode.MOVE);
-            }
-            event.consume();
-        });
-
-        // --- 3. LÂCHER (Drop) ---
-        col.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-
-            if (db.hasString()) {
-                String data = db.getString();
-
-                if (data.startsWith("LISTE:")) {
-                    // === CAS A : On a lâché une COLONNE ===
-                    try {
-                        // On récupère l'index de la colonne qu'on déplaçait (ex: "LISTE:0")
-                        int indexSource = Integer.parseInt(data.split(":")[1]);
-
-                        // On demande au contrôleur d'intervertir avec la colonne actuelle (indexColonne)
-                        controller.traiterDeplacementListe(indexSource, indexColonne);
-                        success = true;
-                    } catch (Exception e) {
-                        System.err.println("Erreur drag colonne: " + e.getMessage());
-                    }
-
-                } else {
-                    // === CAS B : On a lâché une TÂCHE (ID simple) ===
-                    try {
-                        int idTache = Integer.parseInt(data);
-                        controller.traiterDepotTache(idTache, listeModel);
-                        success = true;
-                    } catch (NumberFormatException e) {
-                        // Ce n'était pas un ID valide
-                    }
-                }
-            }
-
-            event.setDropCompleted(success);
-            event.consume();
-        });
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.trellolike.Etiquette;
+import org.example.trellolike.Journal;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
@@ -105,29 +106,40 @@ public class ListeController {
     }
 
     /**
-     * Formate une date pour l'affichage (ex: "Lundi")
+     * Retourne le nom du jour de la semaine en français pour une date donnée.
+     * @param date la date
+     * @return le nom du jour en français
      */
     public String getNomJour(LocalDate date) {
         // Retourne "Lundi", "Mardi"... en français
         String jour = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRENCH);
         return jour.substring(0, 1).toUpperCase() + jour.substring(1); // Première lettre majuscule
     }
+
     /**
      * Méthode partagée avec KanbanController : Ajout d'étiquette + Sauvegarde
+     * @param tache
+     * @param nom
+     * @param codeCouleurHex
      */
     public void traiterAjoutEtiquette(Tache tache, String nom, String codeCouleurHex) {
         Etiquette nouvelleEtiquette = new Etiquette(nom, codeCouleurHex);
         tache.ajouterEtiquette(nouvelleEtiquette);
+        Journal.log("Ajout de l'étiquette '" + nom + "' à la tâche '" + tache.getNom() + "'.");
         projet.sauvegarderGlobalement();
     }
+
     /**
      * Méthode partagée avec KanbanController : Suppression d'étiquette + Sauvegarde
+     * @param tache
+     * @param etiquette
      */
     public void traiterSuppressionEtiquette(Tache tache, Etiquette etiquette) {
         // 1. Modif du modèle
         tache.retirerEtiquette(etiquette);
 
         // 2. Sauvegarde (Ecrit le fichier XML)
+        Journal.log("Suppression de l'étiquette '" + etiquette.getNom() + "' de la tâche '" + tache.getNom() + "'.");
         projet.sauvegarderGlobalement();
     }
     /**
@@ -164,6 +176,7 @@ public class ListeController {
         // Mise à jour automatique lors du changement
         comboPrio.setOnAction(e -> {
             t.setPriorite(comboPrio.getValue());
+            Journal.log("Changement de priorité de la tâche '" + t.getNom() + "' à '" + comboPrio.getValue() + "'.");
             projet.sauvegarderGlobalement(); // Sauvegarde immédiate
         });
 
@@ -235,7 +248,7 @@ public class ListeController {
                 composite.setSousTaches(new ArrayList<>(selection));
 
                 duree.setText("Durée estimée : " + t.getDureeTotale() + "h");
-
+                Journal.log("Mise à jour des sous-tâches de la tâche composite '" + t.getNom() + "'.");
                 projet.sauvegarderGlobalement();
             });
 
@@ -245,6 +258,7 @@ public class ListeController {
         Button btnSaveDesc = new Button("Sauvegarder Description");
         btnSaveDesc.setOnAction(e -> {
             t.setDescription(description.getText());
+            Journal.log("Mise à jour de la description de la tâche '" + t.getNom() + "'.");
             projet.sauvegarderGlobalement();
         });
 
@@ -252,6 +266,7 @@ public class ListeController {
         btnArchiver.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: red;");
         btnArchiver.setOnAction(e -> {
             projet.archiverTache(t);
+            Journal.log("Archivage de la tâche '" + t.getNom() + "'.");
             detailStage.close();
         });
 

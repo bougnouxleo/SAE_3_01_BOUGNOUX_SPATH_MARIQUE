@@ -10,16 +10,38 @@ public class Etiquette implements Serializable {
     // Constructeur vide (OBLIGATOIRE XML)
     public Etiquette() {}
 
+    /**
+     * Constructeur
+     * @param nom
+     * @param codeCouleur
+     */
     public Etiquette(String nom, String codeCouleur) {
         this.nom = nom;
         this.codeCouleur = codeCouleur;
     }
 
     // Getters & Setters
+
+    /**
+     * Getter nom
+     * @return
+     */
     public String getNom() { return nom; }
+    /**
+     * Setter nom
+     * @param nom
+     */
     public void setNom(String nom) { this.nom = nom; }
 
+    /**
+     * Getter codeCouleur
+     * @return
+     */
     public String getCodeCouleur() { return codeCouleur; }
+    /**
+     * Setter codeCouleur
+     * @param codeCouleur
+     */
     public void setCodeCouleur(String codeCouleur) { this.codeCouleur = codeCouleur; }
 
     @Override
