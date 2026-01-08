@@ -162,23 +162,6 @@ public class KanbanController {
         projet.archiverListeDeTaches(liste);
     }
 
-    /**
-     * Vérifie si une tâche peut être déplacée (non bloquée).
-     * @param t la tâche à vérifier
-     * @return true si la tâche peut être déplacée, false sinon
-     */
-    public boolean verifierDroitDeplacer(Tache t) {
-        if (t.estBloquee()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Action impossible");
-            alert.setHeaderText("Tâche bloquée !");
-            alert.setContentText("Vous ne pouvez pas déplacer '" + t.getNom() +
-                    "' car elle dépend d'une tâche non terminée.");
-            alert.show();
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Gère l'ouverture de la fenêtre de détails d'une tâche.
@@ -328,20 +311,35 @@ public class KanbanController {
      * @param listeDestination la liste de tâches destination
      */
     public void traiterDepotTache(int idTache, ListeDeTache listeDestination) {
-        Tache tache = Tache.findById(idTache);
-        if (tache == null) return;
+        // CORRECTION MAJEURE : On demande au PROJET, pas à la classe statique
+        // Cela garantit qu'on récupère l'objet qui contient bien les sous-tâches chargées
+        Tache tache = projet.trouverTacheParId(idTache);
+
+        if (tache == null) {
+            System.err.println("Erreur : Tâche introuvable dans le projet pour ID " + idTache);
+            return;
+        }
 
         ListeDeTache listeSource = projet.trouverListeDeLaTache(tache);
-        if (listeSource == null || listeSource == listeDestination) return;
+
+        // Optimisation : Si on lâche au même endroit, on stop.
+        if (listeSource != null && listeSource.equals(listeDestination)) return;
+
+        // Sécurité : Si la source est null (cas rare), on ne peut pas déplacer
+        if (listeSource == null) return;
 
         try {
+            // Appel de la méthode récursive du projet
             projet.deplacerTache(tache, listeSource, listeDestination);
+
+            // La sauvegarde est incluse dans deplacerTache, mais par sécurité :
             projet.sauvegarderGlobalement();
+
         } catch (Exception e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Déplacement impossible");
-            alert.setHeaderText("Opération annulée");
-            alert.setContentText(e.getMessage());
+            alert.setTitle("Erreur");
+            alert.setContentText("Erreur lors du déplacement : " + e.getMessage());
             alert.showAndWait();
         }
     }
