@@ -46,6 +46,13 @@ public class Main extends Application {
      */
     private CalendarController calendarController;
 
+    /**
+     * The main entry point for all JavaFX applications.
+     * @param stage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
     @Override
     public void start(Stage stage) {
         // 1. CHARGEMENT
@@ -182,10 +189,17 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Lance l'application JavaFX
+     * @param args les arguments de la ligne de commande
+     */
     public static void main(String[] args) {
         launch();
     }
 
+    /**
+     * Méthode appelée lors de la fermeture de l'application pour sauvegarder le projet
+     */
     @Override
     public void stop() {
         if (this.projet != null) this.projet.sauvegarderGlobalement();
