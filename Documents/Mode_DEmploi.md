@@ -180,11 +180,15 @@ Conformément au principe du diagramme de Gantt, une tâche mère ne peut commen
 
 Pour **afficher ou masquer les flèches** de dépendance, cochez ou décochez la case correspondante *(fonc.14)*.
 
+Vous pouvez **exporter le diagramme de Gantt** en image (JPG ou PNG) *(fonc.15)*.
+
 > **fonc.12** : Représentation visuelle des dépendances par des flèches.
 > 
 > **fonc.13** : Respect des contraintes de dépendance dans la planification.
 > 
 > **fonc.14** : Option pour afficher/masquer les flèches de dépendance.
+> 
+> **fonc.15** : Export du diagramme de Gantt en JPG ou PNG.
 
 ---
 
@@ -204,9 +208,9 @@ Effectuez un **double-clic** sur une tâche archivée pour consulter ses détail
 
 ### Supprimer définitivement
 
-Dans la fenêtre de détails d'une tâche archivée, vous pouvez choisir de la **supprimer définitivement** *(fonc.15)*.
+Dans la fenêtre de détails d'une tâche archivée, vous pouvez choisir de la **supprimer définitivement** *(fonc.16)*.
 
-> **fonc.15** : Suppression définitive des tâches depuis les archives.
+> **fonc.16** : Suppression définitive des tâches depuis les archives.
 
 ---
 
@@ -214,17 +218,17 @@ Dans la fenêtre de détails d'une tâche archivée, vous pouvez choisir de la *
 
 ### Affichage
 
-Un **calendrier mensuel standard** est affiché. Vous pouvez naviguer entre les mois grâce aux boutons de changement de mois *(fonc.16)*.
+Un **calendrier mensuel standard** est affiché. Vous pouvez naviguer entre les mois grâce aux boutons de changement de mois *(fonc.17)*.
 
-Chaque tâche apparaît dans la **cellule correspondant à sa deadline** *(fonc.17)*.
+Chaque tâche apparaît dans la **cellule correspondant à sa deadline** *(fonc.18)*.
 
-Si une cellule contient **beaucoup de tâches**, un système de défilement (scroll) permet de toutes les consulter sans agrandir excessivement la cellule *(fonc.18)*.
+Si une cellule contient **beaucoup de tâches**, un système de défilement (scroll) permet de toutes les consulter sans agrandir excessivement la cellule *(fonc.19)*.
 
-> **fonc.16** : Navigation mensuelle dans le calendrier.
+> **fonc.17** : Navigation mensuelle dans le calendrier.
 > 
-> **fonc.17** : Affichage des tâches à leur date de deadline.
+> **fonc.18** : Affichage des tâches à leur date de deadline.
 > 
-> **fonc.18** : Défilement dans les cellules contenant de nombreuses tâches.
+> **fonc.19** : Défilement dans les cellules contenant de nombreuses tâches.
 
 ---
 
