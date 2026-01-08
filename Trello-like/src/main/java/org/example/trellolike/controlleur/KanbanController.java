@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.trellolike.Etiquette;
+import org.example.trellolike.Journal;
 import org.example.trellolike.Projet;
 import org.example.trellolike.tache.ListeDeTache;
 import org.example.trellolike.tache.Tache;
@@ -106,6 +107,8 @@ public class KanbanController {
             }
         }
 
+        // Log + Ajout + Sauvegarde
+        Journal.log("Ajout de la tâche '" + nom + "' dans la liste '" + listeDest.getNom() + "'");
         listeDest.ajouterTache(nouvelleTache);
         projet.sauvegarderGlobalement();
     }
@@ -118,6 +121,7 @@ public class KanbanController {
         if (nomListe == null || nomListe.trim().isEmpty()) return;
 
         ListeDeTache nouvelleListe = new ListeDeTache(nomListe);
+        Journal.log("Ajout de la liste de tâches '" + nomListe + "'");
         projet.ajouterListe(nouvelleListe);
         projet.sauvegarderGlobalement();
     }
@@ -129,6 +133,7 @@ public class KanbanController {
      */
     public void traiterRenommerListe(ListeDeTache liste, String nouveauNom) {
         liste.setNom(nouveauNom);
+        Journal.log("Renommage de la liste de tâches en '" + nouveauNom + "'");
         projet.sauvegarderGlobalement();
     }
 
@@ -143,6 +148,9 @@ public class KanbanController {
         // 2. Modification du Modèle
         tache.ajouterEtiquette(nouvelleEtiquette);
 
+        // Log
+        Journal.log("Ajout de l'étiquette '" + nom + "' à la tâche '" + tache.getNom() + "'");
+
         // 3. Persistance (Sauvegarde XML)
         projet.sauvegarderGlobalement();
     }
@@ -152,6 +160,7 @@ public class KanbanController {
         tache.retirerEtiquette(etiquette);
 
         // 2. Sauvegarde (Ecrit le fichier XML)
+        Journal.log("Suppression de l'étiquette '" + etiquette.getNom() + "' de la tâche '" + tache.getNom() + "'");
         projet.sauvegarderGlobalement();
     }
     /**
@@ -159,9 +168,9 @@ public class KanbanController {
      * @param liste la liste à archiver
      */
     public void traiterArchiverListeDeTaches(ListeDeTache liste) {
+        Journal.log("Archivage de la liste de tâches '" + liste.getNom() + "'");
         projet.archiverListeDeTaches(liste);
     }
-
 
     /**
      * Gère l'ouverture de la fenêtre de détails d'une tâche.
@@ -197,6 +206,7 @@ public class KanbanController {
         // Mise à jour automatique lors du changement
         comboPrio.setOnAction(e -> {
             t.setPriorite(comboPrio.getValue());
+            Journal.log("Mise à jour de la priorité de la tâche '" + t.getNom() + "' en '" + comboPrio.getValue() + "'");
             projet.sauvegarderGlobalement(); // Sauvegarde immédiate
         });
 
@@ -269,6 +279,7 @@ public class KanbanController {
 
                 duree.setText("Durée estimée : " + t.getDureeTotale() + "J");
 
+                Journal.log("Mise à jour des sous-tâches de la tâche composite '" + t.getNom() + "'");
                 projet.sauvegarderGlobalement();
             });
 
@@ -278,6 +289,7 @@ public class KanbanController {
         Button btnSaveDesc = new Button("Sauvegarder Description");
         btnSaveDesc.setOnAction(e -> {
             t.setDescription(description.getText());
+            Journal.log("Mise à jour de la description de la tâche '" + t.getNom() + "'");
             projet.sauvegarderGlobalement();
         });
 
@@ -285,6 +297,7 @@ public class KanbanController {
         btnArchiver.setStyle("-fx-background-color: #ffcccc; -fx-text-fill: red;");
         btnArchiver.setOnAction(e -> {
             projet.archiverTache(t);
+            Journal.log("Archivage de la tâche '" + t.getNom() + "'");
             detailStage.close();
         });
 
@@ -375,6 +388,7 @@ public class KanbanController {
      * Traite le déplacement d'une colonne.
      */
     public void traiterDeplacementListe(int indexSource, int indexCible) {
+        Journal.log("Déplacement de la liste de tâches de l'index " + indexSource + " vers l'index " + indexCible);
         projet.deplacerListe(indexSource, indexCible);
     }
     /**
