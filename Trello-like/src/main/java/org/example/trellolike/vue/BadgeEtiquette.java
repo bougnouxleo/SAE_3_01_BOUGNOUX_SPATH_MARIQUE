@@ -7,6 +7,10 @@ import org.example.trellolike.Etiquette;
 
 public class BadgeEtiquette extends Label {
 
+    /**
+     * Constructeur de la classe BadgeEtiquette
+     * @param e
+     */
     public BadgeEtiquette(Etiquette e) {
         super(e.getNom());
 

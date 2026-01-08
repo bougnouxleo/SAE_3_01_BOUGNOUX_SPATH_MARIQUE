@@ -17,8 +17,15 @@ import java.util.function.Consumer;
 
 public class LigneTache extends HBox {
 
+    /**
+     * actionSuppression permet la suppression d'étiquette
+     */
     private Consumer<Etiquette> actionSuppression;
 
+    /**
+     * Constructeur de la classe LigneTache
+     * @param t
+     */
     public LigneTache(Tache t) {
         // Style global de la ligne (Style "Moderne" comme sur la photo)
         this.setPadding(new Insets(10));

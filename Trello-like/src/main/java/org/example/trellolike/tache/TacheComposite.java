@@ -56,10 +56,19 @@
             sousTaches.add(sousTache);
         }
 
+        /**
+         * Getter XML
+         * @return
+         */
         public List<Tache> getSousTaches() {
             return sousTaches;
         }
 
+
+        /**
+         * Setter XML
+         * @param sousTaches
+         */
         public void setSousTaches(List<Tache> sousTaches) {
             this.sousTaches = sousTaches;
         }

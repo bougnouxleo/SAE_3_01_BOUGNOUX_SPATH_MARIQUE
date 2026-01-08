@@ -22,6 +22,7 @@ import java.util.List;
 
 public class VueTableau extends ScrollPane implements Observateur {
 
+    // Composants logiques
     private Projet projet;
     private KanbanController controller;
 
@@ -30,6 +31,11 @@ public class VueTableau extends ScrollPane implements Observateur {
     private Button btnAjouterListe;
     private Button btnTriDuree; // On le garde en attribut pour changer son texte
 
+    /**
+     * Constructeur de la vue Tableau
+     * @param projet
+     * @param controller
+     */
     public VueTableau(Projet projet, KanbanController controller) {
         this.projet = projet;
         this.controller = controller;
@@ -106,6 +112,10 @@ public class VueTableau extends ScrollPane implements Observateur {
         this.actualiser(projet);
     }
 
+    /**
+     * Mise à jour de l'affichage
+     * @param s le projet
+     */
     @Override
     public void actualiser(Sujet s) {
         if (!(s instanceof Projet)) return;

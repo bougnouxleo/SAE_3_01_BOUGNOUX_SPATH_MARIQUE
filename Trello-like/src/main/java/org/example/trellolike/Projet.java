@@ -30,10 +30,6 @@ public class Projet implements Sujet, java.io.Serializable {
      */
     private List<ListeDeTache> listeDeTaches;
 
-    /**
-     * Liste des membres du projet
-     */
-    private ArrayList<Utilisateur> members;
 
     /**
      * Liste des tâches archivées
@@ -43,7 +39,6 @@ public class Projet implements Sujet, java.io.Serializable {
     public Projet() {
         this.observateurs = new ArrayList<>();
         this.listeDeTaches = new ArrayList<>();
-        this.members = new ArrayList<>();
         this.listeDesArchives = new ArrayList<>();
     }
 
@@ -107,6 +102,7 @@ public class Projet implements Sujet, java.io.Serializable {
 
     public void setNom(String nom) { this.nom = nom; }
 
+    // Méthodes obligatoires pour observateur
     public void enregistrerObservateur(Observateur o) {
         observateurs.add(o);
     }
@@ -133,6 +129,11 @@ public class Projet implements Sujet, java.io.Serializable {
         this.sauvegarderGlobalement();
     }
 
+    /**
+     * Permet le déplacement récursif des taches composites
+     * @param t
+     * @param destination
+     */
     private void deplacerTacheRecursif(Tache t, ListeDeTache destination) {
         // 1. On cherche où est la tâche actuellement (via ID)
         ListeDeTache sourceActuelle = trouverListeDeLaTache(t);
@@ -189,15 +190,7 @@ public class Projet implements Sujet, java.io.Serializable {
         return Objects.equals(getNom(), projet.getNom());
     }
 
-    /**
-     * Méthode qui ajoute un membre au projet
-     *
-     * @param membre le membre à ajouter
-     */
-    public void addMembers(Utilisateur membre) {
-        this.members.add(membre);
 
-    }
     /**
      * Change l'ordre des colonnes dans le projet.
      * @param indexSource L'index actuel de la liste (avant déplacement)
@@ -218,14 +211,7 @@ public class Projet implements Sujet, java.io.Serializable {
     }
 
 
-    /**
-     * Méthode qui supprime un membre du projet
-     *
-     * @param membre le membre à supprimer
-     */
-    public void removeMembers(Utilisateur membre) {
-        this.members.remove(membre);
-    }
+
 
     public List<ListeDeTache> getListeDeTaches() {
         return listeDeTaches;

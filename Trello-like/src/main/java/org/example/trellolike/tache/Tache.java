@@ -2,9 +2,7 @@ package org.example.trellolike.tache;
 
 import org.example.trellolike.Etiquette;
 import org.example.trellolike.Projet;
-import org.example.trellolike.Utilisateur;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,10 +94,18 @@ public abstract class Tache implements java.io.Serializable {
         return nom;
     }
 
+    /**
+     * Méthode qui retourne la priorité de la tâche
+     * @return la priorité de la tâche
+     */
     public String getPriorite() {
         return priorite;
     }
 
+    /**
+     * Setter priorité
+     * @param priorite
+     */
     public void setPriorite(String priorite) {
         this.priorite = priorite;
     }
@@ -148,14 +154,26 @@ public abstract class Tache implements java.io.Serializable {
         return dateDebut;
     }
 
+    /**
+     * Setter XML
+     * @param dateFin
+     */
     public void setDateFin(String dateFin) {
         this.dateFin = dateFin;
     }
 
+    /**
+     * Setter XML
+     * @param dateDebut
+     */
     public void setDateDebut(String dateDebut) {
         this.dateDebut = dateDebut;
     }
 
+    /**
+     * Méthode qui retire une Etiquette de la Tache
+     * @param e l'Etiquette
+     */
     public void retirerEtiquette(Etiquette e) {
         this.etiquettes.remove(e);
     }
@@ -176,22 +194,42 @@ public abstract class Tache implements java.io.Serializable {
         return "Nom : " + nom + "\nDescription : " + description + "\nDate de début : " + dateDebut + "\nDate de fin : " + dateFin + "\n";
     }
 
+    /**
+     * Méthode qui retourne la liste des Etiquettes
+     * @return la liste des Etiquettes
+     */
     public List<Etiquette> getEtiquettes() {
         return etiquettes;
     }
 
+    /**
+     * Setter XML
+     * @param etiquettes
+     */
     public void setEtiquettes(List<Etiquette> etiquettes) { this.etiquettes = etiquettes; }
 
+    /**
+     * Setter XML
+     * @param idsDependances
+     */
     public void setIdsDependances(List<Integer> idsDependances) {
         this.idsDependances = idsDependances;
     }
 
+    /**
+     * Méthode qui ajoute une dépendance à la tâche
+     * @param t la tâche dépendante
+     */
     public void ajouterDependance(Tache t) {
         if (t.getId() != this.id) { // Empêche de dépendre de soi-même
             this.idsDependances.add(t.getId());
         }
     }
 
+    /**
+     * getter XML et dépendances
+     * @return
+     */
     public List<Integer> getIdsDependances() {
         return idsDependances;
     }
@@ -220,16 +258,4 @@ public abstract class Tache implements java.io.Serializable {
         this.estArchivee = b;
     }
 
-    /**
-     * Méthode qui indique si la tâche est archivée
-     * @return true si la tâche est archivée, false sinon
-     */
-    public boolean estArchivee() {
-        return estArchivee;
-    }
-
-    public int getDuree() {
-        //TODO
-        return 0;
-    }
 }
