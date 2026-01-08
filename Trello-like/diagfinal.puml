@@ -1,0 +1,382 @@
+@startuml
+
+' --- REGLAGES GRAPHIQUES ---
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+skinparam packageStyle rectangle
+
+' =======================================================
+'                   DEFINITIONS DES CLASSES
+' =======================================================
+
+class org.example.trellolike.vue.Etiquette.BadgeEtiquette {
+    - boolean estCouleurFoncee(String)
+}
+
+class org.example.trellolike.vue.VueGantt.VueGantt {
+    - Projet projet
+    - GanttController controller
+    - GridPane grid
+    - Pane overlayPane
+    - Map<Integer,StackPane> taskNodes
+    - CheckBox chkAfficherDependances
+    - int LARGEUR_JOUR
+    - int HAUTEUR_BARRE
+    + void actualiser(Sujet)
+    - void dessinerFlecheDependances()
+    - void appliquerStyleStatut(StackPane,Tache)
+    - void creerEnTete(LocalDate)
+    - LocalDate calculerDateMin(List<Tache>)
+    - void exporterEnImage(StackPane)
+}
+
+class org.example.trellolike.vue.Kanban.ColonneKanban {
+    - VBox boxTaches
+    - ListeDeTache listeModele
+    - KanbanController controller
+    + void ajouterCarte(CarteTache)
+    - void demanderNouvelleTache()
+    - void afficherAlerte(String,String)
+    - void mettreAJourDuree(DatePicker,DatePicker,Text,CheckBox)
+}
+
+class org.example.trellolike.controlleur.ListeController {
+    - Projet projet
+    - String filtreTexte
+    - String filtrePriorite
+    - int etatTriDuree
+    + Map<LocalDate,List<Tache>> getTachesGroupeesParJour()
+    - LocalDate parserDate(String)
+    + String getNomJour(LocalDate)
+    + void traiterAjoutEtiquette(Tache,String,String)
+    + void traiterSuppressionEtiquette(Tache,Etiquette)
+    + void traiterOuvertureDetail(Tache)
+    + void mettreAJourFiltres(String,String)
+    + void mettreAJourTriDuree()
+    + int getEtatTriDuree()
+}
+
+class org.example.trellolike.vue.Liste_Archives.LigneTache {
+    - Consumer<Etiquette> actionSuppression
+    - void configurerMenuBadge(BadgeEtiquette,Etiquette)
+    + void setOnEtiquetteSupprimee(Consumer<Etiquette>)
+}
+
+class org.example.trellolike.tache.TacheComposite {
+    - List<Tache> sousTaches
+    + int getDureeTotale()
+    + void afficherDetail()
+    + void ajouterSousTache(Tache)
+    + List<Tache> getSousTaches()
+    + void setSousTaches(List<Tache>)
+}
+
+class org.example.trellolike.vue.Kanban.CarteTache {
+    - Consumer<Etiquette> actionSuppression
+    - void configurerMenuBadge(BadgeEtiquette,Etiquette)
+    + void setOnEtiquetteSupprimee(Consumer<Etiquette>)
+}
+
+class org.example.trellolike.controlleur.KanbanController {
+    - Projet projet
+    - String filtreTexte
+    - String filtrePriorite
+    - int etatTriDuree
+    + void traiterAjoutTache(String,String,LocalDate,LocalDate,ListeDeTache,List<Tache>,boolean,int,String)
+    + void traiterAjoutListe(String)
+    + void traiterRenommerListe(ListeDeTache,String)
+    + void traiterAjoutEtiquette(Tache,String,String)
+    + void traiterSuppressionEtiquette(Tache,Etiquette)
+    + void traiterArchiverListeDeTaches(ListeDeTache)
+    + void traiterOuvertureDetail(Tache)
+    + void traiterDepotTache(int,ListeDeTache)
+    + void mettreAJourFiltres(String,String)
+    + boolean doitAfficherTache(Tache)
+    + void traiterDeplacementListe(int,int)
+    + void mettreAJourTriDuree()
+    + int getEtatTriDuree()
+    + void trierTaches(List<Tache>)
+}
+
+abstract class org.example.trellolike.tache.Tache {
+    - int id
+    - {static} int compteurId
+    # String nom
+    # String description
+    # String dateDebut
+    # String dateFin
+    # List<Etiquette> etiquettes
+    # List<Integer> idsDependances
+    - boolean estArchivee
+    # String priorite
+    + {static} Tache findById(int)
+    + void save()
+    + int getId()
+    + void setId(int)
+    + void setNom(String)
+    + String getNom()
+    + String getPriorite()
+    + void setPriorite(String)
+    + String getDescription()
+    + void setDescription(String)
+    + void ajouterEtiquette(Etiquette)
+    + {abstract}int getDureeTotale()
+    + {abstract}void afficherDetail()
+    + String getDateDebut()
+    + void setDateFin(String)
+    + void setDateDebut(String)
+    + void retirerEtiquette(Etiquette)
+    + String getDateFin()
+    + String toString()
+    + List<Etiquette> getEtiquettes()
+    + void setEtiquettes(List<Etiquette>)
+    + void setIdsDependances(List<Integer>)
+    + void ajouterDependance(Tache)
+    + List<Integer> getIdsDependances()
+    + boolean estBloquee()
+    + void setArchivee(boolean)
+    + boolean equals(Object)
+    + int hashCode()
+}
+
+class org.example.trellolike.vue.Liste_Archives.VueArchives {
+    - Projet projet
+    - VBox conteneurPrincipal
+    - ArchiveController archiveController
+    + void actualiser(Sujet)
+}
+
+class org.example.trellolike.controlleur.GanttController {
+    - Projet projet
+    - boolean afficherDependances
+    + void gererDependances(boolean)
+    + boolean isAfficherDependances()
+    + void traiterOuvertureDetail(Tache)
+}
+
+interface org.example.trellolike.modele.Sujet {
+    + void enregistrerObservateur(Observateur)
+    + void supprimerObservateur(Observateur)
+    + void notifierObservateurs()
+}
+
+class org.example.trellolike.vue.Kanban.VueTableau {
+    - Projet projet
+    - KanbanController controller
+    - HBox conteneurColonnes
+    - Button btnAjouterListe
+    - Button btnTriDuree
+    + void actualiser(Sujet)
+    - void configurerDragAndDropGlobal(ColonneKanban,ListeDeTache,int)
+    - void configurerEvenementsCarte(CarteTache,Tache)
+    - void afficherDialogCreationEtiquette(Tache)
+}
+
+class org.example.trellolike.vue.Liste_Archives.VueListe {
+    - Projet projet
+    - ListeController controller
+    - VBox conteneurPrincipal
+    + void actualiser(Sujet)
+    - void configurerEvenementsLigne(LigneTache,Tache)
+    - void afficherDialogCreationEtiquette(Tache)
+}
+
+class org.example.trellolike.log.Journal {
+    - {static} String NOM_FICHIER
+    + {static} void log(String)
+}
+
+class org.example.trellolike.controlleur.ArchiveController {
+    - Projet projet
+    + void traiterOuvertureDetail(Tache)
+}
+
+class org.example.trellolike.tache.GestionPersistance {
+    - {static} String NOM_FICHIER
+    + {static} void sauvegarder(Projet)
+    + {static} Projet charger()
+}
+
+class org.example.trellolike.controlleur.CalendarController {
+    - Projet projet
+    + void traiterOuvertureDetail(Tache)
+}
+
+class org.example.trellolike.tache.TacheSimple {
+    - int duree
+    + void setDuree(int)
+    + int getDuree()
+    + int getDureeTotale()
+    + void afficherDetail()
+}
+
+class org.example.trellolike.tache.ListeDeTache {
+    - String nom
+    - List<Tache> taches
+    + void setNom(String)
+    + void setTaches(List<Tache>)
+    + String getNom()
+    + List<Tache> getTaches()
+    + void ajouterTache(Tache)
+    + void retirerTache(Tache)
+    + boolean equals(Object)
+}
+
+class org.example.trellolike.Trello_Like {
+    - Projet projet
+    - KanbanController controller
+    - BorderPane root
+    - GanttController ganttController
+    - ArchiveController archiveController
+    - CalendarController calendarController
+    + void start(Stage)
+    - HBox creerBarreDeNavigation()
+    - void changerVue(String)
+    + {static} void main(String[])
+    + void stop()
+}
+
+class org.example.trellolike.vue.Calendrier.VueCalendrier {
+    - Projet projet
+    - CalendarController controller
+    - YearMonth moisActuel
+    - GridPane grille
+    - Label labelMois
+    - HBox creerHeader()
+    + void actualiser(Sujet)
+}
+
+class org.example.trellolike.Etiquette.Etiquette {
+    - String nom
+    - String codeCouleur
+    + String getNom()
+    + void setNom(String)
+    + String getCodeCouleur()
+    + void setCodeCouleur(String)
+    + String toString()
+}
+
+class org.example.trellolike.modele.Projet {
+    - String nom
+    - {static} Projet instance
+    - List<Observateur> observateurs
+    - List<ListeDeTache> listeDeTaches
+    - List<Tache> listeDesArchives
+    + {static} Projet getInstance()
+    + void sauvegarderGlobalement()
+    + Tache trouverTacheParId(int)
+    + ListeDeTache trouverListeDeLaTache(Tache)
+    + List<ListeDeTache> getListes()
+    + void setListes(List<ListeDeTache>)
+    + void setNom(String)
+    + void enregistrerObservateur(Observateur)
+    + void supprimerObservateur(Observateur)
+    + void notifierObservateurs()
+    + void deplacerTache(Tache,ListeDeTache,ListeDeTache)
+    - void deplacerTacheRecursif(Tache,ListeDeTache)
+    + String getNom()
+    + boolean equals(Object)
+    + void deplacerListe(int,int)
+    + List<ListeDeTache> getListeDeTaches()
+    + void ajouterListe(ListeDeTache)
+    + boolean estTacheTerminee(Tache)
+    + void archiverTache(Tache)
+    + void archiverListeDeTaches(ListeDeTache)
+    + List<Tache> getListeDesArchives()
+    + void setListeDesArchives(List<Tache>)
+    + List<Tache> obtenirToutesLesTaches()
+    + void supprimerTacheArchive(Tache)
+}
+
+interface org.example.trellolike.vue.Observateur {
+    + void actualiser(Sujet)
+}
+
+' =======================================================
+'                   HERITAGE (CORRIGÉ)
+' =======================================================
+
+' JavaFX Inheritances (Utilisation des vrais noms de classe)
+javafx.scene.control.Label <|-- org.example.trellolike.vue.Etiquette.BadgeEtiquette
+javafx.scene.control.ScrollPane <|-- org.example.trellolike.vue.VueGantt.VueGantt
+javafx.scene.layout.VBox <|-- org.example.trellolike.vue.Kanban.ColonneKanban
+javafx.scene.layout.HBox <|-- org.example.trellolike.vue.Liste_Archives.LigneTache
+javafx.scene.layout.VBox <|-- org.example.trellolike.vue.Kanban.CarteTache
+javafx.scene.control.ScrollPane <|-- org.example.trellolike.vue.Liste_Archives.VueArchives
+javafx.scene.control.ScrollPane <|-- org.example.trellolike.vue.Kanban.VueTableau
+javafx.scene.control.ScrollPane <|-- org.example.trellolike.vue.Liste_Archives.VueListe
+javafx.application.Application <|-- org.example.trellolike.Trello_Like
+javafx.scene.layout.BorderPane <|-- org.example.trellolike.vue.Calendrier.VueCalendrier
+
+' Interfaces Java Standard
+java.io.Serializable <|.. org.example.trellolike.tache.Tache
+java.io.Serializable <|.. org.example.trellolike.tache.ListeDeTache
+java.io.Serializable <|.. org.example.trellolike.Etiquette.Etiquette
+java.io.Serializable <|.. org.example.trellolike.modele.Projet
+
+' Implémentation du pattern Observer
+org.example.trellolike.modele.Sujet <|.. org.example.trellolike.modele.Projet
+org.example.trellolike.vue.Observateur <|.. org.example.trellolike.vue.VueGantt.VueGantt
+org.example.trellolike.vue.Observateur <|.. org.example.trellolike.vue.Liste_Archives.VueArchives
+org.example.trellolike.vue.Observateur <|.. org.example.trellolike.vue.Kanban.VueTableau
+org.example.trellolike.vue.Observateur <|.. org.example.trellolike.vue.Liste_Archives.VueListe
+org.example.trellolike.vue.Observateur <|.. org.example.trellolike.vue.Calendrier.VueCalendrier
+
+' Héritage Métier
+org.example.trellolike.tache.Tache <|-- org.example.trellolike.tache.TacheComposite
+org.example.trellolike.tache.Tache <|-- org.example.trellolike.tache.TacheSimple
+
+
+' =======================================================
+'                   RELATIONS & ASSOCIATIONS
+' =======================================================
+
+' 1. STRUCTURE DU MODELE
+' ----------------------
+org.example.trellolike.modele.Projet "1" *-- "*" org.example.trellolike.tache.ListeDeTache : contient
+org.example.trellolike.tache.ListeDeTache "1" o-- "*" org.example.trellolike.tache.Tache : contient
+org.example.trellolike.tache.TacheComposite "1" o-- "*" org.example.trellolike.tache.Tache : sous-tâches
+org.example.trellolike.tache.Tache "*" o-- "*" org.example.trellolike.Etiquette.Etiquette : possède
+
+' 2. ARCHITECTURE MVC
+' -------------------
+' Contrôleurs -> Modèle
+org.example.trellolike.controlleur.KanbanController --> org.example.trellolike.modele.Projet : manipule
+org.example.trellolike.controlleur.ListeController --> org.example.trellolike.modele.Projet : manipule
+org.example.trellolike.controlleur.GanttController --> org.example.trellolike.modele.Projet : lit
+org.example.trellolike.controlleur.ArchiveController --> org.example.trellolike.modele.Projet : manipule
+org.example.trellolike.controlleur.CalendarController --> org.example.trellolike.modele.Projet : lit
+
+' Vues -> Contrôleurs
+org.example.trellolike.vue.Kanban.VueTableau --> org.example.trellolike.controlleur.KanbanController : délègue
+org.example.trellolike.vue.Liste_Archives.VueListe --> org.example.trellolike.controlleur.ListeController : délègue
+org.example.trellolike.vue.VueGantt.VueGantt --> org.example.trellolike.controlleur.GanttController : délègue
+org.example.trellolike.vue.Liste_Archives.VueArchives --> org.example.trellolike.controlleur.ArchiveController : délègue
+org.example.trellolike.vue.Calendrier.VueCalendrier --> org.example.trellolike.controlleur.CalendarController : délègue
+
+' 3. HIERARCHIE VISUELLE
+' ----------------------
+org.example.trellolike.vue.Kanban.VueTableau *-- "*" org.example.trellolike.vue.Kanban.ColonneKanban
+org.example.trellolike.vue.Kanban.ColonneKanban *-- "*" org.example.trellolike.vue.Kanban.CarteTache
+org.example.trellolike.vue.Liste_Archives.VueListe *-- "*" org.example.trellolike.vue.Liste_Archives.LigneTache
+
+' Affichage
+org.example.trellolike.vue.Kanban.ColonneKanban --> org.example.trellolike.tache.ListeDeTache : affiche
+org.example.trellolike.vue.Kanban.CarteTache --> org.example.trellolike.tache.Tache : affiche
+org.example.trellolike.vue.Liste_Archives.LigneTache --> org.example.trellolike.tache.Tache : affiche
+
+' 4. COMPOSANTS GRAPHIQUES
+' ------------------------
+org.example.trellolike.vue.Kanban.CarteTache ..> org.example.trellolike.vue.Etiquette.BadgeEtiquette : utilise
+org.example.trellolike.vue.Liste_Archives.LigneTache ..> org.example.trellolike.vue.Etiquette.BadgeEtiquette : utilise
+org.example.trellolike.vue.Etiquette.BadgeEtiquette ..> org.example.trellolike.Etiquette.Etiquette : représente
+
+' 5. SYSTEME
+' ----------
+org.example.trellolike.Trello_Like --> org.example.trellolike.modele.Projet : charge
+org.example.trellolike.Trello_Like --> org.example.trellolike.controlleur.KanbanController : init
+org.example.trellolike.modele.Projet ..> org.example.trellolike.tache.GestionPersistance : persiste
+
+@enduml

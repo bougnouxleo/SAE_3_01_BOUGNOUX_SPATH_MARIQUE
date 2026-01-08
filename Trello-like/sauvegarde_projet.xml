@@ -22,6 +22,28 @@
         <void property="duree">
          <int>7</int>
         </void>
+        <void property="etiquettes">
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#000000</string>
+           </void>
+           <void property="nom">
+            <string>comm</string>
+           </void>
+          </object>
+         </void>
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#99CCCC</string>
+           </void>
+           <void property="nom">
+            <string>pub</string>
+           </void>
+          </object>
+         </void>
+        </void>
         <void property="id">
          <int>3</int>
         </void>
@@ -47,6 +69,28 @@
         </void>
         <void property="duree">
          <int>7</int>
+        </void>
+        <void property="etiquettes">
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#FFFF66</string>
+           </void>
+           <void property="nom">
+            <string>tag</string>
+           </void>
+          </object>
+         </void>
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#663366</string>
+           </void>
+           <void property="nom">
+            <string>git</string>
+           </void>
+          </object>
+         </void>
         </void>
         <void property="id">
          <int>4</int>
@@ -81,6 +125,16 @@
            </void>
            <void property="nom">
             <string>test</string>
+           </void>
+          </object>
+         </void>
+         <void method="add">
+          <object class="org.example.trellolike.Etiquette">
+           <void property="codeCouleur">
+            <string>#000080</string>
+           </void>
+           <void property="nom">
+            <string>tech</string>
            </void>
           </object>
          </void>
@@ -132,7 +186,7 @@
        </object>
       </void>
       <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
+       <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple1">
         <void property="dateDebut">
          <string>2026-01-07</string>
         </void>
@@ -157,7 +211,7 @@
        </object>
       </void>
       <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
+       <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple2">
         <void property="dateDebut">
          <string>2026-01-07</string>
         </void>
@@ -596,7 +650,7 @@
         </void>
         <void property="sousTaches">
          <void method="add">
-          <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple1">
+          <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple3">
            <void property="dateDebut">
             <string>2026-01-07</string>
            </void>
@@ -621,7 +675,7 @@
           </object>
          </void>
          <void method="add">
-          <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple2">
+          <object class="org.example.trellolike.tache.TacheSimple" id="TacheSimple4">
            <void property="dateDebut">
             <string>2026-01-07</string>
            </void>
@@ -649,10 +703,10 @@
        </object>
       </void>
       <void method="add">
-       <object idref="TacheSimple1"/>
+       <object idref="TacheSimple3"/>
       </void>
       <void method="add">
-       <object idref="TacheSimple2"/>
+       <object idref="TacheSimple4"/>
       </void>
       <void method="add">
        <object class="org.example.trellolike.tache.TacheComposite" id="TacheComposite2">
