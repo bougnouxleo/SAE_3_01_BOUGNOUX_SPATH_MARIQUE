@@ -17,6 +17,8 @@ import org.example.trellolike.vue.VueTableau;
 import org.example.trellolike.vue.VueArchives;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.example.trellolike.controlleur.CalendarController;
+import org.example.trellolike.vue.VueCalendrier;
 
 public class Main extends Application {
     /**
@@ -39,6 +41,10 @@ public class Main extends Application {
      * Controller de la vue Archives
      */
     private ArchiveController archiveController;
+    /**
+     * Controller de la vue Calendrier
+     */
+    private CalendarController calendarController;
 
     @Override
     public void start(Stage stage) {
@@ -48,6 +54,7 @@ public class Main extends Application {
         this.controller = new KanbanController(this.projet);
         this.ganttController = new GanttController(this.projet);
         this.archiveController = new ArchiveController(this.projet);
+        this.calendarController = new CalendarController(this.projet);
 
         // 2. CRÉATION DU LAYOUT PRINCIPAL (BorderPane)
         this.root = new BorderPane();
@@ -84,6 +91,7 @@ public class Main extends Application {
         Button btnListe = new Button("Vue Liste");
         Button btnGantt = new Button("Vue Gantt");
         Button btnArchives = new Button("Archives");
+        Button btnCalendrier = new Button("Calendrier");
 
         //Images des boutons
         //Gantt
@@ -114,12 +122,20 @@ public class Main extends Application {
         view4.setPreserveRatio(true);
         btnArchives.setGraphic(view4);
 
+        //Calendrier
+        Image img5 = new Image("/calendrier.jpg"); // ou une autre icône
+        ImageView view5 = new ImageView(img5);
+        view5.setFitHeight(40);
+        view5.setPreserveRatio(true);
+        btnCalendrier.setGraphic(view5);
+
 
         // --- Actions des boutons ---
         btnKanban.setOnAction(e -> changerVue("KANBAN"));
         btnListe.setOnAction(e -> changerVue("LISTE"));
         btnGantt.setOnAction(e -> changerVue("GANTT"));
         btnArchives.setOnAction(e -> changerVue("ARCHIVES"));
+        btnCalendrier.setOnAction(e -> changerVue("CALENDRIER"));
 
 
         // --- Ajout style bouton ---
@@ -127,8 +143,9 @@ public class Main extends Application {
         btnGantt.getStyleClass().add("nav-button");
         btnListe.getStyleClass().add("nav-button");
         btnArchives.getStyleClass().add("nav-button");
+        btnCalendrier.getStyleClass().add("nav-button");
 
-        menu.getChildren().addAll(btnKanban, btnListe, btnGantt, btnArchives);
+        menu.getChildren().addAll(btnKanban, btnListe, btnGantt, btnArchives, btnCalendrier);
         return menu;
     }
 
@@ -156,6 +173,11 @@ public class Main extends Application {
             case "ARCHIVES":
                 VueArchives vueArchives = new VueArchives(this.projet, this.archiveController);
                 root.setCenter(vueArchives);
+                break;
+
+            case "CALENDRIER":
+                VueCalendrier vueCalendrier = new VueCalendrier(this.projet, this.calendarController);
+                root.setCenter(vueCalendrier);
                 break;
         }
     }
