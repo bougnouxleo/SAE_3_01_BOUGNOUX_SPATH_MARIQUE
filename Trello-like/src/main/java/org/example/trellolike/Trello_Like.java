@@ -21,7 +21,7 @@ import javafx.scene.image.ImageView;
 import org.example.trellolike.controlleur.CalendarController;
 import org.example.trellolike.vue.Calendrier.VueCalendrier;
 
-public class Main extends Application {
+public class Trello_Like extends Application {
     /**
      * Layout principal de l'application
      */

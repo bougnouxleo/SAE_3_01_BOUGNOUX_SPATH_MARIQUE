@@ -20,7 +20,7 @@ public class TacheSimple extends Tache {
     }
 
     /**
-     * Constructeur complet (celui que vous utilisez dans le Main)
+     * Constructeur complet
      */
     public TacheSimple(String nom, String description, String dateDebut, String dateFin, int duree, String priorite) {
         super(nom, description, dateDebut, dateFin, priorite);
