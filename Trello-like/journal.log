@@ -1,0 +1,10 @@
+2026-01-08T09:05:26.270527 - Ajout de la tâche 'aaaaaaaaaaaaaaaaaaa' dans la liste 'O'
+2026-01-08T09:06:20.234439700 - Déplacement de la liste de tâches de l'index 1 vers l'index 1
+2026-01-08T09:06:27.595207200 - Ajout de l'étiquette 'aaa' à la tâche 'aaaaaaaaaaaaaaaaaaa'
+2026-01-08T09:06:49.435684500 - Suppression de l'étiquette 'aaa' de la tâche 'aaaaaaaaaaaaaaaaaaa'
+2026-01-08T09:06:57.668741800 - Archivage de la tâche 'aaaaaaaaaaaaaaaaaaa'
+2026-01-08T09:07:11.155575800 - Suppression définitive de la tâche archivée : aaaaaaaaaaaaaaaaaaa
+2026-01-08T09:07:24.468892600 - Déplacement de la liste de tâches de l'index 3 vers l'index 0
+2026-01-08T09:07:26.139811 - Déplacement de la liste de tâches de l'index 2 vers l'index 2
+2026-01-08T09:07:34.139087800 - Déplacement de la liste de tâches de l'index 3 vers l'index 3
+2026-01-08T09:07:46.237826600 - Déplacement de la liste de tâches de l'index 1 vers l'index 0

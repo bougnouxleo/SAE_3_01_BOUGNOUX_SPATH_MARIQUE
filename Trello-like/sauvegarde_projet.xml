@@ -102,6 +102,91 @@
    <void method="add">
     <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache1">
      <void property="nom">
+      <string>P</string>
+     </void>
+     <void property="taches">
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-14</string>
+        </void>
+        <void property="description">
+         <string>P3 tache</string>
+        </void>
+        <void property="duree">
+         <int>7</int>
+        </void>
+        <void property="id">
+         <int>7</int>
+        </void>
+        <void property="nom">
+         <string>P3</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-14</string>
+        </void>
+        <void property="description">
+         <string>P1 tache
+</string>
+        </void>
+        <void property="duree">
+         <int>7</int>
+        </void>
+        <void property="id">
+         <int>5</int>
+        </void>
+        <void property="nom">
+         <string>P1</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+      <void method="add">
+       <object class="org.example.trellolike.tache.TacheSimple">
+        <void property="dateDebut">
+         <string>2026-01-07</string>
+        </void>
+        <void property="dateFin">
+         <string>2026-01-14</string>
+        </void>
+        <void property="description">
+         <string>P2 tache</string>
+        </void>
+        <void property="duree">
+         <int>7</int>
+        </void>
+        <void property="id">
+         <int>6</int>
+        </void>
+        <void property="nom">
+         <string>P2</string>
+        </void>
+        <void property="priorite">
+         <string>Moyenne</string>
+        </void>
+       </object>
+      </void>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache2">
+     <void property="nom">
       <string>R</string>
      </void>
      <void property="taches">
@@ -185,7 +270,7 @@
     </object>
    </void>
    <void method="add">
-    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache2">
+    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache3">
      <void property="nom">
       <string>Q</string>
      </void>
@@ -259,91 +344,6 @@
         </void>
         <void property="nom">
          <string>Q1</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="org.example.trellolike.tache.ListeDeTache" id="ListeDeTache3">
-     <void property="nom">
-      <string>P</string>
-     </void>
-     <void property="taches">
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-14</string>
-        </void>
-        <void property="description">
-         <string>P3 tache</string>
-        </void>
-        <void property="duree">
-         <int>7</int>
-        </void>
-        <void property="id">
-         <int>7</int>
-        </void>
-        <void property="nom">
-         <string>P3</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-14</string>
-        </void>
-        <void property="description">
-         <string>P1 tache
-</string>
-        </void>
-        <void property="duree">
-         <int>7</int>
-        </void>
-        <void property="id">
-         <int>5</int>
-        </void>
-        <void property="nom">
-         <string>P1</string>
-        </void>
-        <void property="priorite">
-         <string>Moyenne</string>
-        </void>
-       </object>
-      </void>
-      <void method="add">
-       <object class="org.example.trellolike.tache.TacheSimple">
-        <void property="dateDebut">
-         <string>2026-01-07</string>
-        </void>
-        <void property="dateFin">
-         <string>2026-01-14</string>
-        </void>
-        <void property="description">
-         <string>P2 tache</string>
-        </void>
-        <void property="duree">
-         <int>7</int>
-        </void>
-        <void property="id">
-         <int>6</int>
-        </void>
-        <void property="nom">
-         <string>P2</string>
         </void>
         <void property="priorite">
          <string>Moyenne</string>
